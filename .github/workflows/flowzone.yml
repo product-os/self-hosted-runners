@@ -1,0 +1,24 @@
+name: Flowzone
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches: [main, master]
+  # allow external contributions to use secrets within trusted code
+  pull_request_target:
+    types: [opened, synchronize, closed]
+    branches: [main, master]
+
+jobs:
+  flowzone:
+    name: Flowzone
+    uses: product-os/flowzone/.github/workflows/flowzone.yml@master
+    secrets: inherit
+    with:
+      repo_config: true
+      repo_homepage: "https://docs.github.com/en/actions/hosting-your-own-runners"
+      repo_description: "GitHub self-hosted runner images for common system architectures."
+      balena_slugs: |
+        product_os/runner-amd64,
+        product_os/runner-arm32v7,
+        product_os/runner-arm64v8
