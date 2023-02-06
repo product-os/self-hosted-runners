@@ -15,10 +15,11 @@ jobs:
     uses: product-os/flowzone/.github/workflows/flowzone.yml@master
     secrets: inherit
     with:
+      working_directory: runner
       repo_config: true
       repo_homepage: "https://docs.github.com/en/actions/hosting-your-own-runners"
       repo_description: "GitHub self-hosted runner images for common system architectures."
-      balena_slugs: |
-        product_os/runner-amd64,
-        product_os/runner-arm32v7,
-        product_os/runner-arm64v8
+      docker_images: |
+        ghcr.io/product-os/self-hosted-runners
+      bake_targets: |
+        default,focal

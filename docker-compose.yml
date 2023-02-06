@@ -1,12 +1,12 @@
 ---
-version: '2.1'
+version: "2.4"
 
 volumes:
   persistent-volume: {}
 
 services:
-  github-actions-runner:
-    build: runner
+  runner:
+    image: ghcr.io/product-os/self-hosted-runners:master
     privileged: true
     userns_mode: host
     cap_add:
@@ -19,6 +19,12 @@ services:
       interval: 300s
       timeout: 60s
       retries: 5
+    env_file:
+      # (required) GH_TOKEN with appropriate scope(s)
+      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
+      - .env
+    environment:
+      GITHUB_ENTERPRISE: balena
     volumes:
       - persistent-volume:/home/githhub/_work
       - persistent-volume:/var/lib/docker
