@@ -3,7 +3,7 @@
 const execSync = require('child_process').execSync;
 const yaml = require('yaml');
 const fs = require('fs');
-const regex = /image:\s+(ghcr.io\/product-os\/self-hosted-runners):.*/i;
+const regex = /(ghcr.io\/product-os\/self-hosted-runners):.*/i;
 
 const getAuthor = (commitHash) => {
   return execSync(`git show --quiet --format="%an" ${commitHash}`, {
