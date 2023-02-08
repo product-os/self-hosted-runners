@@ -1,4 +1,15 @@
 - commits:
+    - subject: Correct versioning regex
+      hash: 6fc8e5231fda506aac3acddb0ab7c02972f00b81
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Anton Belodedenko
+  version: 0.0.3
+  title: ""
+  date: 2023-02-08T00:52:58.796Z
+- commits:
     - subject: Publish to ghcr.io
       hash: 5e16e4bd77f0cdec178dcbe6e8a95fae2e7b4c8a
       body: ""
