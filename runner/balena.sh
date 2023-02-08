@@ -20,7 +20,7 @@ NVM_VERSION=${NVM_VERSION:-0.39.3}
 
 function cleanup() {
     if [[ -s /balena/runner_token ]]; then
-        runner_token="$(cat < /balena/runner_token)"
+        runner_token="$(cat < "/balena/token.${ACTIONS_RUNNER_NAME}")"
         ./config.sh remove --token "${runner_token}"
     fi
     rm -f .runner
@@ -101,7 +101,7 @@ function start_github_runner() {
     registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
     payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${GH_TOKEN}")
     runner_token="$(echo "${payload}" | jq -r .token)"
-    echo "${runner_token}" | sudo tee /balena/runner_token
+    echo "${runner_token}" | sudo tee "/balena/token.${ACTIONS_RUNNER_NAME}"
 
     # shellcheck disable=SC2086
     ./config.sh --ephemeral --replace --unattended \
