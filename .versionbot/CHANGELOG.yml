@@ -1,4 +1,15 @@
 - commits:
+    - subject: Support multiple instances
+      hash: 4612624d6e656118869cbb437392282733982d54
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+  version: 0.0.4
+  title: ""
+  date: 2023-02-08T01:49:40.217Z
+- commits:
     - subject: Correct versioning regex
       hash: 6fc8e5231fda506aac3acddb0ab7c02972f00b81
       body: ""
