@@ -1,0 +1,11 @@
+- commits:
+    - subject: Publish to ghcr.io
+      hash: 5e16e4bd77f0cdec178dcbe6e8a95fae2e7b4c8a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+  version: 0.0.2
+  title: ""
+  date: 2023-02-08T00:18:39.584Z

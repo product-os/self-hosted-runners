@@ -1,9 +1,6 @@
----
 version: "2.4"
-
 volumes:
   persistent-volume: {}
-
 services:
   runner:
     image: ghcr.io/product-os/self-hosted-runners:master
@@ -12,7 +9,7 @@ services:
     cap_add:
       - ALL
     healthcheck:
-      test: |
+      test: >
         /bin/bash -c '[[ -e /var/run/docker.sock ]] \
           && (curl --silent --fail --unix-socket /var/run/docker.sock http:/v1.40/_ping \
           && pgrep Runner.Listener) || true'
@@ -20,8 +17,6 @@ services:
       timeout: 60s
       retries: 5
     env_file:
-      # (required) GH_TOKEN with appropriate scope(s)
-      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
       - .env
     environment:
       GITHUB_ENTERPRISE: balena
