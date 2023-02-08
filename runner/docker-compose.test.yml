@@ -1,0 +1,59 @@
+---
+version: "2.4"
+
+volumes:
+  persistent-volume: {}
+
+services:
+  sut:
+    build:
+      context: .
+    privileged: true
+    userns_mode: host
+    cap_add:
+      - ALL
+    # https://github.com/product-os/self-hosted-runners/settings/secrets/actions/COMPOSE_VARS
+    # COMPOSE_VARS=$(cat .env  | openssl base64 -A)
+    env_file:
+      # (required) GH_TOKEN with appropriate scope(s)
+      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
+      - .env
+    environment:
+      # test at the org. level
+      GITHUB_ORG: product-os
+    volumes:
+      - persistent-volume:/home/githhub/_work
+      - persistent-volume:/var/lib/docker
+      - persistent-volume:/scratch
+      - persistent-volume:/balena
+    entrypoint:
+      - /bin/bash
+      - "-c"
+    command:
+      - |
+        set -axe
+
+        if [[ $(uname -m) =~ arm|aarch ]]; then
+            exit
+        fi
+
+        # background entrypoint
+        ./balena.sh &
+
+        # wait for DinD
+        while ! docker ps; do
+            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+        done
+
+        # wait for runner
+        while ! pgrep Runner.Listener; do
+            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+        done
+
+        # check runner registration
+        while ! test -f .runner; do
+            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+        done
+
+        # TBC: is this enough?
+        cat .runner | jq -r

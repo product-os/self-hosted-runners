@@ -60,7 +60,6 @@ function local_start_docker() {
 
     # shellcheck disable=SC2086
     if [[ -z "${DOCKER_HOST}" ]]; then
-        # https://raw.githubusercontent.com/concourse/docker-image-resource/master/assets/common.sh
         sudo -Eb ./start-docker.sh &
     fi
 }
@@ -85,13 +84,21 @@ function start_github_runner() {
     region="$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
     city="$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
 
-    ACTIONS_RUNNER_TAGS=${ACTIONS_RUNNER_TAGS:-"--labels family:${family},distro:${distro},major:${major},minor:${minor},machine:${machine},arch:${arch},board:${board},mem:${mem},cpu:${cpu},country:${country},region:${region},city:${city},balena:${BALENA_HOST_OS_VERSION}"}
+    ACTIONS_RUNNER_TAGS=${ACTIONS_RUNNER_TAGS:-family:${family},distro:${distro},major:${major},minor:${minor},machine:${machine},arch:${arch},board:${board},mem:${mem},cpu:${cpu},country:${country},region:${region},city:${city}}
 
     if [[ -n $ACTIONS_RUNNER_EXTRA_TAGS ]]; then
         ACTIONS_RUNNER_TAGS="${ACTIONS_RUNNER_TAGS},${ACTIONS_RUNNER_EXTRA_TAGS}"
     fi
 
-    registration_url="https://api.github.com/orgs/${GITHUB_ORG}/actions/runners/registration-token"
+    slug=orgs
+    url="https://github.com/${GITHUB_ORG}"
+    if [[ -n $GITHUB_ENTERPRISE ]]; then
+        GITHUB_ORG="${GITHUB_ENTERPRISE}"
+        slug=enterprises
+        url="https://github.com/${slug}/${GITHUB_ENTERPRISE}"
+    fi
+
+    registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
     payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${GH_TOKEN}")
     runner_token="$(echo "${payload}" | jq -r .token)"
     echo "${runner_token}" | sudo tee /balena/runner_token
@@ -100,8 +107,8 @@ function start_github_runner() {
     ./config.sh --ephemeral --replace --unattended \
       --name "${ACTIONS_RUNNER_NAME}" \
       --token "${runner_token}" \
-      --url "https://github.com/${GITHUB_ORG}" \
-      ${ACTIONS_RUNNER_TAGS}
+      --url "${url}" \
+      --labels "${ACTIONS_RUNNER_TAGS}"
 
     ./run.sh "$*" &
 }

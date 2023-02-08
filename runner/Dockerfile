@@ -1,16 +1,13 @@
-# https://www.docker.com/blog/faster-multi-platform-builds-dockerfile-cross-compilation-guide/
-ARG TARGETARCH
-ARG TARGETVARIANT
+ARG UBUNTU_LTS=7.0.2-jammy
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.2-jammy-arm32v7 AS armv7
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.2-jammy-arm64v8 AS arm64
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.2-jammy-amd64 AS amd64
+FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-arm32v7 AS arm
+FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-arm64v8 AS arm64
+FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-amd64 AS amd64
 
-FROM ${TARGETARCH}${TARGETVARIANT} as build
 
-ARG TARGETARCH
-ARG TARGETVARIANT
+# --- build
+FROM ${TARGETARCH} as build
 
 # https://github.com/actions/runner/pkgs/container/actions-runner
 ARG RUNNER_VERSION=2.301.1
@@ -21,9 +18,10 @@ ARG RUNNER_CONTAINER_HOOKS_VERSION=0.2.0
 # https://github.com/mikefarah/yq/releases (update yq_hashes)
 ARG YQ_VERSION=4.27.5
 
-ENV DEBIAN_FRONTEND noninteractive
+ARG TARGETARCH
 ENV TARGETARCH ${TARGETARCH}
-ENV TARGETVARIANT ${TARGETVARIANT}
+
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update && apt install -y \
     curl \
@@ -39,7 +37,8 @@ RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_
     && mv yq_linux_${TARGETARCH} /usr/bin/yq
 
 WORKDIR /actions-runner
-RUN curl -f -L -o runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${RUNNER_VERSION}.tar.gz \
+RUN runner_arch=$(echo ${TARGETARCH} | sed 's/amd/x/g') \
+    && curl -sfLo runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${runner_arch}-${RUNNER_VERSION}.tar.gz \
     && tar xzf ./runner.tar.gz \
     && rm runner.tar.gz
 
@@ -48,8 +47,8 @@ RUN curl -f -L -o runner-container-hooks.zip https://github.com/actions/runner-c
     && rm runner-container-hooks.zip
 
 
-# runtime
-FROM ${TARGETARCH}${TARGETVARIANT}
+# --- runtime
+FROM ${TARGETARCH}
 
 # https://docs.docker.com/engine/release-notes
 ARG DOCKER_VERSION=23.0.0

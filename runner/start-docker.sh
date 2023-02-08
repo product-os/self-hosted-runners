@@ -10,6 +10,7 @@ function cleanup() {
 
 trap 'cleanup' EXIT
 
+# https://raw.githubusercontent.com/concourse/docker-image-resource/master/assets/common.sh
 source common.sh
 
 start_docker \
