@@ -10,6 +10,10 @@ if [[ $DISABLED =~ true|True|yes|Yes|on|On|1 ]]; then
 fi
 
 ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
+# Configure the runner to only take one job and then let the service un-configure the runner after the job finishes (default false)
+ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-false)}
+# Replace any existing runner with the same name (default false)
+ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false)}
 DOCKER_REGISTRY_MIRROR_INTERNAL=${DOCKER_REGISTRY_MIRROR_INTERNAL:-""}
 DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
@@ -19,9 +23,10 @@ NODE_VERSION=${NODE_VERSION:-18}
 NVM_VERSION=${NVM_VERSION:-0.39.3}
 
 function cleanup() {
-    if [[ -s /balena/runner_token ]]; then
+    if [[ -s "/balena/token.${ACTIONS_RUNNER_NAME}" ]]; then
         runner_token="$(cat < "/balena/token.${ACTIONS_RUNNER_NAME}")"
         ./config.sh remove --token "${runner_token}"
+        rm -f "/balena/token.${ACTIONS_RUNNER_NAME}"
     fi
     rm -f .runner
     sleep "$(( (RANDOM % 10) + 10))s"
@@ -104,7 +109,9 @@ function start_github_runner() {
     echo "${runner_token}" | sudo tee "/balena/token.${ACTIONS_RUNNER_NAME}"
 
     # shellcheck disable=SC2086
-    ./config.sh --ephemeral --replace --unattended \
+    ./config.sh --unattended \
+      $([[ $ACTIONS_RUNNER_EPHEMERAL =~ true|True|1|yes|Yes ]] && echo --ephemeral) \
+      $([[ $ACTIONS_RUNNER_REPLACE =~ true|True|1|yes|Yes ]] && echo --replace) \
       --name "${ACTIONS_RUNNER_NAME}" \
       --token "${runner_token}" \
       --url "${url}" \
