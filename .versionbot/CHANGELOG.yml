@@ -1,4 +1,15 @@
 - commits:
+    - subject: Parametrise runner options
+      hash: f15b1b11b96b50116afd9514872d91b0d9a43a2a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+  version: 0.0.5
+  title: ""
+  date: 2023-02-13T16:37:35.307Z
+- commits:
     - subject: Support multiple instances
       hash: 4612624d6e656118869cbb437392282733982d54
       body: ""

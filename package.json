@@ -1,6 +1,6 @@
 {
   "name": "self-hosted-runners",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "balena self-hosted GitHub actions runner images",
   "private": true,
   "main": "versionist.conf.js",
