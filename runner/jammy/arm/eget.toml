@@ -1,0 +1,57 @@
+# https://github.com/zyedidia/eget#configuration
+[global]
+quiet = false
+show_hash = true
+upgrade_only = false
+all = true
+
+["mikefarah/yq"]
+tag = "v4.30.7"
+asset_filters = [".tar.gz"]
+target = "/usr/local/bin/yq"
+verify_sha256 = "6fb63d8a57e0e88da403dc2c7310abddba7835b1930a213a489742ea5d743418"
+file = "yq_*"
+all = false
+
+["powershell/powershell"]
+asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
+tag = "v7.3.2"
+target = "/opt/microsoft/powershell/7/"
+verify_sha256 = "cdb0f04db328bc6230cbcfcc04db11a20111bc58637468aad79d56a832c489d4"
+file = "*"
+
+["actions/runner"]
+asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
+tag = "v2.301.1"
+target = "./"
+verify_sha256 = "eb9ffe7cf3af213d30882b1420143550ce78a7987a39c4e1457ee8d5424544c3"
+file = "*"
+
+["actions/runner-container-hooks"]
+asset_filters = ["k8s", ".zip"]
+tag = "v0.2.0"
+target = "./k8s/"
+verify_sha256 = "0880c7d5fbb325a950975186609d0c309dc4831ce87bf6724eb43ef13f063b50"
+file = "*"
+
+["https://download.docker.com/linux/static/stable/armhf/docker-20.10.23.tgz"]
+target = "/usr/bin/"
+verify_sha256 = "0493007bda4e73988b05a4d3b797137b9ab12c50e35ced1deb9bde2eeaec2407"
+file = "docker/*"
+
+["docker/compose"]
+tag = "v2.16.0"
+asset_filters = ["armv7"]
+verify_sha256 = "558a083683bd597f5e167178dbdbe57824eecf2132bfb497a58f5d39c5e49e8a"
+target = "./.docker/cli-plugins/"
+
+["docker/buildx"]
+tag = "v0.10.3"
+asset_filters = ["arm-v7", "^.json"]
+verify_sha256 = "07eb9c583f40cb3e3943a228acd05b01245c5b1f45e1ede95b10a1e7ac45b54c"
+target = "./.docker/cli-plugins/"
+
+["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-armv7l.tar.xz"]
+target = "/usr/"
+verify_sha256 = "39c308b9a75591860c4d2c05edae82c10a1157cfb67594837d60666ee960e8fe"
+file = "node-v18.14.2-linux-armv7l/*"

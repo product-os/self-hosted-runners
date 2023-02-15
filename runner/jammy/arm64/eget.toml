@@ -1,0 +1,56 @@
+# https://github.com/zyedidia/eget#configuration
+[global]
+quiet = false
+show_hash = true
+upgrade_only = false
+all = true
+
+["mikefarah/yq"]
+tag = "v4.30.7"
+asset_filters = [".tar.gz"]
+target = "/usr/local/bin/yq"
+verify_sha256 = "7d5240056e8096e790ee9f8c451fc1acb1a7b5797cc5f6c6b741e693dfb40b82"
+file = "yq_*"
+all = false
+
+["powershell/powershell"]
+asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
+tag = "v7.3.2"
+target = "/opt/microsoft/powershell/7"
+verify_sha256 = "c8de060319c02a6001fa4081657d463630807a3c27f4d38421ee644300403418"
+file = "*"
+
+["actions/runner"]
+asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
+tag = "v2.301.1"
+target = "./"
+verify_sha256 = "6b9ba0e7296b5d613dc5aaa0ca640c16b2122a7d42e4b5906c67d9b5c8847e10"
+file = "*"
+
+["actions/runner-container-hooks"]
+asset_filters = ["k8s", ".zip"]
+tag = "v0.2.0"
+target = "./k8s/"
+verify_sha256 = "0880c7d5fbb325a950975186609d0c309dc4831ce87bf6724eb43ef13f063b50"
+file = "*"
+
+["https://download.docker.com/linux/static/stable/aarch64/docker-20.10.23.tgz"]
+target = "/usr/bin/"
+verify_sha256 = "5c40bb7dcd1aad94be49ad75d24e7fd409119ed0eaad04f5d13c4fddfb397c8a"
+file = "docker/*"
+
+["docker/compose"]
+tag = "v2.16.0"
+verify_sha256 = "edaf196a0b9ebe749aa1a42a6ce4550d2c6c2620762aa98c36088a9b96fd22ef"
+target = "./.docker/cli-plugins/"
+
+["docker/buildx"]
+tag = "v0.10.3"
+asset_filters = ["^.json"]
+verify_sha256 = "d37e6824d06bcaaf8bbedb2a802d3b0b9a551aa956a22f52dbcfeba65fe8e427"
+target = "./.docker/cli-plugins/"
+
+["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-arm64.tar.xz"]
+target = "/usr/"
+verify_sha256 = "e3e39b9c3d5475857f62bd8d501d4d3f39303691b6357fba81f2c2b6de6e8520"
+file = "node-v18.14.2-linux-arm64/*"

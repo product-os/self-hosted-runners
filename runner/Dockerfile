@@ -1,53 +1,26 @@
-ARG UBUNTU_LTS=7.0.2-jammy
+ARG OS_CODENAME=jammy
+
+FROM golang:1.20.1 AS eget
+
+WORKDIR /app
+
+# build eget from source until this commit is tagged in a release
+RUN git clone -n https://github.com/zyedidia/eget . && \
+    git checkout ff0fd7efd18ebf8219b89ad28959ea49e8726d07 && \
+    make build
+
+# RUN curl -o eget.sh https://zyedidia.github.io/eget.sh && \
+#     echo "0e64b8a3c13f531da005096cc364ac77835bda54276fedef6c62f3dbdc1ee919  eget.sh" | sha256sum - && \
+#     bash eget.sh && \
+#     rm eget.sh
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
-FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-arm32v7 AS arm
-FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-arm64v8 AS arm64
-FROM mcr.microsoft.com/dotnet/runtime-deps:${UBUNTU_LTS}-amd64 AS amd64
-
-
-# --- build
-FROM ${TARGETARCH} as build
-
-# https://github.com/actions/runner/pkgs/container/actions-runner
-ARG RUNNER_VERSION=2.301.1
-
-# https://github.com/actions/runner-container-hooks/releases
-ARG RUNNER_CONTAINER_HOOKS_VERSION=0.2.0
-
-# https://github.com/mikefarah/yq/releases (update yq_hashes)
-ARG YQ_VERSION=4.27.5
-
-ARG TARGETARCH
-ENV TARGETARCH ${TARGETARCH}
-
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt update && apt install -y \
-    curl \
-    unzip \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY yq_hashes .
-
-RUN wget -q https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH}.tar.gz -O - | tar xz \
-    && sha256=$(sha256sum yq_linux_${TARGETARCH} | awk '{print $1}') \
-    && grep yq_linux_${TARGETARCH} yq_hashes | grep ${sha256} yq_hashes \
-    && mv yq_linux_${TARGETARCH} /usr/bin/yq
-
-WORKDIR /actions-runner
-RUN runner_arch=$(echo ${TARGETARCH} | sed 's/amd/x/g') \
-    && curl -sfLo runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${runner_arch}-${RUNNER_VERSION}.tar.gz \
-    && tar xzf ./runner.tar.gz \
-    && rm runner.tar.gz
-
-RUN curl -f -L -o runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
-    && unzip ./runner-container-hooks.zip -d ./k8s \
-    && rm runner-container-hooks.zip
-
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm32v7 AS arm
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm64v8 AS arm64
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64
 
 # --- runtime
+# hadolint ignore=DL3006
 FROM ${TARGETARCH}
 
 # https://docs.docker.com/engine/release-notes
@@ -58,46 +31,59 @@ ENV RUNNER_ALLOW_RUNASROOT=0
 ENV RUNNER_MANUALLY_TRAP_SIG=1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
 
-RUN apt update && apt install -y \
-    apt-transport-https \
-    build-essential \
-    ca-certificates \
-    curl \
-    git \
-    gnupg \
-    htop \
-    iproute2 \
-    jq \
-    lsb-release \
-    openssh-client \
-    software-properties-common \
-    sudo \
-    uuid-runtime \
-    vim \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /root
 
-COPY --from=build /usr/bin/yq /usr/bin/yq
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# https://docs.docker.com/engine/install/ubuntu/
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
-    && chmod a+r /etc/apt/keyrings/docker.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list \
-    && apt update && apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin \
+ARG OS_CODENAME TARGETARCH
+
+COPY packages.txt ./common.txt
+COPY ${OS_CODENAME}/packages.txt ./os.txt
+
+# hadolint ignore=DL3008,SC2046
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    $(<./common.txt) \
+    $(<./os.txt) \
     && rm -rf /var/lib/apt/lists/* \
-    && useradd -m github \
-    && usermod -aG sudo github \
-    && usermod -aG docker github \
-    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    && rm common.txt os.txt
 
-USER github
+RUN useradd -m github && \
+    addgroup --system docker && \
+    usermod -aG sudo github && \
+    usermod -aG docker github && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /home/github
 
-COPY --from=build /actions-runner .
-COPY --chown=github:github common.sh start-docker.sh balena.sh .
+COPY --from=eget /app/eget /usr/local/bin/eget
 
-RUN sudo chmod +x ./balena.sh
+COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
+
+# avoid GitHub API rate limiting
+ARG GITHUB_TOKEN
+
+RUN eget -D && \
+    chmod +x /opt/microsoft/powershell/7/pwsh && \
+    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
+    mv .docker/cli-plugins/compose .docker/cli-plugins/docker-compose && \
+    mv .docker/cli-plugins/buildx .docker/cli-plugins/docker-buildx && \
+    rm eget.toml
+
+COPY --chown=github:github common.sh start-docker.sh balena.sh ./
+
+RUN chmod +x ./balena.sh
+
+USER github
+
+RUN pwsh -Version && \
+    yq --version && \
+    dockerd --version ; \
+    containerd --version ; \
+    ctr --version && \
+    runc --version && \
+    docker buildx version && \
+    docker compose version && \
+    node --version && \
+    npm --version
 
 ENTRYPOINT ["/home/github/balena.sh"]

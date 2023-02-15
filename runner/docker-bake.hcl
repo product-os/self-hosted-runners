@@ -1,8 +1,11 @@
 # https://docs.docker.com/build/bake/file-definition/
 
-# https://releases.ubuntu.com/
-variable "UBUNTU_LTS" {
-  default = "7.0.2-jammy"
+variable "OS_CODENAME" {
+  default = "jammy"
+}
+
+variable "GITHUB_TOKEN" {
+  default = ""
 }
 
 target "default" {
@@ -12,17 +15,23 @@ target "default" {
     "linux/arm64"
   ]
   args = {
-    UBUNTU_LTS = UBUNTU_LTS
+    OS_CODENAME = OS_CODENAME
+    GITHUB_TOKEN = GITHUB_TOKEN
+  }
+}
+
+target "jammy" {
+  inherits = ["default"]
+  args = {
+    OS_CODENAME = "jammy"
+    GITHUB_TOKEN = GITHUB_TOKEN
   }
 }
 
 target "focal" {
-  platforms = [
-    "linux/amd64",
-    "linux/arm/v7",
-    "linux/arm64"
-  ]
+  inherits = ["default"]
   args = {
-    UBUNTU_LTS = "6.0.13-focal"
+    OS_CODENAME = "focal"
+    GITHUB_TOKEN = GITHUB_TOKEN
   }
 }

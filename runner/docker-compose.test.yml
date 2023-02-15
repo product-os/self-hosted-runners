@@ -6,6 +6,7 @@ volumes:
 
 services:
   sut:
+    image: sut
     build:
       context: .
     privileged: true
@@ -32,10 +33,6 @@ services:
     command:
       - |
         set -axe
-
-        if [[ $(uname -m) =~ arm|aarch ]]; then
-            exit
-        fi
 
         # background entrypoint
         ./balena.sh &
