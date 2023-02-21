@@ -59,10 +59,11 @@ COPY --from=eget /app/eget /usr/local/bin/eget
 
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
 
-# avoid GitHub API rate limiting
-ARG GITHUB_TOKEN
-
-RUN eget -D && \
+# optionally mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# eg. DOCKER_BUILDKIT=1 docker build --secret id=GITHUB_TOKEN,src=~/github_token.txt .
+# eg. docker buildx bake --set *.secrets=id=GITHUB_TOKEN,src=~/github_token.txt .
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    test -f /run/secrets/GITHUB_TOKEN && GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D || eget -D \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
     mv .docker/cli-plugins/compose .docker/cli-plugins/docker-compose && \
