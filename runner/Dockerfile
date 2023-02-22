@@ -68,6 +68,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
     mv .docker/cli-plugins/compose .docker/cli-plugins/docker-compose && \
     mv .docker/cli-plugins/buildx .docker/cli-plugins/docker-buildx && \
+    chown -R github:github /home/github && \
     rm eget.toml
 
 # force legacy iptables for emulated ARM
