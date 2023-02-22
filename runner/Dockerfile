@@ -70,12 +70,18 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     mv .docker/cli-plugins/buildx .docker/cli-plugins/docker-buildx && \
     rm eget.toml
 
+# force legacy iptables for emulated ARM
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy && \
+    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
 COPY --chown=github:github common.sh start-docker.sh balena.sh ./
 
 RUN chmod +x ./balena.sh
 
 USER github
 
+# containerd version check will fail on emulated ARM until this fix is released
+# https://github.com/containerd/containerd/pull/7636
 RUN pwsh -Version && \
     yq --version && \
     dockerd --version ; \

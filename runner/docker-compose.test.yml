@@ -34,6 +34,24 @@ services:
       - |
         set -axe
 
+        # skip testing on emulated ARM until this containerd fix is released
+        # https://github.com/containerd/containerd/pull/7636
+        if ! grep -q "CPU architecture:" /proc/cpuinfo
+        then
+            case "$(uname -m)" in
+                aarch64)
+                    echo "Skipping tests on emulated $(uname -m)..."
+                    exit 0
+                    ;;
+                armv7l)
+                    echo "Skipping tests on emulated $(uname -m)..."
+                    exit 0
+                    ;;
+                *)
+                    ;;
+            esac
+        fi
+
         # background entrypoint
         ./balena.sh &
 
