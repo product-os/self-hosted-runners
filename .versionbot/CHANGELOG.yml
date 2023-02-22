@@ -1,4 +1,38 @@
 - commits:
+    - subject: Workaround issues running containerd on emulated ARM
+      hash: 661608704ace5ffb47343e25deb1bd1955ad71cc
+      body: |
+        This should only be temporary until the containerd fix
+        is released, and/or we start building and testing on native
+        ARM runners.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+    - subject: Use docker secrets for github tokens
+      hash: b5e71426ebd56bd650811f6ad1db94394942f19d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+    - subject: Install packages with eget
+      hash: e9a82eb31978feb6b49215ae83f099a49cff57a8
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+  version: 1.0.0
+  title: ""
+  date: 2023-02-22T15:22:48.468Z
+- commits:
     - subject: Parametrise runner options
       hash: f15b1b11b96b50116afd9514872d91b0d9a43a2a
       body: ""

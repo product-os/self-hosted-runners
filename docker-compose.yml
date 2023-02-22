@@ -3,7 +3,7 @@ volumes:
   persistent-volume: {}
 services:
   runner:
-    image: ghcr.io/product-os/self-hosted-runners:v0.0.5
+    image: ghcr.io/product-os/self-hosted-runners:v1.0.0
     privileged: true
     userns_mode: host
     cap_add:
