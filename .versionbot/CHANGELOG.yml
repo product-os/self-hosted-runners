@@ -1,4 +1,17 @@
 - commits:
+    - subject: Fix permissions on all files in user home
+      hash: edac7f5a709c53f8747920442b69324ba5923a06
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+  version: 1.0.1
+  title: ""
+  date: 2023-02-22T16:50:11.074Z
+- commits:
     - subject: Workaround issues running containerd on emulated ARM
       hash: 661608704ace5ffb47343e25deb1bd1955ad71cc
       body: |
