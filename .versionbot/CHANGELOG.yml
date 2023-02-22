@@ -1,4 +1,18 @@
 - commits:
+    - subject: Remove runtime step to install node
+      hash: a4441f93f59067907f02c361fcd3a46397761626
+      body: |
+        nodejs 18 is already in the base image
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+  version: 1.1.0
+  title: ""
+  date: 2023-02-22T17:42:16.522Z
+- commits:
     - subject: Fix permissions on all files in user home
       hash: edac7f5a709c53f8747920442b69324ba5923a06
       body: ""
