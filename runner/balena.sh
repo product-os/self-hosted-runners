@@ -38,14 +38,6 @@ curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
 
-function get_node() {
-    wget -qO- "https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh" | bash
-    NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install "${NODE_VERSION}"
-    nvm use "${NODE_VERSION}"
-}
-
 function get_geo() {
     if curl_with_opts -I https://ipinfo.io; then
         geoip_api_url=https://ipinfo.io
@@ -121,8 +113,6 @@ function start_github_runner() {
 }
 
 local_start_docker
-
-get_node
 
 start_github_runner "$*"
 
