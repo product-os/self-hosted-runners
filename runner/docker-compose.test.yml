@@ -14,7 +14,7 @@ services:
     cap_add:
       - ALL
     # https://github.com/product-os/self-hosted-runners/settings/secrets/actions/COMPOSE_VARS
-    # COMPOSE_VARS=$(cat .env  | openssl base64 -A)
+    # COMPOSE_VARS=$(cat .env | openssl base64 -A)
     env_file:
       # (required) GH_TOKEN with appropriate scope(s)
       # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)

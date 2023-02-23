@@ -26,9 +26,9 @@ function cleanup() {
     if [[ -s "/balena/token.${ACTIONS_RUNNER_NAME}" ]]; then
         runner_token="$(cat < "/balena/token.${ACTIONS_RUNNER_NAME}")"
         ./config.sh remove --token "${runner_token}"
-        rm -f "/balena/token.${ACTIONS_RUNNER_NAME}"
+        sudo rm -f "/balena/token.${ACTIONS_RUNNER_NAME}"
     fi
-    rm -f .runner
+    sudo rm -f .runner
     sleep "$(( (RANDOM % 10) + 10))s"
 }
 
