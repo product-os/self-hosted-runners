@@ -1,4 +1,17 @@
 - commits:
+    - subject: Remove redundant assets/versioning
+      hash: 7dc21912c3dc9aa9af58bb79b408619167a517fc
+      body: |
+        * fix cleanup
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 1.1.1
+  title: ""
+  date: 2023-02-23T22:48:06.870Z
+- commits:
     - subject: Remove runtime step to install node
       hash: a4441f93f59067907f02c361fcd3a46397761626
       body: |
