@@ -14,6 +14,7 @@ ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
 ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-false)}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false)}
+ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-self-hosted}
 DOCKER_REGISTRY_MIRROR_INTERNAL=${DOCKER_REGISTRY_MIRROR_INTERNAL:-""}
 DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
@@ -107,6 +108,7 @@ function start_github_runner() {
       --name "${ACTIONS_RUNNER_NAME}" \
       --token "${runner_token}" \
       --url "${url}" \
+      --runnergroup "${ACTIONS_RUNNER_GROUP}" \
       --labels "${ACTIONS_RUNNER_TAGS}"
 
     ./run.sh "$*" &
