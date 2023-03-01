@@ -73,8 +73,9 @@ function start_github_runner() {
     distro="$(cat < /etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{print $2}' | sed 's/"//g')"
     major="$(cat < /etc/lsb-release | grep DISTRIB_RELEASE | awk -F'=' '{print $2}' | sed 's/"//g')"
     minor="$(cat < /etc/lsb-release | grep DISTRIB_DESCRIPTION | awk -F'=' '{print $2}' | sed 's/"//g')"
-    machine="$(dpkg --print-architecture)"
-    arch="$(uname -m)"
+    # TODO: why are machine and arch incorrect on our custom arm32 docker socket?
+    machine="$(uname -m)"
+    arch="$(dpkg --print-architecture)"
     board="$(cat < /sys/devices/virtual/dmi/id/board_name || echo 'unknown')"
     cpu="$(nproc)"
     mem="$(($(cat < /proc/meminfo | grep MemTotal | awk '{print $2}') / 1024 / 1024))Gi"
