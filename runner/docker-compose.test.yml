@@ -22,6 +22,7 @@ services:
     environment:
       # test at the org. level
       GITHUB_ORG: product-os
+      ACTIONS_RUNNER_GROUP: Default
     volumes:
       - persistent-volume:/home/githhub/_work
       - persistent-volume:/var/lib/docker
@@ -51,6 +52,9 @@ services:
                     ;;
             esac
         fi
+
+        # GITHUB_TOKEN injected by Flowzone
+        GH_TOKEN=${GH_TOKEN:-${GITHUB_TOKEN}}
 
         # background entrypoint
         ./balena.sh &
