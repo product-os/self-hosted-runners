@@ -94,4 +94,7 @@ RUN pwsh -Version && \
     node --version && \
     npm --version
 
+ARG TARGETPLATFORM
+ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
+
 ENTRYPOINT ["/home/github/balena.sh"]
