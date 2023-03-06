@@ -1,9 +1,6 @@
 ---
 version: "2.4"
 
-volumes:
-  persistent-volume: {}
-
 services:
   sut:
     image: sut
@@ -23,11 +20,13 @@ services:
       # test at the org. level
       GITHUB_ORG: product-os
       ACTIONS_RUNNER_GROUP: Default
-    volumes:
-      - persistent-volume:/home/githhub/_work
-      - persistent-volume:/var/lib/docker
-      - persistent-volume:/scratch
-      - persistent-volume:/balena
+    tmpfs:
+      - /tmp
+      - /var/run
+      - /home/github/_work
+      - /var/lib/docker
+      - /scratch
+      - /balena
     entrypoint:
       - /bin/bash
       - "-c"
