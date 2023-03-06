@@ -27,13 +27,28 @@ FROM ${TARGETARCH}
 ARG DOCKER_VERSION=23.0.0
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV RUNNER_ALLOW_RUNASROOT=0
-ENV RUNNER_MANUALLY_TRAP_SIG=1
-ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
+ENV RUNNER_ALLOW_RUNASROOT 0
+ENV RUNNER_MANUALLY_TRAP_SIG 1
+ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
 
 WORKDIR /root
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008,SC2046
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
+
+# https://docs.docker.com/engine/install/ubuntu/
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && chmod a+r /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
 ARG OS_CODENAME TARGETARCH
 
@@ -66,9 +81,6 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     test -f /run/secrets/GITHUB_TOKEN && GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D || eget -D \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
-    mv .docker/cli-plugins/compose .docker/cli-plugins/docker-compose && \
-    mv .docker/cli-plugins/buildx .docker/cli-plugins/docker-buildx && \
-    chown -R github:github /home/github && \
     rm eget.toml
 
 # force legacy iptables for emulated ARM
