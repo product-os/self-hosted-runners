@@ -31,6 +31,10 @@ ENV RUNNER_ALLOW_RUNASROOT 0
 ENV RUNNER_MANUALLY_TRAP_SIG 1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
 
+# dockerd startup timeout
+ENV STARTUP_TIMEOUT 240
+ENV EXTRA_DOCKER_OPTS "--debug --iptables=false"
+
 WORKDIR /root
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -82,10 +86,6 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
     rm eget.toml
-
-# force legacy iptables for emulated ARM
-RUN update-alternatives --set iptables /usr/sbin/iptables-legacy && \
-    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 
 COPY --chown=github:github common.sh start-docker.sh balena.sh ./
 

@@ -15,7 +15,7 @@ sanitize_cgroups() {
 
   mount -o remount,rw /sys/fs/cgroup
 
-  sed -e 1d /proc/cgroups | while read sys hierarchy num enabled; do
+  sed -e 1d /proc/cgroups | while read sys _ _ enabled; do
     if [ "$enabled" != "1" ]; then
       # subsystem disabled; skip
       continue
@@ -47,7 +47,7 @@ sanitize_cgroups() {
     fi
   done
 
-  if [ ! -e /sys/fs/cgroup/systemd ] && [ $(cat /proc/self/cgroup | grep '^1:name=openrc:' | wc -l) -eq 0 ]; then
+  if [ ! -e /sys/fs/cgroup/systemd ] && [ "$(cat /proc/self/cgroup | grep '^1:name=openrc:' | wc -l)" -eq 0 ]; then
     mkdir /sys/fs/cgroup/systemd
     mount -t cgroup -o none,name=systemd none /sys/fs/cgroup/systemd
   fi
@@ -66,8 +66,8 @@ start_docker() {
     fi
   fi
 
-  local mtu=$(cat /sys/class/net/$(ip route get 8.8.8.8|awk '{ print $5 }')/mtu)
-  local server_args="--mtu ${mtu}"
+  local mtu="$(cat /sys/class/net/"$(ip route get 8.8.8.8|awk '{ print $5 }')"/mtu)"
+  local server_args="${EXTRA_DOCKER_OPTS} --mtu ${mtu}"
   local registry=""
 
   server_args="${server_args} --max-concurrent-downloads=$1 --max-concurrent-uploads=$2"
