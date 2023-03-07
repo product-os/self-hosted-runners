@@ -1,4 +1,48 @@
 - commits:
+    - subject: Disable docker iptables and enable debug logging
+      hash: e56bc462fe25f816b067312fc4a69afa254e02cf
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Install docker via apt repositories
+      hash: f256504c9fc392151b0c9fa74532d942a67a25f0
+      body: |
+        The standalone binaries are unstable on armv6 and armv7 whereas
+        the apt packages have been tested extensively.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Override CPU info for ARM variants
+      hash: 691b79b3144ab061d358a87762968d8f2c1e8d55
+      body: |
+        The current docker and balenaEngine binaries refer
+        to /proc/cpuinfo to determine the ARM variant on startup.
+
+        When using QEMU to emulate ARM on x86, this file reflects the host
+        CPU and not the emulated CPU.
+
+        Similarly, when running arm7l runners on arm64 hosts we want to force
+        the Docker to detect the target ARM variant from the container.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.2.0
+  title: ""
+  date: 2023-03-07T18:44:04.605Z
+- commits:
     - subject: Swap machine and arch labels to align with sources
       hash: 151d1af251f6b97eea085ab77d4016f26a74e2c5
       body: ""
