@@ -51,10 +51,32 @@ function get_geo() {
     fi
 }
 
+# override /proc/cpuinfo for ARM variants
+# see: https://github.com/containerd/containerd/pull/7636
+function override_cpuinfo() {
+    # nothing to do if the cpuinfo is already correct
+    if grep -q "CPU architecture: ${1}" /proc/cpuinfo
+    then
+        return 0
+    fi
+    
+    echo "CPU architecture: ${1}" > /tmp/cpuinfo
+    sudo mount --bind /tmp/cpuinfo /proc/cpuinfo
+}
+
 function local_start_docker() {
     sudo sysctl -w user.max_user_namespaces=15000 || true
 
     sudo rm -f /var/run/docker.pid
+
+    case "$(uname -m)" in
+        aarch64)
+            override_cpuinfo 8
+            ;;
+        armv7l)
+            override_cpuinfo 7
+            ;;
+    esac
 
     # shellcheck disable=SC2086
     if [[ -z "${DOCKER_HOST}" ]]; then

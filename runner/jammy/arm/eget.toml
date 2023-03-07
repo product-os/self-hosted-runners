@@ -34,23 +34,6 @@ target = "./k8s/"
 verify_sha256 = "0880c7d5fbb325a950975186609d0c309dc4831ce87bf6724eb43ef13f063b50"
 file = "*"
 
-["https://download.docker.com/linux/static/stable/armhf/docker-20.10.23.tgz"]
-target = "/usr/bin/"
-verify_sha256 = "0493007bda4e73988b05a4d3b797137b9ab12c50e35ced1deb9bde2eeaec2407"
-file = "docker/*"
-
-["docker/compose"]
-tag = "v2.16.0"
-asset_filters = ["armv7"]
-verify_sha256 = "558a083683bd597f5e167178dbdbe57824eecf2132bfb497a58f5d39c5e49e8a"
-target = "./.docker/cli-plugins/"
-
-["docker/buildx"]
-tag = "v0.10.3"
-asset_filters = ["arm-v7", "^.json"]
-verify_sha256 = "07eb9c583f40cb3e3943a228acd05b01245c5b1f45e1ede95b10a1e7ac45b54c"
-target = "./.docker/cli-plugins/"
-
 ["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-armv7l.tar.xz"]
 target = "/usr/"
 verify_sha256 = "39c308b9a75591860c4d2c05edae82c10a1157cfb67594837d60666ee960e8fe"

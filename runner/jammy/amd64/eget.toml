@@ -34,22 +34,6 @@ target = "./k8s/"
 verify_sha256 = "0880c7d5fbb325a950975186609d0c309dc4831ce87bf6724eb43ef13f063b50"
 file = "*"
 
-["https://download.docker.com/linux/static/stable/x86_64/docker-20.10.23.tgz"]
-target = "/usr/bin/"
-verify_sha256 = "0ee39f72cc434137d294c14d30897826bad6e24979e421f51a252769ad37e6d1"
-file = "docker/*"
-
-["docker/compose"]
-tag = "v2.16.0"
-verify_sha256 = "54ab01967b05e392e6bf13afbc654146890b9fa40501b40aca83a2db18f10427"
-target = "./.docker/cli-plugins/"
-
-["docker/buildx"]
-tag = "v0.10.3"
-asset_filters = ["^.json"]
-verify_sha256 = "91f260c9879f8dc8b78912409f8d9f16a3429d457dbcfa0a67169f74837a9290"
-target = "./.docker/cli-plugins/"
-
 ["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-x64.tar.xz"]
 target = "/usr/"
 verify_sha256 = "de15b44738578367cfb250b6551b4c97e0e0e8050fa931a4a9a7262d374d6034"
