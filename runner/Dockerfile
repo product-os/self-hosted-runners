@@ -1,6 +1,6 @@
 ARG OS_CODENAME=jammy
 
-FROM golang:1.20.1 AS eget
+FROM golang:1.20.2 AS eget
 
 WORKDIR /app
 
