@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.20.2
+      hash: 7321ad1982814248ddaa2abc64458450a6eca41e
+      body: |
+        Update golang from 1.20.1 to 1.20.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.2.1
+  title: ""
+  date: 2023-03-08T02:18:15.349Z
+- commits:
     - subject: Disable docker iptables and enable debug logging
       hash: e56bc462fe25f816b067312fc4a69afa254e02cf
       body: ""
