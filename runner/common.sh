@@ -1,6 +1,5 @@
 [[ $VERBOSE =~ true|True|yes|Yes|on|On|1 ]] && set -x
 
-LOG_FILE=${LOG_FILE:-/tmp/docker.log}
 SKIP_PRIVILEGED=${SKIP_PRIVILEGED:-false}
 STARTUP_TIMEOUT=${STARTUP_TIMEOUT:-120}
 
@@ -81,7 +80,7 @@ start_docker() {
   fi
 
   try_start() {
-    dockerd --data-root /scratch/docker ${server_args} >$LOG_FILE 2>&1 &
+    dockerd --data-root /scratch/docker ${server_args} 2>&1 &
     echo $! > /tmp/docker.pid
 
     sleep 1
@@ -95,12 +94,11 @@ start_docker() {
     done
   }
 
-  export server_args LOG_FILE
+  export server_args
   declare -fx try_start
   trap stop_docker EXIT
 
   if ! timeout ${STARTUP_TIMEOUT} bash -ce 'while true; do try_start && break; done'; then
-    [ -f "$LOG_FILE" ] && cat "${LOG_FILE}"
     echo Docker failed to start within ${STARTUP_TIMEOUT} seconds.
     return 1
   fi

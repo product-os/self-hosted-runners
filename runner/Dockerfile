@@ -23,17 +23,14 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64
 # hadolint ignore=DL3006
 FROM ${TARGETARCH}
 
-# https://docs.docker.com/engine/release-notes
-ARG DOCKER_VERSION=23.0.0
+# dockerd startup timeout
+ENV STARTUP_TIMEOUT 120
+ENV EXTRA_DOCKER_OPTS "--iptables=false"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV RUNNER_ALLOW_RUNASROOT 0
 ENV RUNNER_MANUALLY_TRAP_SIG 1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
-
-# dockerd startup timeout
-ENV STARTUP_TIMEOUT 240
-ENV EXTRA_DOCKER_OPTS "--debug --iptables=false"
 
 WORKDIR /root
 
