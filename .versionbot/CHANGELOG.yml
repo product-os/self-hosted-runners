@@ -1,4 +1,19 @@
 - commits:
+    - subject: Write dockerd logs directly to stdout of the container
+      hash: cf30575068f7d1a408d24e81769ee244d2b922d6
+      body: |
+        This prevents missing important logs when debug is enabled.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.2.2
+  title: ""
+  date: 2023-03-10T21:55:17.099Z
+- commits:
     - subject: Update golang Docker tag to v1.20.2
       hash: 7321ad1982814248ddaa2abc64458450a6eca41e
       body: |
