@@ -27,6 +27,8 @@ services:
       - /var/lib/docker
       - /scratch
       - /balena
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
     entrypoint:
       - /bin/bash
       - "-c"
@@ -42,17 +44,27 @@ services:
 
         # wait for DinD
         while ! docker ps; do
-            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
+
+        # check if we are virtualized
+        cont_arch="$$(docker info | grep Architecture:)"
+        host_arch="$$(sudo DOCKER_HOST=unix:///host/var/run/docker.sock docker info | grep Architecture:)"
+        if [ "$${cont_arch}" != "$${host_arch}" ]
+        then
+            echo "Container architecture ($${cont_arch}) does not match host architecture ($${host_arch})"
+            echo "Skipping runner tests for emulated environments..."
+            exit 0
+        fi
 
         # wait for runner
         while ! pgrep Runner.Listener; do
-            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
         # check runner registration
         while ! test -f .runner; do
-            sleep "$(( ( RANDOM % 3 ) + 3 ))s"
+            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
         # TBC: is this enough?

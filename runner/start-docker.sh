@@ -21,9 +21,4 @@ start_docker \
 
 chown github:github /var/run/docker.sock
 
-while ! docker system info; do
-    [ -f /tmp/docker.log ] && tail -n 10 /tmp/docker.log
-    sleep "$(( ( RANDOM % 3 ) + 3 ))s"
-done
-
-tail -f /tmp/docker.log
+tail -f /dev/null
