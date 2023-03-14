@@ -22,9 +22,9 @@ file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v2.303.0"
+tag = "v2.302.1"
 target = "./"
-verify_sha256 = "6b9ba0e7296b5d613dc5aaa0ca640c16b2122a7d42e4b5906c67d9b5c8847e10"
+verify_sha256 = "cac05dc325a3fd86e0253bd5bda1831e1d550805c47d6e3cc6d248570ceb3b74"
 file = "*"
 
 ["actions/runner-container-hooks"]
