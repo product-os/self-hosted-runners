@@ -22,7 +22,7 @@ file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v2.301.1"
+tag = "v2.303.0"
 target = "./"
 verify_sha256 = "6b9ba0e7296b5d613dc5aaa0ca640c16b2122a7d42e4b5906c67d9b5c8847e10"
 file = "*"
