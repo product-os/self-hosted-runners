@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update checksums and downgrade to previous
+      hash: 7998d463bf6993776cfdecebeae3ad90918d6b28
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 1.2.4
+  title: ""
+  date: 2023-03-14T22:01:36.293Z
+- commits:
     - subject: Update runner version
       hash: 422be77b1284584bc8460730805460bf7bafe46b
       body: ""
