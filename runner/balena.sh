@@ -59,7 +59,7 @@ function override_cpuinfo() {
     then
         return 0
     fi
-    
+
     echo "CPU architecture: ${1}" > /tmp/cpuinfo
     sudo mount --bind /tmp/cpuinfo /proc/cpuinfo
 }
@@ -87,7 +87,8 @@ function local_start_docker() {
 function start_github_runner() {
     [[ -z $GH_TOKEN ]] && false
 
-    mkdir -p /home/github/_work && sudo chown -R github:github /home/github/_work
+    mkdir -p "${HOME}/_work"
+    sudo chown -R "$(id -un):$(id -gn)" "${HOME}"
 
     get_geo
 

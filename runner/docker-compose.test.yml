@@ -20,6 +20,7 @@ services:
       # test at the org. level
       GITHUB_ORG: product-os
       ACTIONS_RUNNER_GROUP: Default
+      ACTIONS_RUNNER_EPHEMERAL: "true"
     tmpfs:
       - /tmp
       - /var/run
