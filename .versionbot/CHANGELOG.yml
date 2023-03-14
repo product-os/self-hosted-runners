@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fix home permissions
+      hash: f371de1c82bf6e350d1d8a65523ef2259d3f5bf9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 1.2.5
+  title: ""
+  date: 2023-03-14T22:56:53.621Z
+- commits:
     - subject: Update checksums and downgrade to previous
       hash: 7998d463bf6993776cfdecebeae3ad90918d6b28
       body: ""
