@@ -1,19 +1,5 @@
 ARG OS_CODENAME=jammy
 
-FROM golang:1.20.2 AS eget
-
-WORKDIR /app
-
-# build eget from source until this commit is tagged in a release
-RUN git clone -n https://github.com/zyedidia/eget . && \
-    git checkout ff0fd7efd18ebf8219b89ad28959ea49e8726d07 && \
-    make build
-
-# RUN curl -o eget.sh https://zyedidia.github.io/eget.sh && \
-#     echo "0e64b8a3c13f531da005096cc364ac77835bda54276fedef6c62f3dbdc1ee919  eget.sh" | sha256sum - && \
-#     bash eget.sh && \
-#     rm eget.sh
-
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm32v7 AS arm
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm64v8 AS arm64
@@ -60,18 +46,30 @@ COPY ${OS_CODENAME}/packages.txt ./os.txt
 RUN apt-get update && apt-get install -y --no-install-recommends \
     $(<./common.txt) \
     $(<./os.txt) \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm common.txt os.txt
+    && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m github && \
     addgroup --system docker && \
     usermod -aG sudo github && \
-    usermod -aG docker github && \
+    usermod -aG docker github && \  
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /home/github
 
-COPY --from=eget /app/eget /usr/local/bin/eget
+ARG EGET_RELEASE=1.3.3
+ARG EGET_SHA256_arm=8b13bc2dbf72a6a0ea2619663e9e5e55f74787459a88a89ebdbd390135d3b836
+ARG EGET_SHA256_arm64=276d58ec76178be131fb920f3a7dea2e4603a3746c77350d9d3deffa2f5143a2
+ARG EGET_SHA256_amd64=373a3bf0864344bfae684b575f01e9c4759b0aa7091dd9c325a3a373cf437d38
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN asset="eget-${EGET_RELEASE}-linux_${TARGETARCH}.tar.gz" && \
+    sha256="EGET_SHA256_${TARGETARCH}" && \
+    curl -fsSL -O "https://github.com/zyedidia/eget/releases/download/v${EGET_RELEASE}/${asset}" && \
+    echo "${!sha256} ${asset}" | sha256sum -c - && \
+    tar -xzv -C /usr/local/bin -f "${asset}" --strip-components=1 --wildcards '*/eget' && \
+    rm "${asset}" && \
+    chmod +x /usr/local/bin/eget
 
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
 
@@ -82,7 +80,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     test -f /run/secrets/GITHUB_TOKEN && GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D || eget -D \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
-    rm eget.toml
+    chown -R github:github .
 
 COPY --chown=github:github common.sh start-docker.sh balena.sh ./
 
