@@ -13,6 +13,15 @@ jobs:
   flowzone:
     name: Flowzone
     uses: product-os/flowzone/.github/workflows/flowzone.yml@master
+    # prevent duplicate workflow executions for pull_request and pull_request_target
+    if: |
+      (
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        github.event_name == 'pull_request'
+      ) || (
+        github.event.pull_request.head.repo.full_name != github.repository &&
+        github.event_name == 'pull_request_target'
+      )
     secrets: inherit
     with:
       working_directory: runner
@@ -22,7 +31,14 @@ jobs:
       docker_images: |
         ghcr.io/product-os/self-hosted-runners
       bake_targets: |
-        default,focal
+        jammy,
+        focal,
+        jammy-amd64,
+        focal-amd64,
+        jammy-arm64v8,
+        focal-arm64v8,
+        jammy-arm32v7,
+        focal-arm32v7
       token_scope: >-
           {
             "actions": "read",
