@@ -1,4 +1,18 @@
 - commits:
+    - subject: Publish docker tags for each platform
+      hash: 6667b9092b4ea5cb3caff75ceca10136487466d3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.2.8
+  title: ""
+  date: 2023-03-27T19:10:45.726Z
+- commits:
     - subject: Prevent duplicate workflows from breaking branch protection
       hash: c5c9b2c24cc91b9ad5c6dc3fb7f203c48580ecbd
       body: ""
