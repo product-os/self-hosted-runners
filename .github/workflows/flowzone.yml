@@ -1,5 +1,4 @@
 name: Flowzone
-
 on:
   pull_request:
     types: [opened, synchronize, closed]
@@ -8,11 +7,10 @@ on:
   pull_request_target:
     types: [opened, synchronize, closed]
     branches: [main, master]
-
 jobs:
   flowzone:
     name: Flowzone
-    uses: product-os/flowzone/.github/workflows/flowzone.yml@master
+    uses: product-os/flowzone/.github/workflows/flowzone.yml@kyle/docker-publish-intermediate # 4534929697-1
     # prevent duplicate workflow executions for pull_request and pull_request_target
     if: |
       (
@@ -33,19 +31,21 @@ jobs:
       bake_targets: |
         default,focal
       token_scope: >-
-          {
-            "actions": "read",
-            "administration": "write",
-            "checks": "read",
-            "contents": "write",
-            "members": "read",
-            "metadata": "read",
-            "organization_secrets": "read",
-            "organization_self_hosted_runners": "write",
-            "packages": "write",
-            "pages": "write",
-            "pull_requests": "read",
-            "secrets": "read",
-            "statuses": "read",
-            "workflows": "read"
-          }
+        {
+
+
+          "actions": "read",
+          "administration": "write",
+          "checks": "read",
+          "contents": "write",
+          "members": "read",
+          "metadata": "read",
+          "organization_secrets": "read",
+          "organization_self_hosted_runners": "write",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "read",
+          "secrets": "read",
+          "statuses": "read",
+          "workflows": "read"
+        }
