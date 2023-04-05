@@ -24,21 +24,18 @@ services:
       VERBOSE: "true"
     tmpfs:
       - /tmp
-      - /var/run
-      - /home/github/_work
+      - /run:exec
+      - /home/github/_work:exec
       - /scratch
-      - /balena
     volumes:
       - /var/run/docker.sock:/host/var/run/docker.sock
-    entrypoint:
-      - /bin/bash
-      - "-c"
     command:
+      - /bin/bash
+      - -c
       - |
-        set -axe
+        set -axeo pipefail
 
-        # background entrypoint
-        ./balena.sh &
+        /start-runner.sh &
 
         # wait for DinD
         count=0
@@ -47,12 +44,13 @@ services:
             echo "DinD failed to start"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        # check if we are virtualized
+        # skip runner tests for emulated environments
         cont_arch="$$(docker info | grep Architecture:)"
-        host_arch="$$(sudo DOCKER_HOST=unix:///host/var/run/docker.sock docker info | grep Architecture:)"
+        host_arch="$$(DOCKER_HOST=unix:///host/var/run/docker.sock docker info | grep Architecture:)"
         if [ "$${cont_arch}" != "$${host_arch}" ]
         then
             echo "Container architecture ($${cont_arch}) does not match host architecture ($${host_arch})"
@@ -67,6 +65,7 @@ services:
             echo "Runner failed to start"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
@@ -77,6 +76,7 @@ services:
             echo "Runner failed to register"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
@@ -97,5 +97,6 @@ services:
               echo "Runner failed to come online"
               exit 1
             fi
+            count=$$((count + 1))
             sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
         done

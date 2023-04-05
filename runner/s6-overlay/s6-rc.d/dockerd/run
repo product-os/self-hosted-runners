@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -ae
+
+[[ $VERBOSE =~ true|True|yes|Yes|on|On|1 ]] && set -x
+
+DOCKER_REGISTRY_MIRROR_INTERNAL=${DOCKER_REGISTRY_MIRROR_INTERNAL:-""}
+DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
+MAX_CONCURRENT_DOWNLOADS=${MAX_CONCURRENT_DOWNLOADS:-3}
+MAX_CONCURRENT_UPLOADS=${MAX_CONCURRENT_UPLOADS:-5}
+
+# override /proc/cpuinfo for ARM variants
+# see: https://github.com/containerd/containerd/pull/7636
+function override_cpuinfo() {
+  # nothing to do if the cpuinfo is already correct
+  if grep -q "CPU architecture: ${1}" /proc/cpuinfo; then
+    return 0
+  fi
+
+  echo "CPU architecture: ${1}" >/tmp/cpuinfo
+  mount --bind /tmp/cpuinfo /proc/cpuinfo
+}
+
+sysctl -w user.max_user_namespaces=15000 || true
+
+rm -f /var/run/docker.pid
+
+case "$(uname -m)" in
+aarch64)
+  override_cpuinfo 8
+  ;;
+armv7l)
+  override_cpuinfo 7
+  ;;
+esac
+
+dockerd_args=()
+dockerd_args+=("--data-root=/scratch/docker")
+dockerd_args+=("--mtu=$(cat /sys/class/net/"$(ip route get 8.8.8.8 | awk '{ print $5 }')"/mtu)")
+dockerd_args+=("--max-concurrent-downloads=${MAX_CONCURRENT_DOWNLOADS}")
+dockerd_args+=("--max-concurrent-uploads=${MAX_CONCURRENT_UPLOADS}")
+
+for registry in ${DOCKER_REGISTRY_MIRROR_INTERNAL}; do
+  dockerd_args+=("--insecure-registry=${registry}")
+done
+
+if [ -n "${DOCKER_REGISTRY_MIRROR}" ]; then
+  dockerd_args+=("--registry-mirror=${DOCKER_REGISTRY_MIRROR}")
+fi
+
+# shellcheck disable=SC2086
+exec dockerd "${dockerd_args[@]}" ${EXTRA_DOCKERD_ARGS} 2>&1
