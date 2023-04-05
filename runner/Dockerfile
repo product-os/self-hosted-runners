@@ -82,9 +82,9 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
     chown -R github:github .
 
-COPY --chown=github:github common.sh start-docker.sh balena.sh ./
+COPY --chown=github:github dockerd.sh runner.sh supervisord.conf ./
 
-RUN chmod +x ./balena.sh
+RUN chmod +x dockerd.sh runner.sh
 
 USER github
 
@@ -104,4 +104,5 @@ RUN pwsh -Version && \
 ARG TARGETPLATFORM
 ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
 
-ENTRYPOINT ["/home/github/balena.sh"]
+CMD [ "/usr/bin/supervisord", "-c", "/home/github/supervisord.conf" ]
+

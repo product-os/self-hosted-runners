@@ -15,13 +15,7 @@ ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-false)}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false)}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-self-hosted}
-DOCKER_REGISTRY_MIRROR_INTERNAL=${DOCKER_REGISTRY_MIRROR_INTERNAL:-""}
-DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
-MAX_CONCURRENT_DOWNLOADS=${MAX_CONCURRENT_DOWNLOADS:-3}
-MAX_CONCURRENT_UPLOADS=${MAX_CONCURRENT_UPLOADS:-5}
-NODE_VERSION=${NODE_VERSION:-18}
-NVM_VERSION=${NVM_VERSION:-0.39.3}
 
 function cleanup() {
     if [[ -s "/balena/token.${ACTIONS_RUNNER_NAME}" ]]; then
@@ -48,39 +42,6 @@ function get_geo() {
         ipinfo="$(curl_with_opts "${geoip_api_url}")"
     else
         ipinfo='{"city":"Unknown","region":"Unknown","country":"Unknown"}'
-    fi
-}
-
-# override /proc/cpuinfo for ARM variants
-# see: https://github.com/containerd/containerd/pull/7636
-function override_cpuinfo() {
-    # nothing to do if the cpuinfo is already correct
-    if grep -q "CPU architecture: ${1}" /proc/cpuinfo
-    then
-        return 0
-    fi
-
-    echo "CPU architecture: ${1}" > /tmp/cpuinfo
-    sudo mount --bind /tmp/cpuinfo /proc/cpuinfo
-}
-
-function local_start_docker() {
-    sudo sysctl -w user.max_user_namespaces=15000 || true
-
-    sudo rm -f /var/run/docker.pid
-
-    case "$(uname -m)" in
-        aarch64)
-            override_cpuinfo 8
-            ;;
-        armv7l)
-            override_cpuinfo 7
-            ;;
-    esac
-
-    # shellcheck disable=SC2086
-    if [[ -z "${DOCKER_HOST}" ]]; then
-        sudo -Eb ./start-docker.sh &
     fi
 }
 
@@ -136,11 +97,9 @@ function start_github_runner() {
       --runnergroup "${ACTIONS_RUNNER_GROUP}" \
       --labels "${ACTIONS_RUNNER_TAGS}"
 
-    ./run.sh "$*" &
+    ./run.sh &
 }
 
-local_start_docker
-
-start_github_runner "$*"
+start_github_runner
 
 wait $!

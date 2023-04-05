@@ -8,6 +8,7 @@ jq
 openssh-client
 software-properties-common
 sudo
+supervisor
 uuid-runtime
 vim
 wget

@@ -41,7 +41,7 @@ services:
         GH_TOKEN=${GH_TOKEN:-${GITHUB_TOKEN}}
 
         # background entrypoint
-        ./balena.sh &
+        /usr/bin/supervisord -c /home/github/supervisord.conf &
 
         # wait for DinD
         while ! docker ps; do
