@@ -22,16 +22,16 @@ file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v2.302.1"
+tag = "v2.303.0"
 target = "./"
-verify_sha256 = "cb9992e3853d95116ff73f9353b45d5134e315eb3c03b13fb6adb8651346411d"
+verify_sha256 = "cb55db5f6e8e2ab3db0c4236aad7d240e413a2b8aa7dffd24a288255dbb05fcf"
 file = "*"
 
 ["actions/runner-container-hooks"]
-asset_filters = ["k8s", ".zip"]
-tag = "v0.2.0"
-target = "./k8s/"
-verify_sha256 = "0880c7d5fbb325a950975186609d0c309dc4831ce87bf6724eb43ef13f063b50"
+asset_filters = ["docker", ".zip"]
+tag = "v0.3.1"
+target = "./docker/"
+verify_sha256 = "93e1f85b6986181e89c08c38605d11d2e3e37a990ad388e0401c872609bfcc69"
 file = "*"
 
 ["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-armv7l.tar.xz"]
