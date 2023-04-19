@@ -1,4 +1,20 @@
 - commits:
+    - subject: Build eget from source
+      hash: fc04f80931294e8be37e5702ba1b74fb879c5cd7
+      body: |
+        This makes it easier to get pre-release features
+        and simplifies the Dockerfile.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.3.2
+  title: ""
+  date: 2023-04-19T16:02:48.527Z
+- commits:
     - subject: Wait for runner to register as online during tests
       hash: e147de0348e7088ba273efb4a590a3ac35ea6956
       body: ""
