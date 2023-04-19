@@ -41,8 +41,13 @@ services:
         ./balena.sh &
 
         # wait for DinD
+        count=0
         while ! docker info; do
-            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
+          if [ "$${count}" -gt 10 ]; then
+            echo "DinD failed to start"
+            exit 1
+          fi
+          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
         # check if we are virtualized
@@ -56,25 +61,41 @@ services:
         fi
 
         # wait for runner
+        count=0
         while ! pgrep Runner.Listener; do
-            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
+          if [ "$${count}" -gt 10 ]; then
+            echo "Runner failed to start"
+            exit 1
+          fi
+          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
         # check runner registration
+        count=0
         while ! test -f .runner; do
-            sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
+          if [ "$${count}" -gt 10 ]; then
+            echo "Runner failed to register"
+            exit 1
+          fi
+          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
         agentId="$(jq -r '.agentId' .runner)"
         slug=orgs
         if [[ -n "$${GITHUB_ENTERPRISE}" ]]; then
-            GITHUB_ORG="$${GITHUB_ENTERPRISE}"
-            slug=enterprises
+          GITHUB_ORG="$${GITHUB_ENTERPRISE}"
+          slug=enterprises
         fi
+
         # wait for runner to be online
+        count=0
         while ! curl -fsSL \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $${GH_TOKEN:-$${GITHUB_TOKEN}}" \
           https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId} | jq -r 'select(.status == "online") | .status'; do
-              sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
+            if [ "$${count}" -gt 10 ]; then
+              echo "Runner failed to come online"
+              exit 1
+            fi
+            sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
         done
