@@ -21,11 +21,11 @@ services:
       GITHUB_ORG: product-os
       ACTIONS_RUNNER_GROUP: Default
       ACTIONS_RUNNER_EPHEMERAL: "true"
+      VERBOSE: "true"
     tmpfs:
       - /tmp
       - /var/run
       - /home/github/_work
-      - /var/lib/docker
       - /scratch
       - /balena
     volumes:
@@ -37,14 +37,11 @@ services:
       - |
         set -axe
 
-        # GITHUB_TOKEN injected by Flowzone
-        GH_TOKEN=${GH_TOKEN:-${GITHUB_TOKEN}}
-
         # background entrypoint
         ./balena.sh &
 
         # wait for DinD
-        while ! docker ps; do
+        while ! docker info; do
             sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
@@ -68,5 +65,16 @@ services:
             sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        # TBC: is this enough?
-        cat .runner | jq -r
+        agentId="$(jq -r '.agentId' .runner)"
+        slug=orgs
+        if [[ -n "$${GITHUB_ENTERPRISE}" ]]; then
+            GITHUB_ORG="$${GITHUB_ENTERPRISE}"
+            slug=enterprises
+        fi
+        # wait for runner to be online
+        while ! curl -fsSL \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $${GH_TOKEN:-$${GITHUB_TOKEN}}" \
+          https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId} | jq -r 'select(.status == "online") | .status'; do
+              sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
+        done
