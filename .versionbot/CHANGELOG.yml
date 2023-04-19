@@ -1,4 +1,18 @@
 - commits:
+    - subject: Wait for runner to register as online during tests
+      hash: e147de0348e7088ba273efb4a590a3ac35ea6956
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.3.1
+  title: ""
+  date: 2023-04-19T15:33:15.961Z
+- commits:
     - subject: Update actions/runner and runner-container-hooks
       hash: e44568ee2f5ff35003eaf869eff7d43f6093f72f
       body: |
