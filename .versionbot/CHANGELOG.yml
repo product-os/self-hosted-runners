@@ -1,4 +1,19 @@
 - commits:
+    - subject: Update actions/runner and runner-container-hooks
+      hash: e44568ee2f5ff35003eaf869eff7d43f6093f72f
+      body: |
+        Also switch to the docker variant of runner-container-hooks
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 1.3.0
+  title: ""
+  date: 2023-04-19T14:47:51.734Z
+- commits:
     - subject: Publish docker tags for each platform
       hash: 6667b9092b4ea5cb3caff75ceca10136487466d3
       body: ""
