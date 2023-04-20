@@ -20,11 +20,11 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64
 # hadolint ignore=DL3006
 FROM ${TARGETARCH}
 
-ENV DEBIAN_FRONTEND noninteractive
-
 WORKDIR /root
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV DEBIAN_FRONTEND noninteractive
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -54,9 +54,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN useradd -m github && \
     addgroup --system docker && \
-    usermod -aG sudo github && \
-    usermod -aG docker github && \  
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    usermod -aG docker github
 
 WORKDIR /home/github
 
@@ -70,14 +68,9 @@ COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     test -f /run/secrets/GITHUB_TOKEN && GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D || eget -D \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
-    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
-    chown -R github:github .
+    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
-COPY --chown=github:github common.sh start-docker.sh balena.sh ./
-
-RUN chmod +x ./balena.sh
-
-USER github
+RUN chown -R github:github /home/github
 
 # containerd version check will fail on emulated ARM until this fix is released
 # https://github.com/containerd/containerd/pull/7636
@@ -95,11 +88,16 @@ RUN pwsh -Version && \
 ARG TARGETPLATFORM
 ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
 
-# dockerd startup timeout
-ENV STARTUP_TIMEOUT 120
-ENV EXTRA_DOCKER_OPTS "--iptables=false"
+ENV EXTRA_DOCKERD_ARGS ""
 ENV RUNNER_ALLOW_RUNASROOT 0
 ENV RUNNER_MANUALLY_TRAP_SIG 1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
+ENV S6_KEEP_ENV 1
 
-ENTRYPOINT ["/home/github/balena.sh"]
+COPY s6-overlay /etc/s6-overlay
+COPY start-runner.sh /
+
+RUN chmod +x /start-runner.sh
+
+ENTRYPOINT [ "/init"]
+CMD [ "/start-runner.sh" ]

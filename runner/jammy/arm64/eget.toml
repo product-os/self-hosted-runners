@@ -38,3 +38,13 @@ file = "*"
 target = "/usr/"
 verify_sha256 = "e3e39b9c3d5475857f62bd8d501d4d3f39303691b6357fba81f2c2b6de6e8520"
 file = "node-v18.14.2-linux-arm64/*"
+
+["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-noarch.tar.xz"]
+verify_sha256 = "d63a4b00051127ae66992164926d5772faee2bb598c666898184879b3ff403fc"
+target = "/"
+file = "*"
+
+["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-aarch64.tar.xz"]
+verify_sha256 = "173db625a038c496f30c1cb8f86da2d917a4b6f58dfcd880998967fd8dd2bcf2"
+target = "/"
+file = "*"

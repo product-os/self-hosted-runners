@@ -22,23 +22,17 @@ services:
       ACTIONS_RUNNER_GROUP: Default
       ACTIONS_RUNNER_EPHEMERAL: "true"
       VERBOSE: "true"
+      EXTRA_DOCKERD_ARGS: "--iptables=false"
     tmpfs:
       - /tmp
-      - /var/run
-      - /home/github/_work
+      - /run:exec
+      - /home/github/_work:exec
       - /scratch
-      - /balena
-    volumes:
-      - /var/run/docker.sock:/host/var/run/docker.sock
-    entrypoint:
-      - /bin/bash
-      - "-c"
     command:
+      - /bin/bash
+      - -c
       - |
-        set -axe
-
-        # background entrypoint
-        ./balena.sh &
+        set -axeo pipefail
 
         # wait for DinD
         count=0
@@ -47,18 +41,16 @@ services:
             echo "DinD failed to start"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        # check if we are virtualized
-        cont_arch="$$(docker info | grep Architecture:)"
-        host_arch="$$(sudo DOCKER_HOST=unix:///host/var/run/docker.sock docker info | grep Architecture:)"
-        if [ "$${cont_arch}" != "$${host_arch}" ]
-        then
-            echo "Container architecture ($${cont_arch}) does not match host architecture ($${host_arch})"
-            echo "Skipping runner tests for emulated environments..."
-            exit 0
+        if readlink -f /proc/1/exe | grep -q qemu; then
+          echo "Skipping runner tests for emulated environments..."
+          exit 0
         fi
+
+        /start-runner.sh &
 
         # wait for runner
         count=0
@@ -67,6 +59,7 @@ services:
             echo "Runner failed to start"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
@@ -77,6 +70,7 @@ services:
             echo "Runner failed to register"
             exit 1
           fi
+          count=$$((count + 1))
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
@@ -97,5 +91,6 @@ services:
               echo "Runner failed to come online"
               exit 1
             fi
+            count=$$((count + 1))
             sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
         done
