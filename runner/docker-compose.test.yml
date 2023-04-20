@@ -28,15 +28,11 @@ services:
       - /run:exec
       - /home/github/_work:exec
       - /scratch
-    volumes:
-      - /var/run/docker.sock:/host/var/run/docker.sock
     command:
       - /bin/bash
       - -c
       - |
         set -axeo pipefail
-
-        /start-runner.sh &
 
         # wait for DinD
         count=0
@@ -49,15 +45,12 @@ services:
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        # skip runner tests for emulated environments
-        cont_arch="$$(docker info | grep Architecture:)"
-        host_arch="$$(DOCKER_HOST=unix:///host/var/run/docker.sock docker info | grep Architecture:)"
-        if [ "$${cont_arch}" != "$${host_arch}" ]
-        then
-            echo "Container architecture ($${cont_arch}) does not match host architecture ($${host_arch})"
-            echo "Skipping runner tests for emulated environments..."
-            exit 0
+        if readlink -f /proc/1/exe | grep -q qemu; then
+          echo "Skipping runner tests for emulated environments..."
+          exit 0
         fi
+
+        /start-runner.sh &
 
         # wait for runner
         count=0
