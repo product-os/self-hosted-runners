@@ -1,4 +1,38 @@
 - commits:
+    - subject: Enable iptables by default and only disable for compose tests
+      hash: d24a7dfb256fbfe0fa5c53f422a17eb891d3bab0
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Remove sudo
+      hash: 4583910edc7b010271d140cabda95af1e058c1e3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Use s6-overlay for init and service management
+      hash: 8fdd9c1b27f8194339e2400a54bec08ccb46afb6
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.0
+  title: ""
+  date: 2023-04-20T13:51:06.862Z
+- commits:
     - subject: Build eget from source
       hash: fc04f80931294e8be37e5702ba1b74fb879c5cd7
       body: |
