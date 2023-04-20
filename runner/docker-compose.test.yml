@@ -22,6 +22,7 @@ services:
       ACTIONS_RUNNER_GROUP: Default
       ACTIONS_RUNNER_EPHEMERAL: "true"
       VERBOSE: "true"
+      EXTRA_DOCKERD_ARGS: "--iptables=false"
     tmpfs:
       - /tmp
       - /run:exec
