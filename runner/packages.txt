@@ -8,6 +8,7 @@ jq
 openssh-client
 software-properties-common
 sudo
+unzip
 uuid-runtime
 vim
 wget
