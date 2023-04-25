@@ -1,4 +1,18 @@
 - commits:
+    - subject: Install unzip
+      hash: 2facc1933ea4fb2148007ea8ecd268b1b20b360e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.2
+  title: ""
+  date: 2023-04-25T23:57:55.038Z
+- commits:
     - subject: Use su to switch to github user instead of s6-setuidgid
       hash: a13df17fc9c4f90b6afb3480f59a6b980296d6fe
       body: |
