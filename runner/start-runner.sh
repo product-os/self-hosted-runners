@@ -39,13 +39,6 @@ function get_geo() {
     fi
 }
 
-if [[ -z "${GH_TOKEN:-${GITHUB_TOKEN}}" ]]; then
-    echo "GH_TOKEN/GITHUB_TOKEN is not set"
-    exit 1
-fi
-
-GH_TOKEN="${GH_TOKEN:-${GITHUB_TOKEN}}"
-
 get_geo
 
 family="$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')"
@@ -75,6 +68,13 @@ if [[ -n "${GITHUB_ENTERPRISE}" ]]; then
     slug=enterprises
     url="https://github.com/${slug}/${GITHUB_ENTERPRISE}"
 fi
+
+if [[ -z "${GH_TOKEN:-${GITHUB_TOKEN}}" ]]; then
+    echo "GH_TOKEN/GITHUB_TOKEN is not set"
+    exit 1
+fi
+
+GH_TOKEN="${GH_TOKEN:-${GITHUB_TOKEN}}"
 
 registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
 payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${GH_TOKEN}")
