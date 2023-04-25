@@ -7,6 +7,7 @@ iptables
 jq
 openssh-client
 software-properties-common
+sudo
 uuid-runtime
 vim
 wget
