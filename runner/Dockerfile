@@ -54,7 +54,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN useradd -m github && \
     addgroup --system docker && \
-    usermod -aG docker github
+    usermod -aG sudo github && \
+    usermod -aG docker github && \  
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /home/github
 
