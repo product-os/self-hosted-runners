@@ -100,6 +100,6 @@ chown -R "github:github" /home/github
 rm -f /var/run/runner.token
 rm -f /home/github/.runner
 
-s6-setuidgid github /home/github/config.sh "${config_args[@]}"
+su - github -c "/home/github/config.sh ${config_args[*]}" 2>&1
 
-exec s6-setuidgid github /home/github/run.sh 2>&1
+exec su - github -c "/home/github/run.sh" 2>&1
