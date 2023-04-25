@@ -1,4 +1,20 @@
 - commits:
+    - subject: Use su to switch to github user instead of s6-setuidgid
+      hash: a13df17fc9c4f90b6afb3480f59a6b980296d6fe
+      body: |
+        s6-setuidgid does not set the target user environment so
+        env vars like HOME still point to /root
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.1
+  title: ""
+  date: 2023-04-25T20:48:41.572Z
+- commits:
     - subject: Enable iptables by default and only disable for compose tests
       hash: d24a7dfb256fbfe0fa5c53f422a17eb891d3bab0
       body: ""
