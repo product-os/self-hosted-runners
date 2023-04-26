@@ -63,6 +63,8 @@ services:
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
+        strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/github
+
         # check runner registration
         count=0
         while ! test -f .runner; do
