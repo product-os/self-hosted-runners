@@ -1,4 +1,18 @@
 - commits:
+    - subject: Test that the runner process is using the correct HOME env
+      hash: 2aa3021cd3a5588915f66ba4e8c036c950741593
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.3
+  title: ""
+  date: 2023-04-26T01:50:31.645Z
+- commits:
     - subject: Install unzip
       hash: 2facc1933ea4fb2148007ea8ecd268b1b20b360e
       body: ""
