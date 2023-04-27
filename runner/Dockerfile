@@ -41,6 +41,11 @@ RUN mkdir -p /etc/apt/keyrings \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
+
 ARG OS_CODENAME TARGETARCH
 
 COPY packages.txt ./common.txt
@@ -55,7 +60,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN useradd -m github && \
     addgroup --system docker && \
     usermod -aG sudo github && \
-    usermod -aG docker github && \  
+    usermod -aG docker github && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /home/github
@@ -74,6 +79,10 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
 
 RUN chown -R github:github /home/github
 
+# no GitHub linux/arm release(s)
+RUN [ "$(uname -m)" == x86_64 ] && \
+    (ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version) || true
+
 # containerd version check will fail on emulated ARM until this fix is released
 # https://github.com/containerd/containerd/pull/7636
 RUN pwsh -Version && \
@@ -85,7 +94,9 @@ RUN pwsh -Version && \
     docker buildx version && \
     docker compose version && \
     node --version && \
-    npm --version
+    npm --version && \
+    gh version && \
+    aws --version
 
 ARG TARGETPLATFORM
 ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM

@@ -1,4 +1,6 @@
+awscli
 build-essential
+gh
 git
 htop
 imvirt
@@ -6,6 +8,7 @@ iproute2
 iptables
 jq
 openssh-client
+socat
 software-properties-common
 sudo
 unzip
