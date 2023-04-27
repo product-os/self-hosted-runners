@@ -48,3 +48,10 @@ file = "*"
 verify_sha256 = "4ed2f852b3f52bca4616a7edc67f5a85734ee54f10c645f8d880e9a524b82b5b"
 target = "/"
 file = "*"
+
+["balena-io/balena-cli"]
+asset_filters = ["linux", "x64", "standalone", ".zip"]
+tag = "v15.2.0"
+target = "/usr/local/lib/balena-cli/"
+verify_sha256 = "789237a919fda6c735c78b7f1003a6277909093d00809b643282653cdc0c85ec"
+file = "*"

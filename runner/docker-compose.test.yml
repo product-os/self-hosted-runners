@@ -101,6 +101,6 @@ services:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $${GH_TOKEN:-$${GITHUB_TOKEN}}" \
           https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId})"
-          
+
         # check that our custom labels have been applied
         test $$(echo $$response | jq '.labels | length') -gt 15
