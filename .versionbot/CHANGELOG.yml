@@ -1,4 +1,15 @@
 - commits:
+    - subject: switch to if/then block
+      hash: 3a6a29dea116a77a59df95d1c097511e1162c01d
+      body: ""
+      footer:
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 2.0.6
+  title: ""
+  date: 2023-04-27T22:15:43.847Z
+- commits:
     - subject: add balena, aws and gh CLIs
       hash: cf99411cb94eb2c8d647cb48c676a3410aee3178
       body: ""
