@@ -1,4 +1,18 @@
 - commits:
+    - subject: Handle whitespaces in labels
+      hash: c3893dcf8e84e3c34a53e9f76484fcdc32e6f785
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.4
+  title: ""
+  date: 2023-04-27T17:23:11.833Z
+- commits:
     - subject: Test that the runner process is using the correct HOME env
       hash: 2aa3021cd3a5588915f66ba4e8c036c950741593
       body: ""
