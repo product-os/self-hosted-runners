@@ -89,7 +89,7 @@ config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
 config_args+=("--token" "${runner_token}")
 config_args+=("--url" "${url}")
 config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
-config_args+=("--labels" "${ACTIONS_RUNNER_TAGS}")
+config_args+=("--labels" "\"${ACTIONS_RUNNER_TAGS}\"")
 
 [[ ${ACTIONS_RUNNER_EPHEMERAL} =~ true|True|1|yes|Yes ]] && config_args+=("--ephemeral")
 [[ ${ACTIONS_RUNNER_REPLACE} =~ true|True|1|yes|Yes ]] && config_args+=("--replace")
