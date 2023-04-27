@@ -80,8 +80,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
 RUN chown -R github:github /home/github
 
 # no GitHub linux/arm release(s)
-RUN [ "$(uname -m)" == x86_64 ] && \
-    (ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version) || true
+RUN if [ "$(uname -m)" == x86_64 ]; then ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version; fi
 
 # containerd version check will fail on emulated ARM until this fix is released
 # https://github.com/containerd/containerd/pull/7636
