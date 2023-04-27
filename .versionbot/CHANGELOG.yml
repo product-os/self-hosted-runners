@@ -1,4 +1,15 @@
 - commits:
+    - subject: add balena, aws and gh CLIs
+      hash: cf99411cb94eb2c8d647cb48c676a3410aee3178
+      body: ""
+      footer:
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 2.0.5
+  title: ""
+  date: 2023-04-27T21:20:33.919Z
+- commits:
     - subject: Handle whitespaces in labels
       hash: c3893dcf8e84e3c34a53e9f76484fcdc32e6f785
       body: ""
