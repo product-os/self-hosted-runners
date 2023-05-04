@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add balena device uuid to runner tags
+      hash: 68ac2cae916a2beaaae821c7be2a80e5667fefd3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.8
+  title: ""
+  date: 2023-05-04T17:23:26.851Z
+- commits:
     - subject: Update golang Docker tag to v1.20.4
       hash: 08aaf22e39c56419409c75c23734b36cc4d0b3d1
       body: |
