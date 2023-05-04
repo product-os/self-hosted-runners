@@ -41,25 +41,30 @@ function get_geo() {
 
 get_geo
 
-family="$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')"
-distro="$(cat </etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{print $2}' | sed 's/"//g')"
-major="$(cat </etc/lsb-release | grep DISTRIB_RELEASE | awk -F'=' '{print $2}' | sed 's/"//g')"
-minor="$(cat </etc/lsb-release | grep DISTRIB_DESCRIPTION | awk -F'=' '{print $2}' | sed 's/"//g')"
-machine="$(uname -m)"
-arch="$(dpkg --print-architecture)"
-board="$(cat </sys/devices/virtual/dmi/id/board_name || echo 'unknown')"
-cpu="$(nproc)"
-mem="$(($(cat </proc/meminfo | grep MemTotal | awk '{print $2}') / 1024 / 1024))Gi"
-country="$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
-region="$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
-city="$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
-platform="${ACTIONS_RUNNER_PLATFORM}"
-
-ACTIONS_RUNNER_TAGS=${ACTIONS_RUNNER_TAGS:-family:${family},distro:${distro},major:${major},minor:${minor},machine:${machine},arch:${arch},board:${board},mem:${mem},cpu:${cpu},country:${country},region:${region},city:${city},platform:${platform}}
+runner_tags=()
+runner_tags+=("family=$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')")
+runner_tags+=("distro=$(cat </etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{print $2}' | sed 's/"//g')")
+runner_tags+=("major=$(cat </etc/lsb-release | grep DISTRIB_RELEASE | awk -F'=' '{print $2}' | sed 's/"//g')")
+runner_tags+=("minor=$(cat </etc/lsb-release | grep DISTRIB_DESCRIPTION | awk -F'=' '{print $2}' | sed 's/"//g')")
+runner_tags+=("machine=$(uname -m)")
+runner_tags+=("arch=$(dpkg --print-architecture)")
+runner_tags+=("board=$(cat </sys/devices/virtual/dmi/id/board_name || echo 'unknown')")
+runner_tags+=("cpu=$(nproc)")
+runner_tags+=("mem=$(($(cat </proc/meminfo | grep MemTotal | awk '{print $2}') / 1024 / 1024))Gi")
+runner_tags+=("country=$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+runner_tags+=("region=$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+runner_tags+=("city=$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+runner_tags+=("platform=${ACTIONS_RUNNER_PLATFORM}")
+runner_tags+=("balena_device_uuid=${BALENA_DEVICE_UUID:-unknown}")
 
 if [[ -n $ACTIONS_RUNNER_EXTRA_TAGS ]]; then
-    ACTIONS_RUNNER_TAGS="${ACTIONS_RUNNER_TAGS},${ACTIONS_RUNNER_EXTRA_TAGS}"
+    runner_tags+=("${ACTIONS_RUNNER_EXTRA_TAGS}")
 fi
+
+# Join the array elements with commas
+runner_tags_str=$(printf "%s," "${runner_tags[@]}")
+# Remove the trailing comma
+runner_tags_str=${runner_tags_str%,}
 
 slug=orgs
 url="https://github.com/${GITHUB_ORG}"
@@ -89,7 +94,7 @@ config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
 config_args+=("--token" "${runner_token}")
 config_args+=("--url" "${url}")
 config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
-config_args+=("--labels" "\"${ACTIONS_RUNNER_TAGS}\"")
+config_args+=("--labels" "\"${runner_tags_str}\"")
 
 [[ ${ACTIONS_RUNNER_EPHEMERAL} =~ true|True|1|yes|Yes ]] && config_args+=("--ephemeral")
 [[ ${ACTIONS_RUNNER_REPLACE} =~ true|True|1|yes|Yes ]] && config_args+=("--replace")
