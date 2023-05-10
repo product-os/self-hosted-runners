@@ -1,4 +1,18 @@
 - commits:
+    - subject: Restore balena device uuid custom label
+      hash: c7bc030963ac29592d6a05b42571e29fecb13e92
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.11
+  title: ""
+  date: 2023-05-10T13:46:48.681Z
+- commits:
     - subject: "Fix: revert to using ':' for label format."
       hash: 5bd5cb20ea9cef4ec317011f4d1aae6deffdf70e
       body: ""
