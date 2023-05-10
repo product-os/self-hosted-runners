@@ -103,4 +103,4 @@ services:
           https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId})"
 
         # check that our custom labels have been applied
-        test $$(echo $$response | jq '.labels | length') -gt 15
+        test $$(echo $$response | jq '.labels | length') -gt 16
