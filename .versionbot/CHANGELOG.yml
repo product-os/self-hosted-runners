@@ -1,4 +1,18 @@
 - commits:
+    - subject: "Fix: revert to using ':' for label format."
+      hash: 5bd5cb20ea9cef4ec317011f4d1aae6deffdf70e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+        signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+      author: Carlo Miguel F. Cruz
+      nested: []
+  version: 2.0.10
+  title: ""
+  date: 2023-05-10T09:34:32.582Z
+- commits:
     - subject: Remove balena uuid label as runners are not being picked up
       hash: 23b3c0d75bda4f4d8743e1290fdfbc4453e6f789
       body: ""
