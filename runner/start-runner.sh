@@ -57,6 +57,8 @@ runner_tags+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:
 runner_tags+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
 runner_tags+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
 runner_tags+=("platform:${ACTIONS_RUNNER_PLATFORM}")
+runner_tags+=("balena_device_uuid:${BALENA_DEVICE_UUID:-unknown}")
+
 
 if [[ -n $ACTIONS_RUNNER_EXTRA_TAGS ]]; then
     runner_tags+=("${ACTIONS_RUNNER_EXTRA_TAGS}")
