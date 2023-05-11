@@ -1,4 +1,18 @@
 - commits:
+    - subject: Install zstd
+      hash: 94aed53f175ad12f0bb5535577c272ff424bdcef
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Harald Fischer <harald@balena.io>
+        signed-off-by: Harald Fischer <harald@balena.io>
+      author: Harald Fischer
+      nested: []
+  version: 2.0.12
+  title: ""
+  date: 2023-05-11T20:37:20.019Z
+- commits:
     - subject: Restore balena device uuid custom label
       hash: c7bc030963ac29592d6a05b42571e29fecb13e92
       body: ""
