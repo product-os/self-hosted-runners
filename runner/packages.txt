@@ -12,6 +12,7 @@ socat
 software-properties-common
 sudo
 unzip
+zstd
 uuid-runtime
 vim
 wget

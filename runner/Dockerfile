@@ -95,6 +95,7 @@ RUN pwsh -Version && \
     node --version && \
     npm --version && \
     gh version && \
+    zstd --version && \
     aws --version
 
 ARG TARGETPLATFORM
