@@ -1,4 +1,18 @@
 - commits:
+    - subject: Automatically remount /run and as executable tmpfs
+      hash: 724a4ab5b32026e3f056d079de336ea1dcf61e42
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.1.0
+  title: ""
+  date: 2023-05-12T20:15:17.053Z
+- commits:
     - subject: Fix tmpfs syntax but keep execute bit
       hash: cbadfe5a75d9cd78aeb294ff5bfc286a9ec5568c
       body: ""
