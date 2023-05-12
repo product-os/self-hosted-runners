@@ -1,14 +1,6 @@
 ---
 version: "2.4"
 
-volumes:
-  # runner workspaces should be tmpfs, but also need execute permissions
-  workspace:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-      o: "mode=1770"
-
 services:
   sut:
     image: sut
@@ -33,9 +25,8 @@ services:
       EXTRA_DOCKERD_ARGS: "--iptables=false"
     tmpfs:
       - /tmp
+      - /run
       - /scratch
-    volumes:
-      - workspace:/home/github/_work
     command:
       - /bin/bash
       - -c
@@ -73,9 +64,9 @@ services:
 
         strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/github
 
-        # check that github user has execute permissions in tmpfs volume
-        cp /usr/bin/pwd /home/github/_work/pwd
-        su - github -c "/home/github/_work/pwd"
+        # check that github user has execute permissions in work directory
+        cp /usr/bin/pwd "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
+        su - github -c "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
 
         # check runner registration
         count=0

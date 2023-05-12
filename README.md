@@ -26,15 +26,6 @@ services:
       ACTIONS_RUNNER_GROUP: Default
     tmpfs:
       - /tmp
+      - /run
       - /scratch
-    volumes:
-      - workspace:/home/github/_work
-
-volumes:
-  # runner workspaces should be tmpfs, but also need execute permissions
-  workspace:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-      o: "mode=1770"
 ```

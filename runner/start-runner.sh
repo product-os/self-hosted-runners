@@ -10,6 +10,7 @@ ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-self-hosted}
+ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/run/github/_work}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
 
 function cleanup() {
@@ -97,17 +98,26 @@ config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
 config_args+=("--token" "${runner_token}")
 config_args+=("--url" "${url}")
 config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
+config_args+=("--work" "${ACTIONS_RUNNER_WORK_DIRECTORY}")
 config_args+=("--labels" "\"${runner_tags_str}\"")
 
 [[ ${ACTIONS_RUNNER_EPHEMERAL} =~ true|True|1|yes|Yes ]] && config_args+=("--ephemeral")
 [[ ${ACTIONS_RUNNER_REPLACE} =~ true|True|1|yes|Yes ]] && config_args+=("--replace")
 
-mkdir -p "/home/github/_work"
-chown -R "github:github" /home/github
+# create and chown the work directory
+# if this is a path under /run and S6_READ_ONLY_ROOT=1,
+#   s6-overlay will have remounted it as tmpfs,exec already
+mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
+chown -R "github:github" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
 
-rm -f /var/run/runner.token
+# chown the current directory since files will be written by the runner process
+chown -R "github:github" /home/github/
+
+# remove any existing runner registration files
 rm -f /home/github/.runner
 
+# configure as github user
 su - github -c "/home/github/config.sh ${config_args[*]}" 2>&1
 
+# run as github user
 exec su - github -c "/home/github/run.sh" 2>&1
