@@ -73,6 +73,10 @@ services:
 
         strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/github
 
+        # check that github user has execute permissions in tmpfs volume
+        cp /usr/bin/pwd /home/github/_work/pwd
+        su - github -c "/home/github/_work/pwd"
+
         # check runner registration
         count=0
         while ! test -f .runner; do
