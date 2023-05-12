@@ -6,7 +6,7 @@ set -ae
 
 ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
 # Configure the runner to only take one job and then let the service un-configure the runner after the job finishes (default false)
-ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-false}
+ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-self-hosted}
