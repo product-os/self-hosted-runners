@@ -77,26 +77,27 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
-RUN chown -R github:github /home/github
+# (not supported) https://github.com/vercel/pkg/blob/main/README.md?plain=1#L91-L93
+RUN if [ "$(uname -m)" != armv7l ]; then ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version; fi
 
-# no GitHub linux/arm release(s)
-RUN if [ "$(uname -m)" == x86_64 ]; then ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version; fi
+RUN chown -R github:github /home/github
 
 # containerd version check will fail on emulated ARM until this fix is released
 # https://github.com/containerd/containerd/pull/7636
 RUN pwsh -Version && \
-    yq --version && \
-    (dockerd --version || true) && \
     (containerd --version || true) && \
+    (dockerd --version || true) && \
+    aws --version && \
     ctr --version && \
-    runc --version && \
     docker buildx version && \
     docker compose version && \
+    gh version && \
     node --version && \
     npm --version && \
-    gh version && \
-    zstd --version && \
-    aws --version
+    runc --version && \
+    socat -V && \
+    yq --version && \
+    zstd --version
 
 ARG TARGETPLATFORM
 ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
