@@ -1,4 +1,15 @@
 - commits:
+    - subject: balena-cli ARM binaries
+      hash: 07a7eea9dbb031990e9de97e43b162fa652e90b5
+      body: ""
+      footer:
+        change-type: patch
+      author: ab77
+      nested: []
+  version: 2.1.1
+  title: ""
+  date: 2023-05-16T19:16:59.583Z
+- commits:
     - subject: Automatically remount /run and as executable tmpfs
       hash: 724a4ab5b32026e3f056d079de336ea1dcf61e42
       body: ""
