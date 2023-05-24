@@ -95,6 +95,7 @@ RUN pwsh -Version && \
     node --version && \
     npm --version && \
     runc --version && \
+    scp --version && \
     socat -V && \
     yq --version && \
     zstd --version
