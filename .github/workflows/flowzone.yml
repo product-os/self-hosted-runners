@@ -35,18 +35,11 @@ jobs:
         default,focal
       token_scope: >-
           {
-            "actions": "read",
             "administration": "write",
-            "checks": "read",
             "contents": "write",
-            "members": "read",
             "metadata": "read",
-            "organization_secrets": "read",
             "organization_self_hosted_runners": "write",
             "packages": "write",
             "pages": "write",
-            "pull_requests": "read",
-            "secrets": "read",
-            "statuses": "read",
-            "workflows": "read"
+            "pull_requests": "read"
           }
