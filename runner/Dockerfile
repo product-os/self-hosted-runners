@@ -110,9 +110,9 @@ ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
 
 COPY s6-overlay /etc/s6-overlay
-COPY start-runner.sh /
+COPY start-runner.sh tmpfs-exec.sh /
 
-RUN chmod +x /start-runner.sh
+RUN chmod +x /start-runner.sh /tmpfs-exec.sh
 
-ENTRYPOINT [ "/init"]
+ENTRYPOINT [ "/tmpfs-exec.sh"]
 CMD [ "/start-runner.sh" ]
