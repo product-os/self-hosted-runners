@@ -105,8 +105,6 @@ config_args+=("--labels" "\"${runner_tags_str}\"")
 [[ ${ACTIONS_RUNNER_REPLACE} =~ true|True|1|yes|Yes ]] && config_args+=("--replace")
 
 # create and chown the work directory
-# if this is a path under /run and S6_READ_ONLY_ROOT=1,
-#   s6-overlay will have remounted it as tmpfs,exec already
 mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
 chown -R "github:github" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
 
