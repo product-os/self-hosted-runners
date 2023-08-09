@@ -1,4 +1,32 @@
 - commits:
+    - subject: Disable automatic runner updates
+      hash: 38f7e03b88b2962fc5360ff07a58de01d77fe7af
+      body: |
+        The home directory has been remounted as tmpfs
+        so avoid upgrading and restarting as the changes will be lost.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Replace the home directory with a tmpfs mount
+      hash: a84d84e5f4940b317efc83df633c5820faf6ab63
+      body: |
+        This will prevent cache and config directories like .npm and .docker
+        from writing to the container filesystem.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.3.0
+  title: ""
+  date: 2023-08-09T18:20:04.123Z
+- commits:
     - subject: Remount tmpfs volumes with execute bit before starting s6
       hash: 7d4ac13c72c3194584855d3f01af95408e02b931
       body: ""
