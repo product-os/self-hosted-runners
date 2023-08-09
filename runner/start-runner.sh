@@ -93,6 +93,7 @@ runner_token="$(echo "${payload}" | jq -r .token)"
 echo "${runner_token}" >"/var/run/runner.token"
 
 config_args=()
+config_args+=("--disableupdate")
 config_args+=("--unattended")
 config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
 config_args+=("--token" "${runner_token}")
