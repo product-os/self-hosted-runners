@@ -1,4 +1,18 @@
 - commits:
+    - subject: Unmount any existing tmpfs binds that may exist on startup
+      hash: 28479c2507936d07511fd03b19a24ba8fd2abd5d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.0.3
+  title: ""
+  date: 2023-08-10T19:08:55.790Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v16.7.6
       hash: eb2d4553793810f652ef75448504a20eaf9e6ec1
       body: |
