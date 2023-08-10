@@ -15,43 +15,36 @@ all = false
 
 ["powershell/powershell"]
 asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "v7.3.2"
+tag = "${POWERSHELL_VERSION}"
 target = "/opt/microsoft/powershell/7"
-verify_sha256 = "77700ff7160f77909ea5dccea0340caeb876f6e12d92d21c5fd7a79fcf377d1a"
 file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v2.307.1"
+tag = "${ACTIONS_RUNNER_VERSION}"
 target = "./"
-verify_sha256 = "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441"
 file = "*"
 
 ["actions/runner-container-hooks"]
 asset_filters = ["docker", ".zip"]
-tag = "v0.3.2"
+tag = "${ACTIONS_HOOKS_VERSION}"
 target = "./docker/"
-verify_sha256 = "d5e2da954fc3ca09c355b461f96901a100f92edf97ccf050aa19ab4fa89a01ff"
 file = "*"
 
-["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-x64.tar.xz"]
+["https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.xz"]
 target = "/usr/"
-verify_sha256 = "de15b44738578367cfb250b6551b4c97e0e0e8050fa931a4a9a7262d374d6034"
-file = "node-v18.14.2-linux-x64/*"
+file = "node-${NODEJS_VERSION}-linux-x64/*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-noarch.tar.xz"]
-verify_sha256 = "d63a4b00051127ae66992164926d5772faee2bb598c666898184879b3ff403fc"
+["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz"]
 target = "/"
 file = "*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-x86_64.tar.xz"]
-verify_sha256 = "4ed2f852b3f52bca4616a7edc67f5a85734ee54f10c645f8d880e9a524b82b5b"
+["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz"]
 target = "/"
 file = "*"
 
 ["balena-io/balena-cli"]
 asset_filters = ["linux", "x64", "standalone", ".zip"]
-tag = "v16.1.0"
+tag = "${BALENA_CLI_VERSION}"
 target = "/usr/local/lib/balena-cli/"
-verify_sha256 = "18603b2a3bf0f9593adfad85fbb35062cd24cc9ec339583859c7a269e19b5826"
 file = "*"

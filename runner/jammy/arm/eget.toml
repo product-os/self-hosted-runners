@@ -15,36 +15,30 @@ all = false
 
 ["powershell/powershell"]
 asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "v7.3.2"
+tag = "${POWERSHELL_VERSION}"
 target = "/opt/microsoft/powershell/7/"
-verify_sha256 = "cdb0f04db328bc6230cbcfcc04db11a20111bc58637468aad79d56a832c489d4"
 file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v2.307.1"
+tag = "${ACTIONS_RUNNER_VERSION}"
 target = "./"
-verify_sha256 = "dbf978d969f4101bcef40eac438a43a3a763720ad2ed06f3eecbbbce16126d79"
 file = "*"
 
 ["actions/runner-container-hooks"]
 asset_filters = ["docker", ".zip"]
-tag = "v0.3.2"
+tag = "${ACTIONS_HOOKS_VERSION}"
 target = "./docker/"
-verify_sha256 = "d5e2da954fc3ca09c355b461f96901a100f92edf97ccf050aa19ab4fa89a01ff"
 file = "*"
 
-["https://nodejs.org/dist/v18.14.2/node-v18.14.2-linux-armv7l.tar.xz"]
+["https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-armv7l.tar.xz"]
 target = "/usr/"
-verify_sha256 = "39c308b9a75591860c4d2c05edae82c10a1157cfb67594837d60666ee960e8fe"
-file = "node-v18.14.2-linux-armv7l/*"
+file = "node-${NODEJS_VERSION}-linux-armv7l/*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-noarch.tar.xz"]
-verify_sha256 = "d63a4b00051127ae66992164926d5772faee2bb598c666898184879b3ff403fc"
+["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz"]
 target = "/"
 file = "*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/v3.1.4.2/s6-overlay-arm.tar.xz"]
-verify_sha256 = "8f00319864d84640ce881dcece946c5584f19bc53ce132be7fb4ee2dbc1905ba"
+["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz"]
 target = "/"
 file = "*"
