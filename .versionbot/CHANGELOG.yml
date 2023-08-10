@@ -1,4 +1,21 @@
 - commits:
+    - subject: Update actions/runner and runner-container-hooks.
+      hash: 0e9f848d1a6174315130f86e5aa7f63cbafd828c
+      body: |
+        The previous version has been deprecated by Github
+        and is now unable to receive messages from the Github
+        API.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+        signed-off-by: Carlo Miguel F. Cruz <carloc@balena.io>
+      author: Carlo Miguel F. Cruz
+      nested: []
+  version: 2.4.0
+  title: ""
+  date: 2023-08-10T10:18:42.966Z
+- commits:
     - subject: Disable automatic runner updates
       hash: 38f7e03b88b2962fc5360ff07a58de01d77fe7af
       body: |
