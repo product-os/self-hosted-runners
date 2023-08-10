@@ -12,6 +12,8 @@ mount -o remount,rw,exec tmpfs /run
 # but should not persist container restarts
 for dir in /home/runner
 do
+    # unmount any existing binds
+    umount ${dir} || true
     # create mountpoint for a new tmpfs
     mkdir -p "${dir}.tmpfs"
     # create the tmpfs with execute permissions
