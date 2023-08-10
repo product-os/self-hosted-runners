@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
     ca-certificates \
     curl \
+    gettext-base \
     gnupg \
     lsb-release \
     && rm -rf /var/lib/apt/lists/*
@@ -68,6 +69,27 @@ WORKDIR /home/github
 COPY --from=eget-build /src/eget /usr/bin/eget
 
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
+
+# renovate: datasource=github-releases depName=actions/runner
+ARG ACTIONS_RUNNER_VERSION=v2.307.1
+
+# renovate: datasource=github-releases depName=actions/runner-container-hooks
+ARG ACTIONS_HOOKS_VERSION=v0.3.2
+
+# renovate: datasource=github-releases depName=balena-io/balena-cli
+ARG BALENA_CLI_VERSION=v16.1.0
+
+# renovate: datasource=github-releases depName=just-containers/s6-overlay
+ARG S6_OVERLAY_VERSION=v3.1.4.2
+
+# renovate: datasource=node-version depName=node versioning=node
+ARG NODEJS_VERSION=v18.14.2
+
+# renovate: datasource=github-releases depName=powershell/powershell
+ARG POWERSHELL_VERSION=v7.3.2
+
+# substitute the variables in the eget.toml file
+RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
 
 # optionally mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # eg. DOCKER_BUILDKIT=1 docker build --secret id=GITHUB_TOKEN,src=~/github_token.txt .
