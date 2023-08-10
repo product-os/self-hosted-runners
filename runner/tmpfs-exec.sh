@@ -10,7 +10,7 @@ mount -o remount,rw,exec tmpfs /run
 
 # create tmpfs overlays for some directories that need to be writable
 # but should not persist container restarts
-for dir in /home/github
+for dir in /home/runner
 do
     # create mountpoint for a new tmpfs
     mkdir -p "${dir}.tmpfs"

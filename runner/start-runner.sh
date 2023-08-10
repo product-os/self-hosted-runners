@@ -10,16 +10,16 @@ ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-Default}
-ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/run/github/_work}
+ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
 
 function cleanup() {
     if [[ -s "/var/run/runner.token" ]]; then
-        s6-setuidgid github /home/github/config.sh remove --token "$(</var/run/runner.token)"
+        s6-setuidgid runner /home/runner/config.sh remove --token "$(</var/run/runner.token)"
     fi
 
     rm -f /var/run/runner.token
-    rm -f /home/github/.runner
+    rm -f /home/runner/.runner
 }
 
 trap 'cleanup' EXIT
@@ -107,16 +107,16 @@ config_args+=("--labels" "\"${runner_tags_str}\"")
 
 # create and chown the work directory
 mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
-chown -R "github:github" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
+chown -R "runner:runner" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
 
 # chown the current directory since files will be written by the runner process
-chown -R "github:github" /home/github/
+chown -R "runner:runner" /home/runner/
 
 # remove any existing runner registration files
-rm -f /home/github/.runner
+rm -f /home/runner/.runner
 
-# configure as github user
-su - github -c "/home/github/config.sh ${config_args[*]}" 2>&1
+# configure as runner user
+su - runner -c "/home/runner/config.sh ${config_args[*]}" 2>&1
 
-# run as github user
-exec su - github -c "/home/github/run.sh" 2>&1
+# run as runner user
+exec su - runner -c "/home/runner/run.sh" 2>&1

@@ -34,7 +34,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gettext-base \
     gnupg \
     lsb-release \
+    software-properties-common \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
+
+RUN adduser --disabled-password --gecos "" --uid 1001 runner \
+    && groupadd docker --gid 123 \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
+
+WORKDIR /home/runner
 
 # https://docs.docker.com/engine/install/ubuntu/
 RUN mkdir -p /etc/apt/keyrings \
@@ -56,15 +67,8 @@ COPY ${OS_CODENAME}/packages.txt ./os.txt
 RUN apt-get update && apt-get install -y --no-install-recommends \
     $(<./common.txt) \
     $(<./os.txt) \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN useradd -m github && \
-    addgroup --system docker && \
-    usermod -aG sudo github && \
-    usermod -aG docker github && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-WORKDIR /home/github
+    && rm -rf /var/lib/apt/lists/* \
+    && rm os.txt common.txt
 
 COPY --from=eget-build /src/eget /usr/bin/eget
 
@@ -102,7 +106,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
 # (not supported) https://github.com/vercel/pkg/blob/main/README.md?plain=1#L91-L93
 RUN if [ "$(uname -m)" != armv7l ]; then ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version; fi
 
-RUN chown -R github:github /home/github
+RUN chown -R runner:runner /home/runner
 
 # containerd version check will fail on emulated ARM until this fix is released
 # https://github.com/containerd/containerd/pull/7636

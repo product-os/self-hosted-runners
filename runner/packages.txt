@@ -9,8 +9,6 @@ iptables
 jq
 openssh-client
 socat
-software-properties-common
-sudo
 unzip
 zstd
 uuid-runtime

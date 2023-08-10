@@ -62,11 +62,11 @@ services:
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/github
+        strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/runner
 
-        # check that github user has execute permissions in work directory
+        # check that runner user has execute permissions in work directory
         cp /usr/bin/pwd "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
-        su - github -c "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
+        su - runner -c "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
 
         # check runner registration
         count=0
