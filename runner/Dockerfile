@@ -90,7 +90,7 @@ ARG S6_OVERLAY_VERSION=v3.1.4.2
 ARG NODEJS_VERSION=v18.14.2
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.2
+ARG POWERSHELL_VERSION=v7.3.6
 
 # substitute the variables in the eget.toml file
 RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
