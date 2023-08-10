@@ -1,4 +1,20 @@
 - commits:
+    - subject: Change runtime user from github to runner
+      hash: fe81872ebbbdd1b49d190250bee5bc96d3192610
+      body: |
+        This aligns with the hosted github runners and fixes some
+        issues with hardcoded home paths /home/runner in actions.
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.0.0
+  title: ""
+  date: 2023-08-10T15:28:54.528Z
+- commits:
     - subject: Allow Renovate to manage packages installed via eget
       hash: ef9a55ccd1e01eb804de3b476d2766c8476c8f47
       body: ""
