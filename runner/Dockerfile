@@ -139,5 +139,5 @@ COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/* \
     && ln -s /etc/s6-overlay/scripts/start-runner /start-runner.sh
 
-ENTRYPOINT [ "/init" ]
+ENTRYPOINT [ "/etc/s6-overlay/scripts/set-arch", "/init" ]
 CMD [ "/etc/s6-overlay/scripts/start-runner" ]

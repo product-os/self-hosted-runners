@@ -49,7 +49,7 @@ services:
           exit 0
         fi
 
-        /etc/s6-overlay/scripts/start-runner &
+        /start-runner.sh &
 
         # wait for runner
         count=0
