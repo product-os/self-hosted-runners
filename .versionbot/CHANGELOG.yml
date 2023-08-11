@@ -1,4 +1,18 @@
 - commits:
+    - subject: Move mount script to a oneshot service
+      hash: c0a645b049ab61f97031962f7370deec8af88924
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.1.0
+  title: ""
+  date: 2023-08-11T17:09:24.771Z
+- commits:
     - subject: Unmount any existing tmpfs binds that may exist on startup
       hash: 28479c2507936d07511fd03b19a24ba8fd2abd5d
       body: ""
