@@ -12,13 +12,13 @@ ADD https://github.com/zyedidia/eget/archive/refs/tags/v${EGET_VERSION}.tar.gz .
 RUN tar xvf v${EGET_VERSION}.tar.gz --strip-components=1 && make build
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm32v7 AS arm
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm64v8 AS arm64
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm32v7 AS arm-base
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm64v8 AS arm64-base
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64-base
 
 # --- runtime
 # hadolint ignore=DL3006
-FROM ${TARGETARCH}
+FROM ${TARGETARCH}-base AS runtime
 
 WORKDIR /root
 
@@ -136,9 +136,8 @@ ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
 
 COPY s6-overlay /etc/s6-overlay
-COPY start-runner.sh tmpfs-exec.sh /
+RUN chmod +x /etc/s6-overlay/scripts/* \
+    && ln -s /etc/s6-overlay/scripts/start-runner /start-runner.sh
 
-RUN chmod +x /start-runner.sh /tmpfs-exec.sh
-
-ENTRYPOINT [ "/tmpfs-exec.sh"]
-CMD [ "/start-runner.sh" ]
+ENTRYPOINT [ "/init" ]
+CMD [ "/etc/s6-overlay/scripts/start-runner" ]
