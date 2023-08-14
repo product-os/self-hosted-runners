@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.308.0
+      hash: cac64d172c5062e2d9161e398c069e6542f18027
+      body: |
+        Update actions/runner from 2.307.1 to 2.308.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.1.1
+  title: ""
+  date: 2023-08-14T12:30:20.392Z
+- commits:
     - subject: Move mount script to a oneshot service
       hash: c0a645b049ab61f97031962f7370deec8af88924
       body: ""
