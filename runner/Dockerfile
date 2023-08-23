@@ -75,22 +75,25 @@ COPY --from=eget-build /src/eget /usr/bin/eget
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.308.0
+ARG ACTIONS_RUNNER_VERSION=2.308.0
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
-ARG ACTIONS_HOOKS_VERSION=v0.3.2
+ARG ACTIONS_HOOKS_VERSION=0.3.2
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v16.7.9
+ARG BALENA_CLI_VERSION=16.7.9
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
-ARG S6_OVERLAY_VERSION=v3.1.4.2
-
-# renovate: datasource=node-version depName=node versioning=node
-ARG NODEJS_VERSION=v18.14.2
+ARG S6_OVERLAY_VERSION=3.1.4.2
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.6
+ARG POWERSHELL_VERSION=7.3.6
+
+# renovate: datasource=node-version depName=node
+ARG NODE_VERSION=18.14.2
+
+# renovate: datasource=npm depName=npm
+ARG NPM_VERSION=9.8.1
 
 # substitute the variables in the eget.toml file
 RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
@@ -99,12 +102,27 @@ RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
 # eg. DOCKER_BUILDKIT=1 docker build --secret id=GITHUB_TOKEN,src=~/github_token.txt .
 # eg. docker buildx bake --set *.secrets=id=GITHUB_TOKEN,src=~/github_token.txt .
 RUN --mount=type=secret,id=GITHUB_TOKEN \
-    test -f /run/secrets/GITHUB_TOKEN && GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D || eget -D \
-    chmod +x /opt/microsoft/powershell/7/pwsh && \
+    if [ -f /run/secrets/GITHUB_TOKEN ]; then \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D ; \
+    else \
+    eget -D ; \
+    fi
+
+# install powershell links 
+RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
+# install npm target release
+RUN npm install -g npm@"$NPM_VERSION" \
+    && rm -rf /root/.npm/_cacache \
+    && npm cache clear --force \
+    && rm -rf /tmp/*
+
 # (not supported) https://github.com/vercel/pkg/blob/main/README.md?plain=1#L91-L93
-RUN if [ "$(uname -m)" != armv7l ]; then ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena && balena version; fi
+RUN if [ "$(dpkg --print-architecture)" != armhf ]; then \
+    ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena ; \
+    balena version ; \
+    fi
 
 RUN chown -R runner:runner /home/runner
 
