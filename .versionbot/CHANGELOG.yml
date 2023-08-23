@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v18.17.1
+      hash: 56cb3faf859aabca63c8a243226e2dd4362219d1
+      body: |
+        Update node from 18.14.2 to 18.17.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.1.6
+  title: ""
+  date: 2023-08-23T21:48:17.346Z
+- commits:
     - subject: Install specific npm version controlled via Renovate
       hash: 327025ef41215030c7583a23d244c8c64a484f1e
       body: ""
