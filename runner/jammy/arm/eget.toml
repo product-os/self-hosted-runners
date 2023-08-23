@@ -15,30 +15,30 @@ all = false
 
 ["powershell/powershell"]
 asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "${POWERSHELL_VERSION}"
-target = "/opt/microsoft/powershell/7/"
+tag = "v${POWERSHELL_VERSION}"
+target = "/opt/microsoft/powershell/7"
 file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "${ACTIONS_RUNNER_VERSION}"
+tag = "v${ACTIONS_RUNNER_VERSION}"
 target = "./"
 file = "*"
 
 ["actions/runner-container-hooks"]
 asset_filters = ["docker", ".zip"]
-tag = "${ACTIONS_HOOKS_VERSION}"
+tag = "v${ACTIONS_HOOKS_VERSION}"
 target = "./docker/"
 file = "*"
 
-["https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-armv7l.tar.xz"]
+["https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-armv7l.tar.xz"]
 target = "/usr/"
-file = "node-${NODEJS_VERSION}-linux-armv7l/*"
+file = "node-v${NODE_VERSION}-linux-armv7l/*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz"]
+["https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz"]
 target = "/"
 file = "*"
 
-["https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz"]
+["https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-arm.tar.xz"]
 target = "/"
 file = "*"
