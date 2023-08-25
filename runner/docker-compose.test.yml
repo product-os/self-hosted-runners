@@ -23,6 +23,7 @@ services:
       ACTIONS_RUNNER_EPHEMERAL: "true"
       VERBOSE: "true"
       EXTRA_DOCKERD_ARGS: "--iptables=false"
+      ACTIONS_RUNNER_MACHINE_NAME: test
     tmpfs:
       - /tmp
       - /run
