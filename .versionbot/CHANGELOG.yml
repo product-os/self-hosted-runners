@@ -1,4 +1,20 @@
 - commits:
+    - subject: Set container hostname before starting runner process
+      hash: ec5c3f232d328dcbbc7697ec563922490817af00
+      body: |
+        This allows customizing the MachineName as it appears
+        in the runner workflow logs.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.1.7
+  title: ""
+  date: 2023-08-25T19:57:24.860Z
+- commits:
     - subject: Update dependency node to v18.17.1
       hash: 56cb3faf859aabca63c8a243226e2dd4362219d1
       body: |
