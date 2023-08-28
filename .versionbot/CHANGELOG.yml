@@ -1,4 +1,35 @@
 - commits:
+    - subject: Generate a github app installation key for runner registration
+      hash: cc3e6f8b7b8bb30df0ad990f074e89502a134974
+      body: |
+        Optionally use a private GitHub app with read and write access to
+        organization self hosted runners to register.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Expose a new env var for runner API authentication
+      hash: bc5deafac2658ddd34f644e3d9d1a4a294cd1240
+      body: |
+        Existing env vars GH_TOKEN and GITHUB_TOKEN will be the fallback
+        if ACTIONS_RUNNER_AUTH_TOKEN is unset.
+
+        This way we can optionally set ACTIONS_RUNNER_AUTH_TOKEN as a PAT
+        on the repo and avoid using the token provided by Flowzone.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.2.0
+  title: ""
+  date: 2023-08-28T19:46:30.700Z
+- commits:
     - subject: Set container hostname before starting runner process
       hash: ec5c3f232d328dcbbc7697ec563922490817af00
       body: |
