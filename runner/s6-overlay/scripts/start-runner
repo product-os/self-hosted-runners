@@ -77,16 +77,16 @@ if [[ -n "${GITHUB_ENTERPRISE}" ]]; then
     url="https://github.com/${slug}/${GITHUB_ENTERPRISE}"
 fi
 
-if [[ -z "${GH_TOKEN:-${GITHUB_TOKEN}}" ]]; then
-    echo "GH_TOKEN/GITHUB_TOKEN is not set"
-    exit 1
-fi
+# Get a GitHub authentication token for the runner either via GitHub App or PAT
+# and write it to /tmp/gh_token
+/etc/s6-overlay/scripts/get-token
 
-GH_TOKEN="${GH_TOKEN:-${GITHUB_TOKEN}}"
-
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
 registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
-payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${GH_TOKEN}")
+payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token $(</tmp/gh_token)")
 runner_token="$(echo "${payload}" | jq -r .token)"
+
+rm -f /tmp/gh_token
 
 # write token to file to be read during teardown
 echo "${runner_token}" >"/var/run/runner.token"

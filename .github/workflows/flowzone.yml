@@ -33,13 +33,3 @@ jobs:
       docker_publish_platform_tags: true
       bake_targets: |
         default,focal
-      token_scope: >-
-          {
-            "administration": "write",
-            "contents": "write",
-            "metadata": "read",
-            "organization_self_hosted_runners": "write",
-            "packages": "write",
-            "pages": "write",
-            "pull_requests": "read"
-          }
