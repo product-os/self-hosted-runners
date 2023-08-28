@@ -77,15 +77,24 @@ if [[ -n "${GITHUB_ENTERPRISE}" ]]; then
     url="https://github.com/${slug}/${GITHUB_ENTERPRISE}"
 fi
 
-if [[ -z "${GH_TOKEN:-${GITHUB_TOKEN}}" ]]; then
-    echo "GH_TOKEN/GITHUB_TOKEN is not set"
+ACTIONS_RUNNER_AUTH_TOKEN="${ACTIONS_RUNNER_AUTH_TOKEN:-}"
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+    ACTIONS_RUNNER_AUTH_TOKEN="${GH_TOKEN:-}"
+fi
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-}"
+fi
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+    echo "ACTIONS_RUNNER_AUTH_TOKEN is not set"
     exit 1
 fi
 
-GH_TOKEN="${GH_TOKEN:-${GITHUB_TOKEN}}"
-
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
 registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
-payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${GH_TOKEN}")
+payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}")
 runner_token="$(echo "${payload}" | jq -r .token)"
 
 # write token to file to be read during teardown

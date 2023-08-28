@@ -13,7 +13,7 @@ services:
     # https://github.com/product-os/self-hosted-runners/settings/secrets/actions/COMPOSE_VARS
     # COMPOSE_VARS=$(cat .env | openssl base64 -A)
     env_file:
-      # (required) GH_TOKEN with appropriate scope(s)
+      # (required) ACTIONS_RUNNER_AUTH_TOKEN with appropriate scope(s)
       # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
       - .env
     environment:
@@ -48,6 +48,19 @@ services:
         if readlink -f /proc/1/exe | grep -q qemu; then
           echo "Skipping runner tests for emulated environments..."
           exit 0
+        fi
+
+        if [ -z "$${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+            ACTIONS_RUNNER_AUTH_TOKEN="$${GH_TOKEN:-}"
+        fi
+
+        if [ -z "$${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+            ACTIONS_RUNNER_AUTH_TOKEN="$${GITHUB_TOKEN:-}"
+        fi
+
+        if [ -z "$${ACTIONS_RUNNER_AUTH_TOKEN}" ]; then
+            echo "ACTIONS_RUNNER_AUTH_TOKEN is not set"
+            exit 1
         fi
 
         /start-runner.sh &
@@ -91,7 +104,7 @@ services:
         count=0
         while ! curl -fsSL \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer $${GH_TOKEN:-$${GITHUB_TOKEN}}" \
+          -H "Authorization: Bearer $${ACTIONS_RUNNER_AUTH_TOKEN}" \
           https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId} | jq -r 'select(.status == "online") | .status'; do
             if [ "$${count}" -gt 10 ]; then
               echo "Runner failed to come online"
@@ -103,7 +116,7 @@ services:
 
         response="$$(curl -fsSL \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer $${GH_TOKEN:-$${GITHUB_TOKEN}}" \
+          -H "Authorization: Bearer $${ACTIONS_RUNNER_AUTH_TOKEN}" \
           https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId})"
 
         # check that our custom labels have been applied
