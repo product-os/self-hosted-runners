@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Get a GitHub authentication token for the runner either via GitHub App or PAT
+# and write it to /tmp/gh_token
+
+set -euo pipefail
+
+# force debug tracing to off as we are dealing with secrets
+set +x
+
+if [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
+    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem"
+fi
+
+if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
+
+    echo "Requesting GitHub App installation token for app id ${ACTIONS_RUNNER_APP_ID} and installation id ${ACTIONS_RUNNER_INSTALLATION_ID}..."
+
+    # https://www.npmjs.com/package/github-app-installation-token
+    npx -y github-app-installation-token@1.2.0 \
+        --appId "${ACTIONS_RUNNER_APP_ID}" \
+        --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
+        --privateKeyLocation /tmp/private.pem | tail -n1 >/tmp/gh_token
+
+    # cleanup npx cache
+    rm -rf ~/.npm/_npx
+
+    # cleanup secret files
+    rm -f /tmp/private.pem
+
+elif [ -n "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    echo "${ACTIONS_RUNNER_AUTH_TOKEN}" >/tmp/gh_token
+elif [ -n "${GH_TOKEN:-}" ]; then
+    echo "${GH_TOKEN}" >/tmp/gh_token
+elif [ -n "${GITHUB_TOKEN:-}" ]; then
+    echo "${GITHUB_TOKEN}" >/tmp/gh_token
+else
+    echo "Missing one of ACTIONS_RUNNER_APP_ID or ACTIONS_RUNNER_INSTALLATION_ID or ACTIONS_RUNNER_APP_KEY_B64"
+    exit 1
+fi
+
+echo "Token has been written to /tmp/gh_token"
