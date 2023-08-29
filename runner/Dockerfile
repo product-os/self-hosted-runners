@@ -187,4 +187,4 @@ RUN chmod +x /etc/s6-overlay/scripts/* \
     && ln -s /etc/s6-overlay/scripts/start-runner /start-runner.sh
 
 ENTRYPOINT [ "/etc/s6-overlay/scripts/set-arch", "/init" ]
-CMD [ "/etc/s6-overlay/scripts/start-runner" ]
+CMD [""]

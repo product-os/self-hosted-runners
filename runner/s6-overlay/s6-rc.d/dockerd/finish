@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
 rm -f /var/run/docker.pid
+
+if [ "$1" -ne 0 ]; then
+  echo "$1" >/run/s6-linux-init-container-results/exitcode
+  /run/s6/basedir/bin/halt
+fi

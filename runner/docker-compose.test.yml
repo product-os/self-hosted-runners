@@ -53,8 +53,6 @@ services:
           exit 0
         fi
 
-        /start-runner.sh &
-
         # wait for runner
         count=0
         while ! pgrep Runner.Listener; do
