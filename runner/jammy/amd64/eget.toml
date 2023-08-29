@@ -45,6 +45,6 @@ file = "*"
 
 ["balena-io/balena-cli"]
 asset_filters = ["linux", "x64", "standalone", ".zip"]
-tag = "v${BALENA_CLI_VERSION}"
+tag = "${BALENA_CLI_VERSION}"
 target = "/usr/local/lib/balena-cli/"
 file = "*"
