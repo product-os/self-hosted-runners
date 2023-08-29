@@ -9,7 +9,7 @@ set -euo pipefail
 set +x
 
 if [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
-    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem"
+    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
 fi
 
 if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
@@ -17,13 +17,11 @@ if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${A
     echo "Requesting GitHub App installation token for app id ${ACTIONS_RUNNER_APP_ID} and installation id ${ACTIONS_RUNNER_INSTALLATION_ID}..."
 
     # https://www.npmjs.com/package/github-app-installation-token
-    npx -y github-app-installation-token@1.2.0 \
+    # https://github.com/gagoar/github-app-installation-token
+    github-app-installation-token \
         --appId "${ACTIONS_RUNNER_APP_ID}" \
         --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
-        --privateKeyLocation /tmp/private.pem | tail -n1 >/tmp/gh_token
-
-    # cleanup npx cache
-    rm -rf ~/.npm/_npx
+        --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 >/tmp/gh_token
 
     # cleanup secret files
     rm -f /tmp/private.pem
@@ -40,3 +38,4 @@ else
 fi
 
 echo "Token has been written to /tmp/gh_token"
+exit 0

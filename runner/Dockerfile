@@ -136,7 +136,8 @@ RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
 # install npm target release
-RUN npm install -g npm@"$NPM_VERSION" \
+# and https://www.npmjs.com/package/github-app-installation-token
+RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
     && rm -rf /root/.npm/_cacache \
     && npm cache clear --force \
     && rm -rf /tmp/*
