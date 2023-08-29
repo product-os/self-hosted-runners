@@ -8,15 +8,16 @@ set -euo pipefail
 # force debug tracing to off as we are dealing with secrets
 set +x
 
-if [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
-    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
-fi
-
-if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
+get_installation_token() {
+    if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
+        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
+        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
+        return
+    fi
 
     # https://www.npmjs.com/package/github-app-installation-token
     # https://github.com/gagoar/github-app-installation-token
-    echo "Requesting token..."
+    echo "Requesting installation token..."
     github-app-installation-token \
         --appId "${ACTIONS_RUNNER_APP_ID}" \
         --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
@@ -26,9 +27,15 @@ if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${A
     rm -f /tmp/private.pem
 
     echo "Token has been written to /tmp/gh_token"
+}
+
+if [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
+    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
+fi
+
+if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
+    get_installation_token
     exit 0
-else
-    echo "Missing one of ACTIONS_RUNNER_APP_ID or ACTIONS_RUNNER_INSTALLATION_ID or ACTIONS_RUNNER_APP_KEY_B64"
 fi
 
 ACTIONS_RUNNER_AUTH_TOKEN="${ACTIONS_RUNNER_AUTH_TOKEN:-}"
