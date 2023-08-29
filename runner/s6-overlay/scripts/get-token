@@ -14,10 +14,9 @@ fi
 
 if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
 
-    echo "Requesting GitHub App installation token for app id ${ACTIONS_RUNNER_APP_ID} and installation id ${ACTIONS_RUNNER_INSTALLATION_ID}..."
-
     # https://www.npmjs.com/package/github-app-installation-token
     # https://github.com/gagoar/github-app-installation-token
+    echo "Requesting token..."
     github-app-installation-token \
         --appId "${ACTIONS_RUNNER_APP_ID}" \
         --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
@@ -26,16 +25,28 @@ if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${A
     # cleanup secret files
     rm -f /tmp/private.pem
 
-elif [ -n "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
-    echo "${ACTIONS_RUNNER_AUTH_TOKEN}" >/tmp/gh_token
-elif [ -n "${GH_TOKEN:-}" ]; then
-    echo "${GH_TOKEN}" >/tmp/gh_token
-elif [ -n "${GITHUB_TOKEN:-}" ]; then
-    echo "${GITHUB_TOKEN}" >/tmp/gh_token
+    echo "Token has been written to /tmp/gh_token"
+    exit 0
 else
     echo "Missing one of ACTIONS_RUNNER_APP_ID or ACTIONS_RUNNER_INSTALLATION_ID or ACTIONS_RUNNER_APP_KEY_B64"
+fi
+
+ACTIONS_RUNNER_AUTH_TOKEN="${ACTIONS_RUNNER_AUTH_TOKEN:-}"
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    ACTIONS_RUNNER_AUTH_TOKEN="${GH_TOKEN:-}"
+fi
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-}"
+fi
+
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    echo "ACTIONS_RUNNER_AUTH_TOKEN is unset"
     exit 1
 fi
+
+echo "${ACTIONS_RUNNER_AUTH_TOKEN}" >/tmp/gh_token
 
 echo "Token has been written to /tmp/gh_token"
 exit 0
