@@ -1,4 +1,18 @@
 - commits:
+    - subject: Remove the hardcoded v prefix in balena-cli releases
+      hash: 5b90ffbe188e2a4bba619dd2e4ece9fd64bb3785
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.2.1
+  title: ""
+  date: 2023-08-29T13:23:41.929Z
+- commits:
     - subject: Generate a github app installation key for runner registration
       hash: cc3e6f8b7b8bb30df0ad990f074e89502a134974
       body: |
