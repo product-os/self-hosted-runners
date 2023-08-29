@@ -70,6 +70,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && rm os.txt common.txt
 
+# Some packages are only available in the official Ubuntu upstream starting from Ubuntu 21
+# https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
+# hadolint ignore=DL3008,SC1091
+RUN if [ "${OS_CODENAME}" = "focal" ]; then \
+    REPO_URL="https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable" ; \
+    source /etc/os-release ; \
+    sh -c "echo 'deb ${REPO_URL}/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" ; \
+    curl -fsSL "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/Release.key" -O Release.key ; \
+    apt-key add Release.key ; \
+    fi
+
+# Install podman, buildah, skopeo container's tools
+# hadolint ignore=DL3008,SC1091
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    podman buildah skopeo \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /etc/containers \
+    && echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
+
+RUN if [ "${OS_CODENAME}" = "focal" ]; then \
+    rm /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list ; \
+    fi
+
 COPY --from=eget-build /src/eget /usr/bin/eget
 
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
@@ -132,13 +155,16 @@ RUN pwsh -Version && \
     (containerd --version || true) && \
     (dockerd --version || true) && \
     aws --version && \
+    buildah --version && \
     ctr --version && \
     docker buildx version && \
     docker compose version && \
     gh version && \
     node --version && \
     npm --version && \
+    podman --version && \
     runc --version && \
+    skopeo --version && \
     socat -V && \
     yq --version && \
     zstd --version
