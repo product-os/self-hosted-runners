@@ -28,7 +28,7 @@ curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
 
-function get_geo() {
+get_geo() {
     if curl_with_opts -I https://ipinfo.io; then
         geoip_api_url=https://ipinfo.io
         if [[ -n $GEOIP_API_TOKEN ]]; then
@@ -83,7 +83,11 @@ fi
 
 # https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
 registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
-payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token $(</tmp/gh_token)")
+echo "Requesting registration token..."
+payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token $(</tmp/gh_token)") || {
+    echo "Failed to get registration token from ${registration_url}"
+    exit 1
+}
 runner_token="$(echo "${payload}" | jq -r .token)"
 
 rm -f /tmp/gh_token
