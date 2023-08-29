@@ -1,4 +1,18 @@
 - commits:
+    - subject: Fallback to GitHub PAT for enterprise runner registration
+      hash: da87a364c6dacb4a7088b71b94fa6da9ac4b935e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.2.5
+  title: ""
+  date: 2023-08-29T20:12:35.612Z
+- commits:
     - subject: Install github token npm package at build time
       hash: 4a56245c9a246b6a8d07ae351535a04de3285d90
       body: ""
