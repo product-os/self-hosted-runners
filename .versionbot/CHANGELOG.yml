@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17
+      hash: 76128ebfac98be1f4f4146cc7f8c7bef9af85638
+      body: |
+        Update balena-io/balena-cli from 16.8.0 to 17.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.2.6
+  title: ""
+  date: 2023-08-30T00:16:17.677Z
+- commits:
     - subject: Fallback to GitHub PAT for enterprise runner registration
       hash: da87a364c6dacb4a7088b71b94fa6da9ac4b935e
       body: ""
