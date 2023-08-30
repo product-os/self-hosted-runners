@@ -27,6 +27,7 @@ services:
       EXTRA_DOCKERD_ARGS: "--iptables=false"
       ACTIONS_RUNNER_MACHINE_NAME: sut
       ACTIONS_RUNNER_EXTRA_TAGS: sut
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
     tmpfs:
       - /tmp
       - /run
@@ -76,7 +77,7 @@ services:
             exit 1
           fi
           count=$$((count + 1))
-          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
+          sleep "$$(( ( RANDOM % 5 ) + 10 ))s"
         done
 
         # 1. check that the home directory is set correctly
