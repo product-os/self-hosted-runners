@@ -180,11 +180,14 @@ ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
 ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
 # default is 5000ms
-ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 10000
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
+
+COPY docker-hc ./docker-hc
+RUN chmod +x ./docker-hc
 
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/* \
     && ln -s /etc/s6-overlay/scripts/start-runner /start-runner.sh
 
 ENTRYPOINT [ "/etc/s6-overlay/scripts/set-arch", "/init" ]
-CMD [""]
+CMD []

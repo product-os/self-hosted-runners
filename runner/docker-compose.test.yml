@@ -1,8 +1,7 @@
----
 version: "2.4"
 
 services:
-  sut:
+  runner:
     image: sut
     build:
       context: .
@@ -26,53 +25,52 @@ services:
       ACTIONS_RUNNER_EPHEMERAL: "true"
       VERBOSE: "true"
       EXTRA_DOCKERD_ARGS: "--iptables=false"
-      ACTIONS_RUNNER_MACHINE_NAME: test
+      ACTIONS_RUNNER_MACHINE_NAME: sut
+      ACTIONS_RUNNER_EXTRA_TAGS: sut
     tmpfs:
       - /tmp
       - /run
       - /scratch
+
+  sut:
+    image: docker:stable
+    depends_on:
+     - runner
+    env_file:
+      # (optional) ACTIONS_RUNNER_APP_KEY_B64 for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_APP_ID for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_INSTALLATION_ID for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_AUTH_TOKEN with appropriate scope(s)
+      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
+      - .env
+    environment:
+      # test at the org. level
+      GITHUB_ORG: product-os
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: []
     command:
-      - /bin/bash
+      - /bin/sh
       - -c
       - |
-        set -axeo pipefail
+        set -ex
 
-        # wait for DinD
-        count=0
-        while ! docker info; do
-          if [ "$${count}" -gt 10 ]; then
-            echo "DinD failed to start"
-            exit 1
+        apk add --no-cache bash bind-tools curl jq
+
+        runner_ip="$$(dig +short runner | tail -n 1)"
+        runner_id=""
+
+        container_ids=$$(docker ps --format '{{.ID}}')
+        for id in $$container_ids; do
+          if docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$${id}" | grep -q "$${runner_ip}"
+          then
+            runner_id="$${id}"
+            break
           fi
-          count=$$((count + 1))
-          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        if readlink -f /proc/1/exe | grep -q qemu; then
-          echo "Skipping runner tests for emulated environments..."
-          exit 0
-        fi
-
-        # wait for runner
         count=0
-        while ! pgrep Runner.Listener; do
-          if [ "$${count}" -gt 10 ]; then
-            echo "Runner failed to start"
-            exit 1
-          fi
-          count=$$((count + 1))
-          sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
-        done
-
-        strings /proc/$$(pgrep Runner.Listener)/environ | grep HOME=/home/runner
-
-        # check that runner user has execute permissions in work directory
-        cp /usr/bin/pwd "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
-        su - runner -c "$${ACTIONS_RUNNER_WORK_DIRECTORY}/pwd"
-
-        # check runner registration
-        count=0
-        while ! test -f .runner; do
+        while ! docker exec $${runner_id} /home/runner/docker-hc; do
           if [ "$${count}" -gt 10 ]; then
             echo "Runner failed to register"
             exit 1
@@ -81,23 +79,40 @@ services:
           sleep "$$(( ( RANDOM % 3 ) + 3 ))s"
         done
 
-        agentId="$(jq -r '.agentId' .runner)"
+        # 1. check that the home directory is set correctly
+        # 2. check that runner user has execute permissions in work directory
+        docker exec $${runner_id} sh -c "
+          strings /proc/\$(pgrep Runner.Listener)/environ | grep HOME=/home/runner &&
+          cp /usr/bin/pwd /home/runner/_work/pwd &&
+          su - runner -c /home/runner/_work/pwd
+        "
+
+        # Get a GitHub authentication token for the runner either via GitHub App or PAT
+        docker exec $${runner_id} sh -c "
+          /etc/s6-overlay/scripts/get-token &&
+          cat /tmp/gh_token
+        " | tail -n1 > /tmp/gh_token
+
+        # get agent id from runner config file
+        agent_id="$$(docker exec $${runner_id} jq -r '.agentId' .runner)"
+
         slug=orgs
         if [[ -n "$${GITHUB_ENTERPRISE}" ]]; then
           GITHUB_ORG="$${GITHUB_ENTERPRISE}"
           slug=enterprises
         fi
 
-        # Get a GitHub authentication token for the runner either via GitHub App or PAT
-        # and write it to /tmp/gh_token
-        /etc/s6-overlay/scripts/get-token
-
         # wait for runner to be online
         count=0
-        while ! curl -fsSL \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer $$(</tmp/gh_token)" \
-          https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId} | jq -r 'select(.status == "online") | .status'; do
+        response=
+        while true; do
+            response="$$(curl -fsSL \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $$(cat /tmp/gh_token)" \
+              https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agent_id})"
+            if [ "$(echo "$${response}" | jq -r '.status')" = "online" ]; then
+              break
+            fi
             if [ "$${count}" -gt 10 ]; then
               echo "Runner failed to come online"
               exit 1
@@ -106,12 +121,5 @@ services:
             sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
         done
 
-        response="$$(curl -fsSL \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer $$(</tmp/gh_token)" \
-          https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agentId})"
-
-        rm -f /tmp/gh_token
-
         # check that our custom labels have been applied
-        test $$(echo $$response | jq '.labels | length') -gt 16
+        echo "$${response}" | jq -e 'if any(.labels[]; .name == "sut") then true else false end'
