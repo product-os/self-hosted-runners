@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.1.1
+      hash: 2638b5fedf80dc30f202b1445a37c785e851110a
+      body: |
+        Update balena-io/balena-cli from 17.0.0 to 17.1.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.3.2
+  title: ""
+  date: 2023-09-05T19:54:50.013Z
+- commits:
     - subject: Run e2e tests from a sidecar service
       hash: 0002e0bb6090ca6f2338ef7abce73df3d5405887
       body: ""
