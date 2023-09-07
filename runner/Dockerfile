@@ -98,7 +98,7 @@ COPY --from=eget-build /src/eget /usr/bin/eget
 COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=2.308.0
+ARG ACTIONS_RUNNER_VERSION=v2.309.0
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
 ARG ACTIONS_HOOKS_VERSION=0.3.2

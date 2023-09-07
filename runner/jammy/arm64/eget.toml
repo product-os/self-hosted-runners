@@ -21,7 +21,7 @@ file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "v${ACTIONS_RUNNER_VERSION}"
+tag = "${ACTIONS_RUNNER_VERSION}"
 target = "./"
 file = "*"
 
