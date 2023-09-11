@@ -153,6 +153,7 @@ RUN pwsh -Version && \
     node --version && \
     npm --version && \
     podman --version && \
+    python3 --version && \
     runc --version && \
     skopeo --version && \
     socat -V && \
