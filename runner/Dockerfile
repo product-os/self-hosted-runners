@@ -113,7 +113,7 @@ ARG S6_OVERLAY_VERSION=3.1.4.2
 ARG POWERSHELL_VERSION=7.3.6
 
 # renovate: datasource=node-version depName=node
-ARG NODE_VERSION=18.17.1
+ARG NODE_VERSION=18.18.2
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=9.8.1
