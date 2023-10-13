@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v18.18.2
+      hash: 44d3c55ed82fbb1ab94c1b4753606108e42c06dc
+      body: |
+        Update node from 18.17.1 to 18.18.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.3.4
+  title: ""
+  date: 2023-10-13T22:23:51.624Z
+- commits:
     - subject: Update dependency actions/runner to v2.309.0
       hash: f121b682dfc26390359160d713fb3702ec2edb81
       body: |
