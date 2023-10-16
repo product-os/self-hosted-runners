@@ -10,7 +10,7 @@ mount -o remount,rw,exec tmpfs /run
 
 function mount_as_tmpfs() {
     # unmount any existing binds
-    umount "${1}" || true
+    umount "${1}" 2>/dev/null || true
     # create mountpoint for a new tmpfs
     mkdir -p "${1}.tmpfs"
     # create the tmpfs with execute permissions
@@ -26,24 +26,3 @@ function mount_as_tmpfs() {
 for dir in /home/runner /opt; do
     mount_as_tmpfs "${dir}" || true
 done
-
-# override /proc/cpuinfo for ARM variants
-# see: https://github.com/containerd/containerd/pull/7636
-function override_cpuinfo() {
-    # nothing to do if the cpuinfo is already correct
-    if grep -q "CPU architecture: ${1}" /proc/cpuinfo; then
-        return 0
-    fi
-
-    echo "CPU architecture: ${1}" >/tmp/cpuinfo
-    mount --bind /tmp/cpuinfo /proc/cpuinfo
-}
-
-case "$(uname -m)" in
-aarch64)
-    override_cpuinfo 8
-    ;;
-armv7l)
-    override_cpuinfo 7
-    ;;
-esac
