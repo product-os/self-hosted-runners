@@ -13,7 +13,9 @@ RUN git clone https://github.com/zyedidia/eget . \
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME} AS runtime
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.23-jammy AS jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.23-focal AS focal
+FROM ${OS_CODENAME} AS runtime
 
 WORKDIR /root
 
