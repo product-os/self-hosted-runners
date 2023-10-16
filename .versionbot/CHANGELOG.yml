@@ -1,4 +1,31 @@
 - commits:
+    - subject: Disable publish of separate images per architecture
+      hash: b2760b9df582aedc9014102e1b4effe945b8847e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Remove support for arm32v7 builds
+      hash: fbabae9f8dd9b0669270d04199c4f04783ee00ae
+      body: |
+        These images were under-utilized and anything
+        that needs to target that platform can run natively
+        on aarch64 runners anyway.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.4.0
+  title: ""
+  date: 2023-10-16T23:25:54.126Z
+- commits:
     - subject: Update dependency node to v18.18.2
       hash: 44d3c55ed82fbb1ab94c1b4753606108e42c06dc
       body: |
