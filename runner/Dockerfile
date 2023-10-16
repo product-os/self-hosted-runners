@@ -162,6 +162,12 @@ RUN pwsh -Version && \
     yq --version && \
     zstd --version
 
+COPY docker-hc ./docker-hc
+RUN chmod +x ./docker-hc
+
+COPY s6-overlay /etc/s6-overlay
+RUN chmod +x /etc/s6-overlay/scripts/*
+
 ARG TARGETPLATFORM
 ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
 
@@ -174,11 +180,23 @@ ENV S6_READ_ONLY_ROOT 1
 # default is 5000ms
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 
-COPY docker-hc ./docker-hc
-RUN chmod +x ./docker-hc
+CMD [ "/init" ]
 
-COPY s6-overlay /etc/s6-overlay
-RUN chmod +x /etc/s6-overlay/scripts/*
+# https://github.com/balena-io-experimental/ctr-jailer
+FROM ghcr.io/balena-io-experimental/ctr-jailer:v0.0.16
 
-ENTRYPOINT [ "/init" ]
-CMD []
+COPY --from=runtime / /usr/src/app/rootfs
+
+ARG TARGETPLATFORM
+ENV ACTIONS_RUNNER_PLATFORM $TARGETPLATFORM
+
+ENV EXTRA_DOCKERD_ARGS ""
+ENV RUNNER_ALLOW_RUNASROOT 0
+ENV RUNNER_MANUALLY_TRAP_SIG 1
+ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
+ENV S6_KEEP_ENV 1
+ENV S6_READ_ONLY_ROOT 1
+# default is 5000ms
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
+
+CMD [ "/init" ]
