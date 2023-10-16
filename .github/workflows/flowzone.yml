@@ -30,5 +30,10 @@ jobs:
       repo_description: "GitHub self-hosted runner images for common system architectures."
       docker_images: |
         ghcr.io/product-os/self-hosted-runners
+      docker_runs_on: >
+        {
+          "linux/arm64": ["self-hosted","ARM64"],
+          "linux/amd64": ["self-hosted","X64"]
+        }
       bake_targets: |
         default,focal
