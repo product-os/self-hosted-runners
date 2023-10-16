@@ -30,6 +30,5 @@ jobs:
       repo_description: "GitHub self-hosted runner images for common system architectures."
       docker_images: |
         ghcr.io/product-os/self-hosted-runners
-      docker_publish_platform_tags: true
       bake_targets: |
         default,focal

@@ -4,21 +4,18 @@ FROM golang:1.21.0 AS eget-build
 
 WORKDIR /src
 
-ARG EGET_VERSION=1.3.3
+ARG EGET_VERSION=v1.3.3
 ARG CGO_ENABLED=0
 
-ADD https://github.com/zyedidia/eget/archive/refs/tags/v${EGET_VERSION}.tar.gz ./
-
-RUN tar xvf v${EGET_VERSION}.tar.gz --strip-components=1 && make build
+RUN git clone https://github.com/zyedidia/eget . \
+    && git checkout -q ${EGET_VERSION} \
+    && make build
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm32v7 AS arm-base
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-arm64v8 AS arm64-base
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.14-${OS_CODENAME}-amd64 AS amd64-base
-
-# --- runtime
-# hadolint ignore=DL3006
-FROM ${TARGETARCH}-base AS runtime
+# https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.23-jammy AS jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.23-focal AS focal
+FROM ${OS_CODENAME} AS runtime
 
 WORKDIR /root
 
@@ -58,17 +55,15 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 
-ARG OS_CODENAME TARGETARCH
+ARG OS_CODENAME
 
-COPY packages.txt ./common.txt
-COPY ${OS_CODENAME}/packages.txt ./os.txt
+COPY config/ ./config/
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    $(<./common.txt) \
-    $(<./os.txt) \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm os.txt common.txt
+    $(<./config/packages.txt) \
+    $(<./config/packages.${OS_CODENAME}.txt) \
+    && rm -rf /var/lib/apt/lists/*
 
 # Some packages are only available in the official Ubuntu upstream starting from Ubuntu 21
 # https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
@@ -95,7 +90,7 @@ RUN if [ "${OS_CODENAME}" = "focal" ]; then \
 
 COPY --from=eget-build /src/eget /usr/bin/eget
 
-COPY ${OS_CODENAME}/${TARGETARCH}/eget.toml ./eget.toml
+RUN ln -sf "./config/eget.$(uname -m).toml" ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
 ARG ACTIONS_RUNNER_VERSION=v2.309.0
@@ -142,11 +137,8 @@ RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
     && npm cache clear --force \
     && rm -rf /tmp/*
 
-# (not supported) https://github.com/vercel/pkg/blob/main/README.md?plain=1#L91-L93
-RUN if [ "$(dpkg --print-architecture)" != armhf ]; then \
-    ln -s /usr/local/lib/balena-cli/balena /usr/local/bin/balena ; \
-    balena version ; \
-    fi
+RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
+    && balena version
 
 RUN chown -R runner:runner /home/runner
 
@@ -186,8 +178,7 @@ COPY docker-hc ./docker-hc
 RUN chmod +x ./docker-hc
 
 COPY s6-overlay /etc/s6-overlay
-RUN chmod +x /etc/s6-overlay/scripts/* \
-    && ln -s /etc/s6-overlay/scripts/start-runner /start-runner.sh
+RUN chmod +x /etc/s6-overlay/scripts/*
 
-ENTRYPOINT [ "/etc/s6-overlay/scripts/set-arch", "/init" ]
+ENTRYPOINT [ "/init" ]
 CMD []
