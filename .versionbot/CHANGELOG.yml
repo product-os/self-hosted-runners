@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.310.2
+      hash: f9eb62952295c5596b4581af8131a6fbc0dc0554
+      body: |
+        Update actions/runner from 2.309.0 to 2.310.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.4.3
+  title: ""
+  date: 2023-10-17T23:36:00.598Z
+- commits:
     - subject: Update golang Docker tag to v1.21.3
       hash: 2cb4d70c23563c3b7d9cc157dbf0cb29449384e0
       body: |
