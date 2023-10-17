@@ -13,6 +13,29 @@ ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-Default}
 ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
 GITHUB_ORG=${GITHUB_ORG:-balena-io}
 
+# these tmpfs mounts need the executable bit set
+mount -o remount,rw,exec tmpfs /tmp
+mount -o remount,rw,exec tmpfs /run
+
+function move_to_tmpfs() {
+    # unmount any existing binds
+    umount "${1}" 2>/dev/null || true
+    # create mountpoint for a new tmpfs
+    mkdir -p "${1}.tmpfs"
+    # create the tmpfs with execute permissions
+    mount -t tmpfs -o rw,exec tmpfs "${1}.tmpfs"
+    # copy the contents of the original directory to the tmpfs
+    cp -a "${1}"/* "${1}.tmpfs"
+    # bind mount the tmpfs over the original
+    mount --bind "${1}.tmpfs" "${1}"
+}
+
+# create tmpfs overlays for some directories that need to be writable
+# but should not persist container restarts
+for dir in /home/runner /opt; do
+    move_to_tmpfs "${dir}" || true
+done
+
 curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
@@ -75,7 +98,7 @@ payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token
 }
 runner_token="$(echo "${payload}" | jq -r .token)"
 
-# remove token created by /etc/s6-overlay/scripts/mount-tmpfs
+# remove token created by /etc/s6-overlay/scripts/get-token
 rm -f /tmp/gh_token
 
 # write token to file to be read during teardown
