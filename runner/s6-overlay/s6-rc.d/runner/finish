@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-if [ -s "/var/run/runner.token" ]; then
-  su - runner -c "/home/runner/config.sh remove --token $(</var/run/runner.token)"
+if [ -s "/run/runner.token" ]; then
+  su - runner -c "/home/runner/config.sh remove --token $(</run/runner.token)"
 fi
 
-rm -f /var/run/runner.token
+rm -f /run/runner.token
 rm -f /home/runner/.runner
 
 echo "$1" >/run/s6-linux-init-container-results/exitcode

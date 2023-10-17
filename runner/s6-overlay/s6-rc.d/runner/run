@@ -2,7 +2,7 @@
 
 set -ae
 
-[[ $VERBOSE =~ true|True|yes|Yes|on|On|1 ]] && set -x
+[[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
 
 ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
 # Configure the runner to only take one job and then let the service un-configure the runner after the job finishes (default false)
@@ -11,7 +11,6 @@ ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-Default}
 ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
-GITHUB_ORG=${GITHUB_ORG:-balena-io}
 
 # these tmpfs mounts need the executable bit set
 mount -o remount,rw,exec tmpfs /tmp
@@ -60,8 +59,6 @@ get_geo() {
 
 get_geo
 
-echo "${ipinfo}" | jq
-
 runner_tags=()
 runner_tags+=("family:$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')")
 runner_tags+=("distro:$(cat </etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{print $2}' | sed 's/"//g')")
@@ -87,41 +84,23 @@ runner_tags_str=$(printf "%s," "${runner_tags[@]}")
 # Remove the trailing comma
 runner_tags_str=${runner_tags_str%,}
 
-slug=orgs
-url="https://github.com/${GITHUB_ORG}"
-if [[ -n "${GITHUB_ENTERPRISE}" ]]; then
-    GITHUB_ORG="${GITHUB_ENTERPRISE}"
-    slug=enterprises
-    url="https://github.com/${slug}/${GITHUB_ENTERPRISE}"
+url="https://github.com/${GITHUB_ORG:-balena-io}"
+if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
+    url="https://github.com/enterprises/${GITHUB_ENTERPRISE}"
 fi
-
-# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
-registration_url="https://api.github.com/${slug}/${GITHUB_ORG}/actions/runners/registration-token"
-echo "Requesting registration token..."
-payload=$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token $(</tmp/gh_token)") || {
-    echo "Failed to get registration token from ${registration_url}"
-    exit 1
-}
-runner_token="$(echo "${payload}" | jq -r .token)"
-
-# remove token created by /etc/s6-overlay/scripts/get-token
-rm -f /tmp/gh_token
-
-# write token to file to be read during teardown
-echo "${runner_token}" >"/var/run/runner.token"
 
 config_args=()
 config_args+=("--disableupdate")
 config_args+=("--unattended")
 config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
-config_args+=("--token" "${runner_token}")
+config_args+=("--token" "$(</run/runner.token)")
 config_args+=("--url" "${url}")
 config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
 config_args+=("--work" "${ACTIONS_RUNNER_WORK_DIRECTORY}")
 config_args+=("--labels" "\"${runner_tags_str}\"")
 
-[[ ${ACTIONS_RUNNER_EPHEMERAL} =~ true|True|1|yes|Yes ]] && config_args+=("--ephemeral")
-[[ ${ACTIONS_RUNNER_REPLACE} =~ true|True|1|yes|Yes ]] && config_args+=("--replace")
+[[ ${ACTIONS_RUNNER_EPHEMERAL,,} =~ true|yes|on|1 ]] && config_args+=("--ephemeral")
+[[ ${ACTIONS_RUNNER_REPLACE,,} =~ true|yes|on|1 ]] && config_args+=("--replace")
 
 # create and chown the work directory
 mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"

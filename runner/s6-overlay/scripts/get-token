@@ -1,59 +1,75 @@
 #!/usr/bin/env bash
 
 # Get a GitHub authentication token for the runner either via GitHub App or PAT
-# and write it to /tmp/gh_token
-
-set -euo pipefail
 
 # force debug tracing to off as we are dealing with secrets
 set +x
 
-get_installation_token() {
-    if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
-        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
-        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
-        return
-    fi
+set -euo pipefail
 
-    # https://www.npmjs.com/package/github-app-installation-token
-    # https://github.com/gagoar/github-app-installation-token
-    echo "Requesting installation token..."
-    github-app-installation-token \
-        --appId "${ACTIONS_RUNNER_APP_ID}" \
-        --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
-        --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 >/tmp/gh_token
+# required to use `read` with pipes
+shopt -s lastpipe
 
-    # cleanup secret files
-    rm -f /tmp/private.pem
-
-    echo "Token has been written to /tmp/gh_token"
-}
-
-if [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
+# decode app key and write to a file if one was provided via env vars
+if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ] && [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
     echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
 fi
 
 if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
-    get_installation_token
-    exit 0
+
+    if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
+        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
+        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
+    else
+        # https://www.npmjs.com/package/github-app-installation-token
+        # https://github.com/gagoar/github-app-installation-token
+        echo "Requesting installation token from GitHub App..."
+        github-app-installation-token \
+            --appId "${ACTIONS_RUNNER_APP_ID}" \
+            --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
+            --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 | read -r ACTIONS_RUNNER_AUTH_TOKEN || {
+            echo "GitHub App installation token request failed!"
+        }
+    fi
 fi
 
-ACTIONS_RUNNER_AUTH_TOKEN="${ACTIONS_RUNNER_AUTH_TOKEN:-}"
+# cleanup secret files
+rm -f /tmp/private.pem
 
 if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    echo "Using PAT 'GH_TOKEN' for authentication..."
     ACTIONS_RUNNER_AUTH_TOKEN="${GH_TOKEN:-}"
 fi
 
 if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+    echo "Using PAT 'GITHUB_TOKEN' for authentication..."
     ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-}"
 fi
 
 if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
-    echo "ACTIONS_RUNNER_AUTH_TOKEN is unset"
+    echo "No authentication methods provided!"
     exit 1
 fi
 
-echo "${ACTIONS_RUNNER_AUTH_TOKEN}" >/tmp/gh_token
+slug="orgs/${GITHUB_ORG:-balena-io}"
+if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
+    slug="enterprises/${GITHUB_ENTERPRISE}"
+fi
 
-echo "Token has been written to /tmp/gh_token"
-exit 0
+curl_with_opts() {
+    curl --fail --silent --retry 3 --connect-timeout 3 "$@"
+}
+
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
+registration_url="https://api.github.com/${slug}/actions/runners/registration-token"
+echo "Requesting registration token..."
+curl_with_opts -sX POST "${registration_url}" \
+    -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token >"/run/runner.token" || {
+    echo "Failed to get registration token from ${registration_url}"
+    exit 1
+}
+
+echo "Runner registration token saved to /run/runner.token"
+
+# unset secrets
+unset ACTIONS_RUNNER_AUTH_TOKEN ACTIONS_RUNNER_APP_KEY_B64 GH_TOKEN GITHUB_TOKEN
