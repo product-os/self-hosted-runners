@@ -36,6 +36,12 @@ for dir in /home/runner /opt; do
     move_to_tmpfs "${dir}" || true
 done
 
+# set hostname
+echo "${ACTIONS_RUNNER_MACHINE_NAME:-$(hostname)}" > /etc/hostname
+# sed "s/127.0.1.1.*/127.0.1.1 ${new_hostname}/" -i /etc/hosts
+hostname -F /etc/hostname
+hostname
+
 curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
