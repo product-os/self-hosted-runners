@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.1.5
+      hash: d3913d8c4ba2da49ffa191d593b9641973e1b897
+      body: |
+        Update balena-io/balena-cli from 17.1.1 to 17.1.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.4.1
+  title: ""
+  date: 2023-10-17T21:15:55.481Z
+- commits:
     - subject: Disable publish of separate images per architecture
       hash: b2760b9df582aedc9014102e1b4effe945b8847e
       body: ""
