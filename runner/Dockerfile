@@ -93,7 +93,7 @@ COPY --from=eget-build /src/eget /usr/bin/eget
 RUN ln -sf "./config/eget.$(uname -m).toml" ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.309.0
+ARG ACTIONS_RUNNER_VERSION=v2.310.2
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
 ARG ACTIONS_HOOKS_VERSION=0.3.2
