@@ -105,7 +105,7 @@ ARG BALENA_CLI_VERSION=v17.1.5
 ARG S6_OVERLAY_VERSION=3.1.4.2
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.6
+ARG POWERSHELL_VERSION=v7.3.8
 
 # renovate: datasource=node-version depName=node
 ARG NODE_VERSION=18.18.2
