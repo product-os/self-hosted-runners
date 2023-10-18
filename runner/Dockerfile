@@ -162,9 +162,6 @@ RUN pwsh -Version && \
     yq --version && \
     zstd --version
 
-COPY docker-hc ./docker-hc
-RUN chmod +x ./docker-hc
-
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 

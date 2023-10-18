@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e
+
+# unset secrets
+unset ACTIONS_RUNNER_AUTH_TOKEN ACTIONS_RUNNER_APP_KEY_B64 GH_TOKEN GITHUB_TOKEN
+
+[[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
+
+while true; do
+  sleep "${HEALTHCHECK_INTERVAL:-120}"
+  
+  # ping the docker daemon socket
+  curl --silent --fail --unix-socket /var/run/docker.sock http:/v1.41/_ping
+
+  # check for runner listener process
+  pgrep Runner.Listener >/dev/null
+done
