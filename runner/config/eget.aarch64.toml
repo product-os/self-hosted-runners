@@ -15,7 +15,7 @@ all = false
 
 ["powershell/powershell"]
 asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "v${POWERSHELL_VERSION}"
+tag = "${POWERSHELL_VERSION}"
 target = "/opt/microsoft/powershell/7"
 file = "*"
 
@@ -27,7 +27,7 @@ file = "*"
 
 ["actions/runner-container-hooks"]
 asset_filters = ["docker", ".zip"]
-tag = "v${ACTIONS_HOOKS_VERSION}"
+tag = "${ACTIONS_HOOKS_VERSION}"
 target = "./docker/"
 file = "*"
 
