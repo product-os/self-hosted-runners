@@ -2,6 +2,9 @@
 
 set -ae
 
+# unset secrets
+unset ACTIONS_RUNNER_AUTH_TOKEN ACTIONS_RUNNER_APP_KEY_B64 GH_TOKEN GITHUB_TOKEN
+
 [[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
 
 ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
