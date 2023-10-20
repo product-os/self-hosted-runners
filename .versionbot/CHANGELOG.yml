@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v9.9.0
+      hash: 949e09af1be9c8a5c5b0940ee2d04c45f550147e
+      body: |
+        Update npm from 9.8.1 to 9.9.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.4.7
+  title: ""
+  date: 2023-10-20T13:43:28.003Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.1.7
       hash: d76f21887f3d31c90c095e4f0786ad9748025a85
       body: |
