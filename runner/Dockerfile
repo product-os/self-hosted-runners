@@ -111,7 +111,7 @@ ARG POWERSHELL_VERSION=v7.3.8
 ARG NODE_VERSION=18.18.2
 
 # renovate: datasource=npm depName=npm
-ARG NPM_VERSION=9.8.1
+ARG NPM_VERSION=9.9.0
 
 # substitute the variables in the eget.toml file
 RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
