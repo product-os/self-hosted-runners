@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.1.7
+      hash: d76f21887f3d31c90c095e4f0786ad9748025a85
+      body: |
+        Update balena-io/balena-cli from 17.1.5 to 17.1.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.4.6
+  title: ""
+  date: 2023-10-20T12:19:27.241Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.3.8
       hash: 0b469a2971bb98b3bc0383f18d49b6b7553dce4e
       body: |
