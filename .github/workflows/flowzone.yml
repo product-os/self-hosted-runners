@@ -36,4 +36,4 @@ jobs:
           "linux/amd64": ["self-hosted","X64"]
         }
       bake_targets: |
-        default,focal
+        default,focal,jammy-vm,focal-vm
