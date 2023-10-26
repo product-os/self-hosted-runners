@@ -1,4 +1,18 @@
 - commits:
+    - subject: Provide additional build-time runner tags
+      hash: bdbfc865b161ee1865ef2b40f518b782ecde27b3
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.5.1
+  title: ""
+  date: 2023-10-26T15:56:05.694Z
+- commits:
     - subject: Install container jailer wrapper as final build stage
       hash: 4532d8cd3024c601bdae82809563680886569916
       body: ""
