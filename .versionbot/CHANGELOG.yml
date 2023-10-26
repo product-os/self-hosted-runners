@@ -1,4 +1,18 @@
 - commits:
+    - subject: Silence the error when board_name is unknown
+      hash: 67cfd2cb6c16393a61c74784cde555be4f887d89
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.5.2
+  title: ""
+  date: 2023-10-26T23:28:21.048Z
+- commits:
     - subject: Provide additional build-time runner tags
       hash: bdbfc865b161ee1865ef2b40f518b782ecde27b3
       body: ""
