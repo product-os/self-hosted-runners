@@ -69,7 +69,7 @@ runner_tags+=("major:$(cat </etc/lsb-release | grep DISTRIB_RELEASE | awk -F'=' 
 runner_tags+=("minor:$(cat </etc/lsb-release | grep DISTRIB_DESCRIPTION | awk -F'=' '{print $2}' | sed 's/"//g')")
 runner_tags+=("machine:$(uname -m)")
 runner_tags+=("arch:$(dpkg --print-architecture)")
-runner_tags+=("board:$(cat </sys/devices/virtual/dmi/id/board_name || echo 'unknown')")
+runner_tags+=("board:$(cat </sys/devices/virtual/dmi/id/board_name 2>/dev/null || echo 'unknown')")
 runner_tags+=("cpu:$(nproc)")
 runner_tags+=("mem:$(($(cat </proc/meminfo | grep MemTotal | awk '{print $2}') / 1024 / 1024))Gi")
 runner_tags+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
