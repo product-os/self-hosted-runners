@@ -3,12 +3,6 @@ version: "2.4"
 services:
   runner:
     image: sut
-    build:
-      context: .
-    privileged: true
-    userns_mode: host
-    cap_add:
-      - ALL
     # https://github.com/product-os/self-hosted-runners/settings/secrets/actions/COMPOSE_VARS
     # COMPOSE_VARS=$(cat .env | openssl base64 -A)
     env_file:
@@ -24,103 +18,46 @@ services:
       ACTIONS_RUNNER_GROUP: Default
       ACTIONS_RUNNER_EPHEMERAL: "true"
       VERBOSE: "true"
-      EXTRA_DOCKERD_ARGS: "--iptables=false"
       ACTIONS_RUNNER_MACHINE_NAME: sut
       ACTIONS_RUNNER_EXTRA_TAGS: sut
       S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
-    tmpfs:
-      - /tmp
-      - /run
-      - /scratch
 
   sut:
-    image: docker:stable
-    depends_on:
-     - runner
-    env_file:
-      # (optional) ACTIONS_RUNNER_APP_KEY_B64 for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_APP_ID for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_INSTALLATION_ID for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_AUTH_TOKEN with appropriate scope(s)
-      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
-      - .env
+    image: alpine:3.18
     environment:
-      # test at the org. level
-      GITHUB_ORG: product-os
+      DOCKER_HOST: unix:///var/run/docker.sock
+      COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-self-hosted-runners}
+      COMPOSE_FILE: docker-compose.yml:docker-compose.test.yml
+    depends_on:
+      - runner
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: []
+      - ./:/usr/src/app:ro
+    working_dir: /usr/src/app
     command:
       - /bin/sh
       - -c
       - |
         set -ex
-
-        apk add --no-cache bash bind-tools curl jq
-
-        runner_ip="$$(dig +short runner | tail -n 1)"
-        runner_id=""
-
-        container_ids=$$(docker ps --format '{{.ID}}')
-        for id in $$container_ids; do
-          if docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$${id}" | grep -q "$${runner_ip}"
-          then
-            runner_id="$${id}"
-            break
-          fi
-        done
+        apk add --no-cache docker-cli-compose
 
         count=0
-        while ! docker exec $${runner_id} /home/runner/docker-hc; do
-          if [ "$${count}" -gt 10 ]; then
-            echo "Runner failed to register"
+        while true; do
+
+          if [ $$count -gt 20 ]; then
+            echo "Timed out waiting for runner to come online"
             exit 1
           fi
-          count=$$((count + 1))
-          sleep "$$(( ( RANDOM % 5 ) + 10 ))s"
+
+          count=$$(($$count + 1))
+
+          sleep 3
+          
+          docker compose logs --no-color runner | grep "Daemon has completed initialization" || continue
+          docker compose logs --no-color runner | grep "Listening for Jobs" || continue
+
+          echo "Waiting for runnner to come online..."
+
+          break
+
         done
-
-        # 1. check that the home directory is set correctly
-        # 2. check that runner user has execute permissions in work directory
-        docker exec $${runner_id} sh -c "
-          strings /proc/\$(pgrep Runner.Listener)/environ | grep HOME=/home/runner &&
-          cp /usr/bin/pwd /home/runner/_work/pwd &&
-          su - runner -c /home/runner/_work/pwd
-        "
-
-        # Get a GitHub authentication token for the runner either via GitHub App or PAT
-        docker exec $${runner_id} sh -c "
-          /etc/s6-overlay/scripts/get-token &&
-          cat /tmp/gh_token
-        " | tail -n1 > /tmp/gh_token
-
-        # get agent id from runner config file
-        agent_id="$$(docker exec $${runner_id} jq -r '.agentId' .runner)"
-
-        slug=orgs
-        if [[ -n "$${GITHUB_ENTERPRISE}" ]]; then
-          GITHUB_ORG="$${GITHUB_ENTERPRISE}"
-          slug=enterprises
-        fi
-
-        # wait for runner to be online
-        count=0
-        response=
-        while true; do
-            response="$$(curl -fsSL \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer $$(cat /tmp/gh_token)" \
-              https://api.github.com/$${slug}/$${GITHUB_ORG}/actions/runners/$${agent_id})"
-            if [ "$(echo "$${response}" | jq -r '.status')" = "online" ]; then
-              break
-            fi
-            if [ "$${count}" -gt 10 ]; then
-              echo "Runner failed to come online"
-              exit 1
-            fi
-            count=$$((count + 1))
-            sleep "$$(( ( RANDOM % 10 ) + 5 ))s"
-        done
-
-        # check that our custom labels have been applied
-        echo "$${response}" | jq -e 'if any(.labels[]; .name == "sut") then true else false end'

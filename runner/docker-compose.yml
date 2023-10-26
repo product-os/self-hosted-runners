@@ -1,0 +1,23 @@
+version: "2.4"
+
+services:
+  runner:
+    build: .
+    # Privileged is required to setup the rootfs and jailer
+    # but permissions are dropped to a chroot in order to start your VM
+    privileged: true
+    network_mode: host
+    # Optionally run the VM jail in-memory to save storage wear
+    tmpfs:
+      - /tmp
+      - /run
+      - /srv
+      - /scratch
+    environment:
+      GITHUB_ORG: product-os
+      ACTIONS_RUNNER_GROUP: Default
+      ACTIONS_RUNNER_EPHEMERAL: "true"
+      VERBOSE: "true"
+      ACTIONS_RUNNER_MACHINE_NAME: sut
+      ACTIONS_RUNNER_EXTRA_TAGS: sut
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
