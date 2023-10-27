@@ -99,7 +99,7 @@ ARG ACTIONS_RUNNER_VERSION=v2.310.2
 ARG ACTIONS_HOOKS_VERSION=v0.4.0
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v17.2.0
+ARG BALENA_CLI_VERSION=v17.2.1
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
 ARG S6_OVERLAY_VERSION=3.1.4.2
