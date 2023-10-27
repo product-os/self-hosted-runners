@@ -179,7 +179,7 @@ ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 CMD [ "/init" ]
 
 # https://github.com/balena-io-experimental/ctr-jailer
-FROM ghcr.io/balena-io-experimental/ctr-jailer:v0.0.16 AS vm
+FROM ghcr.io/balena-io-experimental/ctr-jailer:0.0.20 AS vm
 
 COPY --from=runtime / /usr/src/app/rootfs
 
