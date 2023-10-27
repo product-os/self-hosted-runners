@@ -96,7 +96,7 @@ RUN ln -sf "./config/eget.$(uname -m).toml" ./eget.toml
 ARG ACTIONS_RUNNER_VERSION=v2.310.2
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
-ARG ACTIONS_HOOKS_VERSION=v0.3.2
+ARG ACTIONS_HOOKS_VERSION=v0.4.0
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
 ARG BALENA_CLI_VERSION=v17.2.0
