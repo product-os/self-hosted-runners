@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.4.0
+      hash: 500ffed73ca36ecefca6584c38ca2a5dee784ab6
+      body: |
+        Update actions/runner-container-hooks from 0.3.2 to 0.4.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.5.3
+  title: ""
+  date: 2023-10-27T13:08:05.674Z
+- commits:
     - subject: Silence the error when board_name is unknown
       hash: 67cfd2cb6c16393a61c74784cde555be4f887d89
       body: ""
