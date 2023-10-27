@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update ghcr.io/balena-io-experimental/ctr-jailer Docker tag to v0.0.22
+      hash: 2f2a0eca2f852f0a84faa0f5450d129746569fea
+      body: |
+        Update ghcr.io/balena-io-experimental/ctr-jailer from 0.0.20 to 0.0.22
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.5.7
+  title: ""
+  date: 2023-10-27T21:15:29.023Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/ctr-jailer Docker tag to v0.0.20
       hash: 7fa22151c04169404582fb68f0501a0aaa3a5980
       body: |
