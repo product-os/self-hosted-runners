@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.2.1
+      hash: 52a4952be8a91b95b5b8c8449c7da2fafcb24192
+      body: |
+        Update balena-io/balena-cli from 17.2.0 to 17.2.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.5.4
+  title: ""
+  date: 2023-10-27T14:24:16.896Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.4.0
       hash: 500ffed73ca36ecefca6584c38ca2a5dee784ab6
       body: |
