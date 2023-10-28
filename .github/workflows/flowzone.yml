@@ -37,3 +37,13 @@ jobs:
         }
       bake_targets: |
         default,focal,jammy-vm,focal-vm
+      # Set a reasonable timeout because if the e2e workflow jobs fail
+      # to pick up the self-hosted runners from the docker compose tests,
+      # they will idle until timeout.
+      jobs_timeout_minutes: 60
+      required_status_checks: >
+        [
+          "All tests",
+          "Flowzone / All jobs",
+          "policy-bot: master"
+        ]
