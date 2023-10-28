@@ -1,4 +1,31 @@
 - commits:
+    - subject: Remove the default tags when running CI tests
+      hash: af24c8c55dc6c94102004a20bd4bd8760508f7eb
+      body: |
+        We want to avoid having any production workflows
+        picking up the draft runners by mistake, even if they
+        are in separate runner groups.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Allow removing preset and default runner tags
+      hash: a480752053e5d4d056d29cfe2c5012e4506bfb02
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.0
+  title: ""
+  date: 2023-10-28T19:00:03.521Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/ctr-jailer Docker tag to v0.0.22
       hash: 2f2a0eca2f852f0a84faa0f5450d129746569fea
       body: |
