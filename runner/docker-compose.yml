@@ -25,7 +25,7 @@ services:
       S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
       # test at the org. level
       GITHUB_ORG: product-os
-      ACTIONS_RUNNER_GROUP: Default
+      ACTIONS_RUNNER_GROUP: runners-under-test
       ACTIONS_RUNNER_MACHINE_NAME: sut
       ACTIONS_RUNNER_EXTRA_TAGS: sut:build-${GITHUB_SHA:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
