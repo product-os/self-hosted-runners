@@ -13,11 +13,19 @@ services:
       - /run
       - /srv
       - /scratch
+    env_file:
+      # (optional) ACTIONS_RUNNER_APP_KEY_B64 for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_APP_ID for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_INSTALLATION_ID for github app with read and write access to organization self hosted runners
+      # (optional) ACTIONS_RUNNER_AUTH_TOKEN with appropriate scope(s)
+      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
+      - .env
     environment:
+      VERBOSE: "true"
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
+      # test at the org. level
       GITHUB_ORG: product-os
       ACTIONS_RUNNER_GROUP: Default
-      ACTIONS_RUNNER_EPHEMERAL: "true"
-      VERBOSE: "true"
       ACTIONS_RUNNER_MACHINE_NAME: sut
-      ACTIONS_RUNNER_EXTRA_TAGS: sut
-      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
+      ACTIONS_RUNNER_EXTRA_TAGS: sut:build-${GITHUB_SHA:-dev}
+      ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
