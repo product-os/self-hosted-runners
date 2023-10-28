@@ -14,6 +14,8 @@ ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
 ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-Default}
 ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
+ACTIONS_RUNNER_NO_DEFAULT_LABELS=${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-false}
+ACTIONS_RUNNER_DISABLE_UPDATE=${ACTIONS_RUNNER_DISABLE_UPDATE:-false}
 
 # these tmpfs mounts need the executable bit set
 mount -o remount,rw,exec tmpfs /tmp
@@ -77,13 +79,30 @@ runner_tags+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:up
 runner_tags+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
 runner_tags+=("balena_device_uuid:${BALENA_DEVICE_UUID:-unknown}")
 
+# comma-separated list of tags to add to the runner
 if [ -n "${ACTIONS_RUNNER_BUILD_TAGS:-}" ]; then
-    runner_tags+=("${ACTIONS_RUNNER_BUILD_TAGS}")
+    # split the string into an array
+    IFS=',' read -r -a build_tags <<< "${ACTIONS_RUNNER_BUILD_TAGS}"
 fi
 
+# comma-separated list of tags to add to the runner
 if [ -n "${ACTIONS_RUNNER_EXTRA_TAGS:-}" ]; then
-    runner_tags+=("${ACTIONS_RUNNER_EXTRA_TAGS}")
+    # split the string into an array
+    IFS=',' read -r -a extra_tags <<< "${ACTIONS_RUNNER_EXTRA_TAGS}"
 fi
+
+# comma-separated list of tags to remove from the runner
+if [ -n "${ACTIONS_RUNNER_REMOVE_TAGS:-}" ]; then
+    # split the string into an array
+    IFS=',' read -r -a remove_tags <<< "${ACTIONS_RUNNER_REMOVE_TAGS}"
+fi
+
+# add the build tags to the runner tags
+runner_tags+=("${build_tags[@]}")
+# add the extra tags to the runner tags
+runner_tags+=("${extra_tags[@]}")
+# remove the remove tags from the runner tags
+runner_tags=("${runner_tags[@]/${remove_tags[@]}}")
 
 # Join the array elements with commas
 runner_tags_str=$(printf "%s," "${runner_tags[@]}")
@@ -107,6 +126,8 @@ config_args+=("--labels" "\"${runner_tags_str}\"")
 
 [[ ${ACTIONS_RUNNER_EPHEMERAL,,} =~ true|yes|on|1 ]] && config_args+=("--ephemeral")
 [[ ${ACTIONS_RUNNER_REPLACE,,} =~ true|yes|on|1 ]] && config_args+=("--replace")
+[[ ${ACTIONS_RUNNER_NO_DEFAULT_LABELS,,} =~ true|yes|on|1 ]] && config_args+=("--no-default-labels")
+[[ ${ACTIONS_RUNNER_DISABLE_UPDATE,,} =~ true|yes|on|1 ]] && config_args+=("--disableupdate")
 
 # create and chown the work directory
 mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
