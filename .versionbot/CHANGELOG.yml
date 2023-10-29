@@ -1,4 +1,28 @@
 - commits:
+    - subject: Add e2e workflow that runs on draft runners
+      hash: 176dce6d2923a4cb4ee8a8e1a129e9bc0a3005d2
+      body: |
+        The docker compose tests in Flowzone will bring
+        the runners online with a dynamic tag specific
+        to the commit hash.
+
+        The e2e workflow will wait and execute on the
+        draft runners when they come online.
+
+        When the e2e job is complete, the runner
+        will automatically teardown, completing the
+        docker compose test step.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.1
+  title: ""
+  date: 2023-10-29T13:28:23.651Z
+- commits:
     - subject: Remove the default tags when running CI tests
       hash: af24c8c55dc6c94102004a20bd4bd8760508f7eb
       body: |
