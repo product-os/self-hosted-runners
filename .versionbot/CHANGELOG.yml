@@ -1,4 +1,20 @@
 - commits:
+    - subject: Disable runner updates by default
+      hash: afea497dd2f4144e6ed9112466b85b414ef73c77
+      body: |
+        The filesystem is usually ephemeral anyway so updates
+        are lost on restart, and this leads to a boot loop.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.2
+  title: ""
+  date: 2023-10-29T14:23:05.315Z
+- commits:
     - subject: Add e2e workflow that runs on draft runners
       hash: 176dce6d2923a4cb4ee8a8e1a129e9bc0a3005d2
       body: |
