@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v6.0.24
+      hash: adbf42017386bd62ba878f3f33be6a12d8836c78
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 6.0.23 to 6.0.24
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.6.4
+  title: ""
+  date: 2023-10-29T20:12:47.585Z
+- commits:
     - subject: Update balena-io-experimental/container-jail to v0.0.23
       hash: 4fb8a9dcc0f9d931fa79e7e02bb52272f47d438b
       body: |
