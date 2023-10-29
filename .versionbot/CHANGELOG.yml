@@ -1,4 +1,51 @@
 - commits:
+    - subject: Update balena-io-experimental/container-jail to v0.0.23
+      hash: 4fb8a9dcc0f9d931fa79e7e02bb52272f47d438b
+      body: |
+        Update balena-io-experimental/container-jail from 0.0.22 to 0.0.23
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested:
+        - commits:
+            - subject: Update project name and README
+              hash: f60bf09ddfaac96cd3af4bb776e178a58da57a68
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+                Signed-off-by: Kyle Harding <kyle@balena.io>
+                signed-off-by: Kyle Harding <kyle@balena.io>
+              author: Kyle Harding
+            - subject: Clear the chroot base in case /srv was not mounted tmpfs
+              hash: 039f35bb47bba11454da3fb45f7e7a63890a916e
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+                Signed-off-by: Kyle Harding <kyle@balena.io>
+                signed-off-by: Kyle Harding <kyle@balena.io>
+              author: Kyle Harding
+          version: container-jail-0.0.23
+          title: ""
+          date: 2023-10-29T17:47:42.960Z
+    - subject: Update usage in README
+      hash: 08d49d6912c030753d3609ba9cfa60c383bc5d89
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.3
+  title: ""
+  date: 2023-10-29T18:55:03.603Z
+- commits:
     - subject: Disable runner updates by default
       hash: afea497dd2f4144e6ed9112466b85b414ef73c77
       body: |
