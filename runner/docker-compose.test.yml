@@ -1,45 +1,8 @@
 version: "2.4"
 
 services:
-  runner:
-    image: sut:latest
-
   sut:
-    image: alpine:3.18
-    environment:
-      DOCKER_HOST: unix:///var/run/docker.sock
-      COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-self-hosted-runners}
-      COMPOSE_FILE: docker-compose.yml:docker-compose.test.yml
-    depends_on:
-      - runner
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./:/usr/src/app:ro
-    working_dir: /usr/src/app
-    command:
-      - /bin/sh
-      - -c
-      - |
-        set -ex
-        apk add --no-cache docker-cli-compose
-
-        count=0
-        while true; do
-
-          if [ $$count -gt 20 ]; then
-            echo "Timed out waiting for runner to come online"
-            exit 1
-          fi
-
-          count=$$(($$count + 1))
-
-          sleep 3
-          
-          docker compose logs --no-color runner | grep "Daemon has completed initialization" || continue
-          docker compose logs --no-color runner | grep "Listening for Jobs" || continue
-
-          echo "Waiting for runnner to come online..."
-
-          break
-
-        done
+    extends:
+      file: docker-compose.yml
+      service: runner
+    image: sut

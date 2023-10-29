@@ -1,0 +1,65 @@
+name: Tests
+
+"on":
+  pull_request:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # This job depends on all runner checks passing
+  # so we can mark it as a required status check.
+  all_tests:
+    name: All tests
+    needs: runs_on
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log GitHub context
+        env:
+          CONTEXT: ${{ toJSON(github) }}
+        run: echo "${CONTEXT}" || true
+
+  # Run tests directly on the runners that are spun up
+  # by the docker compose tests in Flowzone.
+  runs_on:
+    name: Runs on
+    # Set a reasonable timeout because if the e2e workflow jobs fail
+    # to pick up the self-hosted runners from the docker compose tests,
+    # they will idle until timeout.
+    timeout-minutes: 60
+    # These tags MUST match the draft runners being tested by the Flowzone workflow.
+    runs-on:
+      - ${{ matrix.tag1 }}
+      - ${{ matrix.tag2 }}
+      - ${{ matrix.tag3 }}
+      - ${{ matrix.tag4 }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tag1:
+          - "distro:jammy"
+          - "distro:focal"
+        tag2:
+          - "platform:linux/amd64"
+          - "platform:linux/arm64"
+        tag3:
+          - "runtime:container"
+          - "runtime:vm"
+        tag4:
+          - "commit:${{ github.sha }}"
+
+    # Add as many tests as we think necessary to establish
+    # whether the runner image is ready for production CI runs.
+    steps:
+      - name: npm ping
+        run: |
+          npm ping
+
+      - name: docker run hello-world
+        run: |
+          docker run hello-world
