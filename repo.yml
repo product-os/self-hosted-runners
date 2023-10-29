@@ -1,2 +1,5 @@
 ---
 type: "docker"
+upstream:
+  - repo: 'balena-io-experimental/container-jail'
+    url: https://github.com/balena-io-experimental/container-jail
