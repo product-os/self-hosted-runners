@@ -1,31 +1,23 @@
 version: "2.4"
 
 services:
+  # default to VM runner target
   runner:
     build: .
-    # Privileged is required to setup the rootfs and jailer
-    # but permissions are dropped to a chroot in order to start your VM
     privileged: true
     network_mode: host
-    # Optionally run the VM jail in-memory to save storage wear
     tmpfs:
       - /tmp
       - /run
       - /srv
       - /scratch
+    # see README for more environment variables
     env_file:
-      # (optional) ACTIONS_RUNNER_APP_KEY_B64 for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_APP_ID for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_INSTALLATION_ID for github app with read and write access to organization self hosted runners
-      # (optional) ACTIONS_RUNNER_AUTH_TOKEN with appropriate scope(s)
-      # (optional) GEOIP_API_TOKEN (https://ipinfo.io/login)
       - .env
     environment:
       VERBOSE: "true"
       S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
-      # test at the org. level
       GITHUB_ORG: product-os
       ACTIONS_RUNNER_GROUP: runners-under-test
-      ACTIONS_RUNNER_MACHINE_NAME: sut
       ACTIONS_RUNNER_EXTRA_TAGS: commit:${GITHUB_SHA:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
