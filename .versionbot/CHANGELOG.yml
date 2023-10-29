@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.311.0
+      hash: 6e37e5f2d02d0dea06cb76587047abbd20e53046
+      body: |
+        Update actions/runner from 2.310.2 to 2.311.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.6.5
+  title: ""
+  date: 2023-10-29T23:17:53.811Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v6.0.24
       hash: adbf42017386bd62ba878f3f33be6a12d8836c78
       body: |
