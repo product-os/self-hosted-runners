@@ -53,13 +53,75 @@ jobs:
         tag4:
           - "commit:${{ github.sha }}"
 
+    defaults:
+      run:
+        working-directory: .
+        shell: bash --noprofile --norc -eo pipefail -x {0}
+
     # Add as many tests as we think necessary to establish
     # whether the runner image is ready for production CI runs.
     steps:
-      - name: npm ping
+      - name: Check environment
         run: |
+          date
+          id
+          printenv
+
+      - name: Check secrets
+        run : |
+          ! printenv | grep -q ACTIONS_RUNNER_AUTH_TOKEN=
+          ! printenv | grep -q ACTIONS_RUNNER_APP_KEY_B64=
+          ! printenv | grep -q GH_TOKEN=
+          ! printenv | grep -q GITHUB_TOKEN=
+
+      - name: Check system
+        run: |
+          cat /etc/os-release
+          uname -a
+          free -h
+          df -h
+          lsblk
+
+      - name: Check devices
+        run: |
+          ls -al /dev/
+
+          echo "Hello, World!" >/dev/stdout
+          echo "Hello, World!" >/dev/stderr
+
+      - name: Check networking
+        run: |
+          hostname
+
+          ip addr
+          ip link list
+          ip route
+          
           npm ping
 
-      - name: docker run hello-world
+          curl -fsSL https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch | bash
+
+      - name: Check docker
         run: |
+          docker info
           docker run hello-world
+
+      - name: Check packages
+        run: |
+          pwsh -Version
+          containerd --version
+          dockerd --version
+          aws --version
+          buildah --version
+          ctr --version
+          docker buildx version
+          docker compose version
+          gh version
+          node --version
+          npm --version
+          podman --version
+          runc --version
+          skopeo --version
+          socat -V
+          yq --version
+          zstd --version
