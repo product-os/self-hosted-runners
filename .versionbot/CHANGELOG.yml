@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.2.2
+      hash: 99ccb0c6b07bab164c5df59cc3c05a3da5e3018f
+      body: |
+        Update balena-io/balena-cli from 17.2.1 to 17.2.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.6.7
+  title: ""
+  date: 2023-10-30T17:14:50.077Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v7
       hash: 65089133e4f716f6cbf3e67a099ae48160f8ae71
       body: |
