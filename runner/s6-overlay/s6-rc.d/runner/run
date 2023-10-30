@@ -114,6 +114,7 @@ if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
     url="https://github.com/enterprises/${GITHUB_ENTERPRISE}"
 fi
 
+# https://github.com/actions/runner/blob/main/src/Runner.Listener/Runner.cs
 config_args=()
 config_args+=("--disableupdate")
 config_args+=("--unattended")
