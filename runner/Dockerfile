@@ -15,6 +15,7 @@ RUN git clone https://github.com/zyedidia/eget . \
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.13-jammy AS jammy
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.24-focal AS focal
+# hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
 
 WORKDIR /root
@@ -44,49 +45,35 @@ RUN adduser --disabled-password --gecos "" --uid 1001 runner \
 
 WORKDIR /home/runner
 
+# Add keyring for docker-ce
 # https://docs.docker.com/engine/install/ubuntu/
 RUN mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
+# Add keyring for container tools (podman, buildah, skopeo)
+# https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
+RUN url="https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x$(lsb_release -is)_$(lsb_release -rs)" \
+    && sh -c "echo 'deb ${url}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
+    && curl -fsSL "${url}/Release.key" | apt-key add -
+
+# Add keyring for GH CLI releases
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg \
     && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
-
-ARG OS_CODENAME
 
 COPY config/ ./config/
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
     $(<./config/packages.txt) \
-    $(<./config/packages.${OS_CODENAME}.txt) \
+    $(<./config/packages."$(lsb_release -cs)".txt) \
     && rm -rf /var/lib/apt/lists/*
 
-# Some packages are only available in the official Ubuntu upstream starting from Ubuntu 21
 # https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
-# hadolint ignore=DL3008,SC1091
-RUN if [ "${OS_CODENAME}" = "focal" ]; then \
-    REPO_URL="https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable" ; \
-    source /etc/os-release ; \
-    sh -c "echo 'deb ${REPO_URL}/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" ; \
-    curl -fsSL "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/Release.key" -O Release.key ; \
-    apt-key add Release.key ; \
-    fi
-
-# Install podman, buildah, skopeo container's tools
-# hadolint ignore=DL3008,SC1091
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    podman buildah skopeo \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /etc/containers \
-    && echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
-
-RUN if [ "${OS_CODENAME}" = "focal" ]; then \
-    rm /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list ; \
-    fi
+RUN echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
 
 COPY --from=eget-build /src/eget /usr/bin/eget
 
@@ -140,11 +127,21 @@ RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
 RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
     && balena version
 
+COPY s6-overlay /etc/s6-overlay
+RUN chmod +x /etc/s6-overlay/scripts/*
+
+# hadolint ignore=DL3059
 RUN chown -R runner:runner /home/runner
 
-# containerd version check will fail on emulated ARM until this fix is released
-# https://github.com/containerd/containerd/pull/7636
+# switch to runner user to check package versions
+USER runner
+
+# For reference, here are the packages in the official hosted runners:
+# - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
+# - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
 RUN pwsh -Version && \
+    # containerd version check will fail on emulated ARM until this fix is released
+    # https://github.com/containerd/containerd/pull/7636
     (containerd --version || true) && \
     (dockerd --version || true) && \
     aws --version && \
@@ -162,8 +159,9 @@ RUN pwsh -Version && \
     yq --version && \
     zstd --version
 
-COPY s6-overlay /etc/s6-overlay
-RUN chmod +x /etc/s6-overlay/scripts/*
+# switch back to root user for s6 entrypoint
+# hadolint ignore=DL3002
+USER root
 
 ARG TARGETPLATFORM
 
