@@ -10,6 +10,7 @@ iptables
 jq
 openssh-client
 podman
+rsync
 skopeo
 socat
 unzip

@@ -29,7 +29,7 @@ function move_to_tmpfs() {
     # create the tmpfs with execute permissions
     mount -t tmpfs -o rw,exec tmpfs "${1}.tmpfs"
     # copy the contents of the original directory to the tmpfs
-    cp -a "${1}"/* "${1}.tmpfs"
+    rsync -av "${1}"/ "${1}.tmpfs"/
     # bind mount the tmpfs over the original
     mount --bind "${1}.tmpfs" "${1}"
 }
