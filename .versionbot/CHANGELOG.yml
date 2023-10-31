@@ -1,4 +1,19 @@
 - commits:
+    - subject: Use rsync to mirror all files to tmpfs
+      hash: 404f00439abfb3e3e2f7aaffa81f54c3fcb7f50f
+      body: |
+        The previous method was skipping hidden files.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.10
+  title: ""
+  date: 2023-10-31T16:08:00.322Z
+- commits:
     - subject: Limit memory to 8GB for testing to avoid powershell crash
       hash: 29de5b3fbd61179a8cdb0b75bb95eb58b824f7e6
       body: ""
