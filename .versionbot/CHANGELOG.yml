@@ -1,4 +1,28 @@
 - commits:
+    - subject: Limit memory to 8GB for testing to avoid powershell crash
+      hash: 29de5b3fbd61179a8cdb0b75bb95eb58b824f7e6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Add a suite of self-tests to e2e
+      hash: 63f34e212fc4e3a9c090102dca0daf26099945fd
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.6.9
+  title: ""
+  date: 2023-10-31T15:40:15.288Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.24
       hash: 179457ac7170e10701ae60e7b173997341f5b118
