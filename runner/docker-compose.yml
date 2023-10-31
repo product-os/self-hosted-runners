@@ -21,3 +21,5 @@ services:
       ACTIONS_RUNNER_GROUP: runners-under-test
       ACTIONS_RUNNER_EXTRA_TAGS: commit:${GITHUB_SHA:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
+      # limit memory to 8GB for testing
+      MEM_SIZE_MIB: 8192
