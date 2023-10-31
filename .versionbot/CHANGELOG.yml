@@ -1,4 +1,19 @@
 - commits:
+    - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
+        v0.0.25
+      hash: 6b814d73d81a458565eeb8e4662311db84b73c8a
+      body: >
+        Update ghcr.io/balena-io-experimental/container-jail from 0.0.24 to
+        0.0.25
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.6.11
+  title: ""
+  date: 2023-10-31T17:13:11.671Z
+- commits:
     - subject: Use rsync to mirror all files to tmpfs
       hash: 404f00439abfb3e3e2f7aaffa81f54c3fcb7f50f
       body: |
