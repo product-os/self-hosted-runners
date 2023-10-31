@@ -80,6 +80,7 @@ jobs:
           uname -a
           free -h
           df -h
+          mount
           lsblk
 
       - name: Check devices
