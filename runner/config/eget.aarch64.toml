@@ -13,12 +13,6 @@ verify_sha256 = "7d5240056e8096e790ee9f8c451fc1acb1a7b5797cc5f6c6b741e693dfb40b8
 file = "yq_*"
 all = false
 
-["powershell/powershell"]
-asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "${POWERSHELL_VERSION}"
-target = "/opt/microsoft/powershell/7"
-file = "*"
-
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
 tag = "${ACTIONS_RUNNER_VERSION}"

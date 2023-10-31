@@ -91,9 +91,6 @@ ARG BALENA_CLI_VERSION=v17.2.2
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
 ARG S6_OVERLAY_VERSION=3.1.4.2
 
-# renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.9
-
 # renovate: datasource=node-version depName=node
 ARG NODE_VERSION=18.18.2
 
@@ -113,10 +110,6 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     eget -D ; \
     fi
 
-# install powershell links 
-RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
-    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
-
 # install npm target release
 # and https://www.npmjs.com/package/github-app-installation-token
 RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
@@ -126,6 +119,25 @@ RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
 
 RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
     && balena version
+
+# add dotnet root to path
+ENV DOTNET_ROOT "/home/runner/.dotnet"
+ENV PATH "$PATH:$DOTNET_ROOT"
+RUN echo "export DOTNET_ROOT=$DOTNET_ROOT" >> /home/runner/.profile \
+    && echo "PATH=\$PATH:\$DOTNET_ROOT" >> /home/runner/.profile
+
+# Install .NET SDKs
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
+# https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
+RUN curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --install-dir "$DOTNET_ROOT" --channel LTS \
+    && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --install-dir "$DOTNET_ROOT" --channel 7.0
+
+# renovate: datasource=github-releases depName=powershell/powershell
+ARG POWERSHELL_VERSION=v7.3.9
+
+# install powershell via dotnet tools
+RUN dotnet tool install -v=n powershell --version ${POWERSHELL_VERSION/v/} --tool-path "$DOTNET_ROOT/tools" \
+    && ln -sf "$DOTNET_ROOT/tools/pwsh" /usr/bin/pwsh
 
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
