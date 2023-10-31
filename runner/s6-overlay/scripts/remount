@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -x
+
+# these tmpfs mounts need the executable bit set
+mount -o remount,rw,exec tmpfs /tmp
+mount -o remount,rw,exec tmpfs /run
+
+# Create tmpfs mounts for each top-level directory under /
+for dir in /*; do
+    [ -d "$dir" ] || continue
+
+    # skip directories that are mount points
+    if mountpoint -q "$dir"; then
+        continue
+    fi
+
+    # create a tmpfs mount
+    tmp="$(mktemp -d)"
+    mount -t tmpfs tmpfs "$tmp"
+
+    # copy all files from the directory to the tmpfs mount
+    rsync -aAX "$dir/" "$tmp/"
+
+    # bind mount the tmpfs over / making it ephemeral
+    mount --bind "$tmp" "$dir"
+done
+
+# Execute the provided command
+# shellcheck disable=SC2068
+exec $@
