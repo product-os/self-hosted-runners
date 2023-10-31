@@ -177,7 +177,7 @@ ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 CMD [ "/init" ]
 
 # https://github.com/balena-io-experimental/container-jail
-FROM ghcr.io/balena-io-experimental/container-jail:0.0.24 AS vm
+FROM ghcr.io/balena-io-experimental/container-jail:0.0.25 AS vm
 
 COPY --from=runtime / /usr/src/app/rootfs
 
