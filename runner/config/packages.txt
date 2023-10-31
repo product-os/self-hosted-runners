@@ -1,5 +1,6 @@
 awscli
 build-essential
+buildah
 gh
 git
 htop
@@ -8,6 +9,9 @@ iproute2
 iptables
 jq
 openssh-client
+podman
+rsync
+skopeo
 socat
 unzip
 zstd
