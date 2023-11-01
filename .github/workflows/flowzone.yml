@@ -37,13 +37,18 @@ jobs:
         }
       bake_targets: |
         default,focal,jammy-vm,focal-vm
-      # Set a reasonable timeout because if the e2e workflow jobs fail
-      # to pick up the self-hosted runners from the docker compose tests,
-      # they will idle until timeout.
+      # Set a reasonable timeout so failed docker test jobs don't leave the
+      # custom test jobs idling forever
       jobs_timeout_minutes: 60
-      required_status_checks: >
+      # These runners will be brought online by the docker test jobs
+      custom_runs_on: >
         [
-          "All tests",
-          "Flowzone / All jobs",
-          "policy-bot: master"
+          ["distro:jammy","platform:linux/amd64","runtime:container","commit:${{ github.sha }}"],
+          ["distro:jammy","platform:linux/amd64","runtime:vm","commit:${{ github.sha }}"],
+          ["distro:jammy","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
+          ["distro:jammy","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"],
+          ["distro:focal","platform:linux/amd64","runtime:container","commit:${{ github.sha }}"],
+          ["distro:focal","platform:linux/amd64","runtime:vm","commit:${{ github.sha }}"],
+          ["distro:focal","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
+          ["distro:focal","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"]
         ]

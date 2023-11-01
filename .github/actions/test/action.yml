@@ -1,0 +1,93 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+name: Tests
+description: "Run a suite of tests on the draft runner to ensure it is ready for production"
+inputs:
+  json:
+    description: "JSON stringified object containing all the inputs from the calling workflow"
+    required: true
+  secrets:
+    description: "JSON stringified object containing all the secrets from the calling workflow"
+    required: true
+  variables:
+    description: "JSON stringified object containing all the variables from the calling workflow"
+    required: true
+runs:
+  using: "composite"
+
+  # Add as many tests as we think necessary to establish
+  # whether the runner image is ready for production CI runs.
+  steps:
+    - name: Check environment
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        date
+        id
+        printenv
+
+    - name: Check secrets
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run : |
+        ! printenv | grep -q ACTIONS_RUNNER_AUTH_TOKEN=
+        ! printenv | grep -q ACTIONS_RUNNER_APP_KEY_B64=
+        ! printenv | grep -q GH_TOKEN=
+        ! printenv | grep -q GITHUB_TOKEN=
+
+    - name: Check system
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        cat /etc/os-release
+        uname -a
+        dpkg --print-architecture
+        free -h
+        df -h
+        mount
+        lsblk
+
+    - name: Check devices
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        ls -al /dev/
+        echo "Hello, World!" >/dev/stdout
+        echo "Hello, World!" >/dev/stderr
+
+    - name: Check networking
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        hostname
+
+        ip addr
+        ip link list
+        ip route
+        
+        npm ping
+
+        curl -fsSL https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch | bash
+
+    - name: Check docker
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        docker info
+        docker run hello-world
+
+    - name: Check packages
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        aws --version
+        balena version
+        buildah --version
+        containerd --version
+        ctr --version
+        dockerd --version
+        docker buildx version
+        docker compose version
+        gh version
+        node --version
+        npm --version
+        podman --version
+        python3 --version
+        pwsh -Version
+        runc --version
+        skopeo --version
+        socat -V
+        yq --version
+        zstd --version
