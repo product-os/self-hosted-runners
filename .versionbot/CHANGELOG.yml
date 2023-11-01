@@ -1,4 +1,18 @@
 - commits:
+    - subject: Install python3 and pip3
+      hash: 937993a87924098c7889df95f502b681fb5adea9
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.0
+  title: ""
+  date: 2023-11-01T13:21:00.991Z
+- commits:
     - subject: Remount entire rootfs as tmpfs
       hash: 22c580ce1297b3c5dd3176ac69f47aa7dff8726c
       body: |
