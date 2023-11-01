@@ -78,6 +78,7 @@ jobs:
         run: |
           cat /etc/os-release
           uname -a
+          dpkg --print-architecture
           free -h
           df -h
           mount
@@ -109,12 +110,12 @@ jobs:
 
       - name: Check packages
         run: |
-          pwsh -Version
-          containerd --version
-          dockerd --version
           aws --version
+          balena version
           buildah --version
+          containerd --version
           ctr --version
+          dockerd --version
           docker buildx version
           docker compose version
           gh version
@@ -122,6 +123,7 @@ jobs:
           npm --version
           podman --version
           python3 --version
+          pwsh -Version
           runc --version
           skopeo --version
           socat -V
