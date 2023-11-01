@@ -64,7 +64,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 
-COPY config/ ./config/
+COPY config/packages.* ./config/
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -76,23 +76,72 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
 
 COPY --from=eget-build /src/eget /usr/bin/eget
-
-RUN ln -sf "./config/eget.$(uname -m).toml" ./eget.toml
+COPY config/eget.toml ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
 ARG ACTIONS_RUNNER_VERSION=v2.311.0
 
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget actions/runner --tag "${ACTIONS_RUNNER_VERSION}"
+
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
 ARG ACTIONS_HOOKS_VERSION=v0.4.0
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget actions/runner-container-hooks --tag "${ACTIONS_HOOKS_VERSION}"
+
+# renovate: datasource=github-releases depName=powershell/powershell
+ARG POWERSHELL_VERSION=v7.3.9
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget powershell/powershell --tag "${POWERSHELL_VERSION}"
+
+# install powershell links
+# https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
+RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
+    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
 ARG BALENA_CLI_VERSION=v17.2.2
 
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget balena-io/balena-cli --tag "${BALENA_CLI_VERSION}"
+
+# install balena-cli links
+RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget mikefarah/yq
+
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
 ARG S6_OVERLAY_VERSION=3.1.4.2
 
-# renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.9
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget just-containers/s6-overlay --tag "${S6_OVERLAY_VERSION}" --asset "s6-overlay-$(uname -m).tar.xz"
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget just-containers/s6-overlay --tag "${S6_OVERLAY_VERSION}" --asset "s6-overlay-noarch.tar.xz"
 
 # renovate: datasource=node-version depName=node
 ARG NODE_VERSION=18.18.2
@@ -100,33 +149,27 @@ ARG NODE_VERSION=18.18.2
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=9.9.0
 
-# substitute the variables in the eget.toml file
-RUN envsubst < eget.toml > eget.toml.tmp && mv eget.toml.tmp eget.toml
+# install nodejs and npm
+RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
+	then \
+		NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" ; \
+	else \
+		NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-arm64.tar.gz" ; \
+	fi && \
+	curl -fsSL "${NODE_URL}" | tar xz -C /usr/local --strip-components=1 --no-same-owner \
+	&& npm install -g npm@"$NPM_VERSION" \
+	&& rm -rf /root/.npm/_cacache \
+	&& npm cache clear --force \
+	&& rm -rf /tmp/*
 
-# optionally mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# eg. DOCKER_BUILDKIT=1 docker build --secret id=GITHUB_TOKEN,src=~/github_token.txt .
-# eg. docker buildx bake --set *.secrets=id=GITHUB_TOKEN,src=~/github_token.txt .
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    if [ -f /run/secrets/GITHUB_TOKEN ]; then \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) eget -D ; \
-    else \
-    eget -D ; \
-    fi
-
-# install powershell links 
-RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
-    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
-
-# install npm target release
-# and https://www.npmjs.com/package/github-app-installation-token
-RUN npm install -g npm@"$NPM_VERSION" github-app-installation-token@1.2.0 \
+# install github-app-installation-token
+# https://www.npmjs.com/package/github-app-installation-token
+RUN npm install -g github-app-installation-token@^1.2.0 \
     && rm -rf /root/.npm/_cacache \
     && npm cache clear --force \
     && rm -rf /tmp/*
 
-RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
-    && balena version
-
+# install s6-overlay
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 
@@ -139,12 +182,8 @@ USER runner
 # For reference, here are the packages in the official hosted runners:
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
-RUN pwsh -Version && \
-    # containerd version check will fail on emulated ARM until this fix is released
-    # https://github.com/containerd/containerd/pull/7636
-    (containerd --version || true) && \
-    (dockerd --version || true) && \
-    aws --version && \
+RUN aws --version && \
+    balena version && \
     buildah --version && \
     ctr --version && \
     docker buildx version && \
@@ -153,6 +192,7 @@ RUN pwsh -Version && \
     node --version && \
     npm --version && \
     podman --version && \
+    pwsh -Version && \
     python3 --version && \
     runc --version && \
     skopeo --version && \

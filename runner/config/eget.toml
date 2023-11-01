@@ -4,47 +4,35 @@ quiet = false
 show_hash = true
 upgrade_only = false
 all = true
+system = "linux/arm64"
 
 ["mikefarah/yq"]
 tag = "v4.30.7"
 asset_filters = [".tar.gz"]
 target = "/usr/local/bin/yq"
-verify_sha256 = "7d5240056e8096e790ee9f8c451fc1acb1a7b5797cc5f6c6b741e693dfb40b82"
 file = "yq_*"
 all = false
 
 ["powershell/powershell"]
 asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
-tag = "${POWERSHELL_VERSION}"
 target = "/opt/microsoft/powershell/7"
 file = "*"
 
 ["actions/runner"]
 asset_filters = ["^noexternals", "^noruntime", ".tar.gz"]
-tag = "${ACTIONS_RUNNER_VERSION}"
 target = "./"
 file = "*"
 
 ["actions/runner-container-hooks"]
 asset_filters = ["docker", ".zip"]
-tag = "${ACTIONS_HOOKS_VERSION}"
 target = "./docker/"
 file = "*"
 
-["https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-arm64.tar.xz"]
-target = "/usr/"
-file = "node-v${NODE_VERSION}-linux-arm64/*"
-
-["https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz"]
-target = "/"
-file = "*"
-
-["https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.xz"]
+["just-containers/s6-overlay"]
 target = "/"
 file = "*"
 
 ["balena-io/balena-cli"]
-asset_filters = ["linux", "arm64", "standalone", ".zip"]
-tag = "${BALENA_CLI_VERSION}"
+asset_filters = ["standalone", ".zip"]
 target = "/usr/local/lib/balena-cli/"
 file = "*"
