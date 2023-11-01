@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10
+      hash: 1819f7a63a9ff8c6a2f70948b2db0235feeb6208
+      body: |
+        Update npm from 9.9.0 to 10.2.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.4
+  title: ""
+  date: 2023-11-01T20:14:34.444Z
+- commits:
     - subject: Improve logging levels of remount script
       hash: 5983cc61099152c59e275a3d4beaec0da3b89d4a
       body: ""
