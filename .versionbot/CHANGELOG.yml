@@ -1,4 +1,18 @@
 - commits:
+    - subject: Install eget packages one at a time for better caching
+      hash: de3ea66392f54498c296eeef05ba2b2ff7f411d7
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.1
+  title: ""
+  date: 2023-11-01T16:33:09.611Z
+- commits:
     - subject: Install python3 and pip3
       hash: 937993a87924098c7889df95f502b681fb5adea9
       body: ""
