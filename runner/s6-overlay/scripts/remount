@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -x
+set -e
+
+[[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
 
 # these tmpfs mounts need the executable bit set
 mount -o remount,rw,exec tmpfs /tmp
@@ -15,6 +17,8 @@ for dir in /*; do
         continue
     fi
 
+    echo "Remounting $dir as tmpfs..."
+
     # create a tmpfs mount
     tmp="$(mktemp -d)"
     mount -t tmpfs tmpfs "$tmp"
@@ -23,7 +27,7 @@ for dir in /*; do
     rsync -aAX "$dir/" "$tmp/"
 
     # bind mount the tmpfs over / making it ephemeral
-    mount --bind "$tmp" "$dir"
+    mount -v --bind "$tmp" "$dir"
 done
 
 # Execute the provided command
