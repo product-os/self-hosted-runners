@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.2.3
+      hash: c4fc4d4b8419eb278be9cd3682496481ccbb9478
+      body: |
+        Update balena-io/balena-cli from 17.2.2 to 17.2.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.7
+  title: ""
+  date: 2023-11-03T17:34:33.867Z
+- commits:
     - subject: Update dependency npm to v10.2.3
       hash: 773e69feeefae47ca29aa97b58adb29f31b8c377
       body: |
