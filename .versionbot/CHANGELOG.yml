@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.3.0
+      hash: 8c45f34571e46ae48dbd2f82f4343a8439ad1971
+      body: |
+        Update balena-io/balena-cli from 17.2.4 to 17.3.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.12
+  title: ""
+  date: 2023-11-07T23:12:13.166Z
+- commits:
     - subject: Update golang Docker tag to v1.21.4
       hash: 4bcdcbd59376695164964f679d1d13e2a7ccebb4
       body: |
