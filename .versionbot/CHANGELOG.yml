@@ -1,4 +1,19 @@
 - commits:
+    - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
+        v0.0.26
+      hash: 47ab409664299bcb205a26f7faef1001b9505629
+      body: >
+        Update ghcr.io/balena-io-experimental/container-jail from 0.0.25 to
+        0.0.26
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.9
+  title: ""
+  date: 2023-11-07T20:16:55.297Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.2.4
       hash: e3eb14127f0732f6fa34fd2c31d870dcf05efcf2
       body: |
