@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.21.4
+      hash: 4bcdcbd59376695164964f679d1d13e2a7ccebb4
+      body: |
+        Update golang from 1.21.3 to 1.21.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.11
+  title: ""
+  date: 2023-11-07T22:15:05.070Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.27
       hash: 1acf1b7a2ec677ccc04f9619103d47e78bf2e000
