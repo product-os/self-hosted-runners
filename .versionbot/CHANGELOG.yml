@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.2.4
+      hash: 5da85f88b26504b3afd33a951e8e3403fa74d68f
+      body: |
+        Update npm from 10.2.3 to 10.2.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.21
+  title: ""
+  date: 2023-11-15T22:14:17.070Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.4.2
       hash: 362fafe73624cf7a29fa6de309424f6687f60980
       body: |
