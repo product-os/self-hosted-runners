@@ -56,6 +56,8 @@ runs:
         echo "Testing stdout" 1> >(tee "$HOME"/stdout)
         echo "Testing stderr" 2> >(tee "$HOME"/stderr)
 
+        script -q -e -c "echo 'Testing pseudo-terminal'"
+
         echo GITHUB_ENV=$GITHUB_ENV
         echo "test=GITHUB_ENV" | tee -a $GITHUB_ENV
 
@@ -64,9 +66,6 @@ runs:
 
         echo GITHUB_STEP_SUMMARY=$GITHUB_STEP_SUMMARY
         echo "Testing GITHUB_STEP_SUMMARY" | tee -a $GITHUB_STEP_SUMMARY
-
-        node -e "console.log('Testing console.log')" 1> >(tee -a $GITHUB_STEP_SUMMARY)
-        node -e "console.error('Testing console.error')" 2> >(tee -a $GITHUB_STEP_SUMMARY)
 
     - name: Check networking
       shell: bash --noprofile --norc -eo pipefail -x {0}
