@@ -47,8 +47,25 @@ runs:
       shell: bash --noprofile --norc -eo pipefail -x {0}
       run: |
         ls -al /dev/
-        echo "Hello, World!" >/dev/stdout
-        echo "Hello, World!" >/dev/stderr
+
+        echo "Testing stdout" >&1
+        echo "Testing stderr" >&2
+        echo "Testing stdout" >/dev/stdout
+        echo "Testing stderr" >/dev/stderr
+
+        echo "Testing stdout" 1> >(tee "$HOME"/stdout)
+        echo "Testing stderr" 2> >(tee "$HOME"/stderr)
+
+        script -q -e -c "echo 'Testing pseudo-terminal'"
+
+        echo GITHUB_ENV=$GITHUB_ENV
+        echo "test=GITHUB_ENV" | tee -a $GITHUB_ENV
+
+        echo GITHUB_OUTPUT=$GITHUB_OUTPUT
+        echo "test=GITHUB_OUTPUT" | tee -a $GITHUB_OUTPUT
+
+        echo GITHUB_STEP_SUMMARY=$GITHUB_STEP_SUMMARY
+        echo "Testing GITHUB_STEP_SUMMARY" | tee -a $GITHUB_STEP_SUMMARY
 
     - name: Check networking
       shell: bash --noprofile --norc -eo pipefail -x {0}
