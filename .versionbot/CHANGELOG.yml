@@ -1,4 +1,18 @@
 - commits:
+    - subject: Test shell expansion, redirection, and GitHub devices
+      hash: 9a368c7ab9f336656111ef0d2971bdf78b4536ca
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.25
+  title: ""
+  date: 2023-11-16T21:06:47.315Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.34
       hash: ea004c2c321215020d2ed43246d156858ec41648
