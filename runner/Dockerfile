@@ -13,8 +13,8 @@ RUN git clone https://github.com/zyedidia/eget . \
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.13-jammy AS jammy
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.24-focal AS focal
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.14-jammy AS jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.25-focal AS focal
 # hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
 
