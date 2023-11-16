@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.3.10
+      hash: c888bcb9e47e06033fd495f382a991135edbaaec
+      body: |
+        Update powershell/powershell from 7.3.9 to 7.3.10
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.26
+  title: ""
+  date: 2023-11-16T22:12:15.975Z
+- commits:
     - subject: Test shell expansion, redirection, and GitHub devices
       hash: 9a368c7ab9f336656111ef0d2971bdf78b4536ca
       body: ""
