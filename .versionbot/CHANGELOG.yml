@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.0
+      hash: d2e16bed94f81c8954ecdd408f222083f360301c
+      body: |
+        Update powershell/powershell from 7.3.10 to 7.4.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.30
+  title: ""
+  date: 2023-11-21T23:36:34.146Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.4.4
       hash: e8567b590da78a8ae7fc20305fb22e66776d34bb
       body: |
