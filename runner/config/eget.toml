@@ -14,7 +14,7 @@ file = "yq_*"
 all = false
 
 ["powershell/powershell"]
-asset_filters = ["powershell", "^fxdependent", "^alpine", ".tar.gz"]
+asset_filters = ["powershell", "^fxdependent", "^musl", ".tar.gz"]
 target = "/opt/microsoft/powershell/7"
 file = "*"
 

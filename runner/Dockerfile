@@ -97,7 +97,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     eget actions/runner-container-hooks --tag "${ACTIONS_HOOKS_VERSION}"
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.3.10
+ARG POWERSHELL_VERSION=v7.4.0
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
