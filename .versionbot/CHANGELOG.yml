@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.5.0
+      hash: e70c9d523fb7c99d3cabb250fd0d34547646da68
+      body: |
+        Update actions/runner-container-hooks from 0.4.0 to 0.5.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.34
+  title: ""
+  date: 2023-11-22T20:15:24.930Z
+- commits:
     - subject: Update dependency node to v20.10.0
       hash: b68f0d8970e1b109664ffc2825c6aac05839bdcc
       body: |
