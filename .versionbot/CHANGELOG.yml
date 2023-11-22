@@ -1,4 +1,18 @@
 - commits:
+    - subject: Fix renovate node version lookup
+      hash: 6e2963b683eeed161cd49ed8888b9b82544ac7a0
+      body: |
+        Fixes renovate warning:
+        Failed to look up node-version package node
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Kyle Harding
+      nested: []
+  version: 3.8.32
+  title: ""
+  date: 2023-11-22T17:07:11.032Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8
       hash: 725d684414b535e137ca39ada388121d50e3d651
       body: |
