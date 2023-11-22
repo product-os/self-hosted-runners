@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8
+      hash: 725d684414b535e137ca39ada388121d50e3d651
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 7.0.14 to 8.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.31
+  title: ""
+  date: 2023-11-22T16:36:38.500Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.4.0
       hash: d2e16bed94f81c8954ecdd408f222083f360301c
       body: |
