@@ -144,7 +144,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     eget just-containers/s6-overlay --tag "${S6_OVERLAY_VERSION}" --asset "s6-overlay-noarch.tar.xz"
 
 # renovate: datasource=node depName=node
-ARG NODE_VERSION=20.9.0
+ARG NODE_VERSION=20.10.0
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=10.2.4
