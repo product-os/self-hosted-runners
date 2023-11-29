@@ -1,4 +1,19 @@
 - commits:
+    - subject: Enable healthcheck service
+      hash: 6403e569f5ea6737a3c9693e46d38bf94f6d721e
+      body: |
+        It was an oversight that this was not already enabled.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.35
+  title: ""
+  date: 2023-11-29T14:00:13.803Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.5.0
       hash: e70c9d523fb7c99d3cabb250fd0d34547646da68
       body: |
