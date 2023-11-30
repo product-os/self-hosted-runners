@@ -1,4 +1,20 @@
 - commits:
+    - subject: Remove healthcheck service
+      hash: 7ec76633b31c4340c730862cbf21b4cc129905cd
+      body: |
+        This service wasn't adding any value as s6 is already monitoring
+        the services and restarting them as needed.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.36
+  title: ""
+  date: 2023-11-30T14:22:59.745Z
+- commits:
     - subject: Enable healthcheck service
       hash: 6403e569f5ea6737a3c9693e46d38bf94f6d721e
       body: |
