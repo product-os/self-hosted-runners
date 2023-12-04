@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.4.5
+      hash: 76c1bb8a6cdc95b964493d7f38cc704bf6e41810
+      body: |
+        Update balena-io/balena-cli from 17.4.4 to 17.4.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.37
+  title: ""
+  date: 2023-12-04T15:16:52.402Z
+- commits:
     - subject: Remove healthcheck service
       hash: 7ec76633b31c4340c730862cbf21b4cc129905cd
       body: |
