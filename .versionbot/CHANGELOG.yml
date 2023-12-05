@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.21.5
+      hash: f332e439cad4488a3d02975e30d89b3e3e93f815
+      body: |
+        Update golang from 1.21.4 to 1.21.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.38
+  title: ""
+  date: 2023-12-05T21:14:26.027Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.4.5
       hash: 76c1bb8a6cdc95b964493d7f38cc704bf6e41810
       body: |
