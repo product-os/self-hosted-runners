@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.2.5
+      hash: 4837b9022d9e35272d865721ca87febc5de8507c
+      body: |
+        Update npm from 10.2.4 to 10.2.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.39
+  title: ""
+  date: 2023-12-06T23:15:37.912Z
+- commits:
     - subject: Update golang Docker tag to v1.21.5
       hash: f332e439cad4488a3d02975e30d89b3e3e93f815
       body: |
