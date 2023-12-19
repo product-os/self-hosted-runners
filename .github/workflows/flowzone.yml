@@ -1,5 +1,4 @@
 name: Flowzone
-
 on:
   pull_request:
     types: [opened, synchronize, closed]
@@ -8,7 +7,6 @@ on:
   pull_request_target:
     types: [opened, synchronize, closed]
     branches: [main, master]
-
 jobs:
   flowzone:
     name: Flowzone
@@ -25,16 +23,15 @@ jobs:
     secrets: inherit
     with:
       working_directory: runner
-      repo_config: true
-      repo_homepage: "https://docs.github.com/en/actions/hosting-your-own-runners"
-      repo_description: "GitHub self-hosted runner images for common system architectures."
       docker_images: |
         ghcr.io/product-os/self-hosted-runners
       docker_runs_on: >
         {
+
           "linux/arm64": ["self-hosted","runtime:container","ARM64"],
           "linux/amd64": ["self-hosted","runtime:container","X64"]
         }
+
       bake_targets: |
         default,focal,jammy-vm,focal-vm
       # Set a reasonable timeout so failed docker test jobs don't leave the
@@ -43,6 +40,7 @@ jobs:
       # These runners will be brought online by the docker test jobs
       custom_runs_on: >
         [
+
           ["distro:jammy","platform:linux/amd64","runtime:container","commit:${{ github.sha }}"],
           ["distro:jammy","platform:linux/amd64","runtime:vm","commit:${{ github.sha }}"],
           ["distro:jammy","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
@@ -52,3 +50,4 @@ jobs:
           ["distro:focal","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
           ["distro:focal","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"]
         ]
+
