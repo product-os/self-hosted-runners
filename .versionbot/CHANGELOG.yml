@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v17.4.9
+      hash: 620d1f4b610d47158c93e39527a858ea8deb41ac
+      body: |
+        Update balena-io/balena-cli from 17.4.6 to 17.4.9
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.43
+  title: ""
+  date: 2023-12-25T23:54:10.464Z
+- commits:
     - subject: Remove repo config from flowzone.yml
       hash: 7f8c00bc352db4de58322ff68ceadd49bcbcd256
       body: |
