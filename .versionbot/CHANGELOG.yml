@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.11.0
+      hash: 8bd77a9175b72699b6a67ea68c72c87bd5224cf5
+      body: |
+        Update node from 20.10.0 to 20.11.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.48
+  title: ""
+  date: 2024-01-10T16:05:54.540Z
+- commits:
     - subject: Update dotnet monorepo
       hash: cd5e1cb95b0d587f23c17ca28211400de4a66ff3
       body: |
