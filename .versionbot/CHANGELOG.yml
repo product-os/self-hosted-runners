@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: cd5e1cb95b0d587f23c17ca28211400de4a66ff3
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 6.0.25 to 6.0.26
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.47
+  title: ""
+  date: 2024-01-10T01:22:41.791Z
+- commits:
     - subject: Update golang Docker tag to v1.21.6
       hash: 0302b1a6fded92922709b9fac2bc726a72218222
       body: |
