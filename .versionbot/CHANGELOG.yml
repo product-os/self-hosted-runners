@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.1
+      hash: b2ed30490aa2013796743087bc33a9bce426a333
+      body: |
+        Update powershell/powershell from 7.4.0 to 7.4.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.50
+  title: ""
+  date: 2024-01-12T00:07:33.630Z
+- commits:
     - subject: Update dependency npm to v10.3.0
       hash: c226511c3de0a408509b0d3adba353b9d2868907
       body: |
