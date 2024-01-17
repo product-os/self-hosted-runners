@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.312.0
+      hash: cbf85d3cc6020a498224de64483d87d1d7b89d70
+      body: |
+        Update actions/runner from 2.311.0 to 2.312.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.51
+  title: ""
+  date: 2024-01-17T05:06:06.632Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.4.1
       hash: b2ed30490aa2013796743087bc33a9bce426a333
       body: |
