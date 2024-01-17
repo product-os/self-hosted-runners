@@ -79,7 +79,7 @@ COPY --from=eget-build /src/eget /usr/bin/eget
 COPY config/eget.toml ./eget.toml
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.311.0
+ARG ACTIONS_RUNNER_VERSION=v2.312.0
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
