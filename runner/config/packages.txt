@@ -1,7 +1,6 @@
 awscli
 build-essential
 buildah
-gh
 git
 htop
 imvirt
