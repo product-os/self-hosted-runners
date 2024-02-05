@@ -1,4 +1,20 @@
 - commits:
+    - subject: Remove eget config file and put eget flags inline
+      hash: 7b9f67f45730e3bfb234b0e6322e4ca436de3b33
+      body: |
+        This vastly improves caching as previously any changes
+        to eget.toml would invalidate all of the cached eget downloads.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.56
+  title: ""
+  date: 2024-02-05T15:53:38.565Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v17.5.1
       hash: 6ddf3101afb13cc1d33e58518442da643b926c00
       body: |
