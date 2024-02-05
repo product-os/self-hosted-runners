@@ -75,8 +75,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
 RUN echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
 
-COPY --from=eget-build /src/eget /usr/bin/eget
-COPY config/eget.toml ./eget.toml
+COPY --from=eget-build /src/eget /usr/local/bin/eget
 
 # renovate: datasource=github-releases depName=actions/runner
 ARG ACTIONS_RUNNER_VERSION=v2.312.0
@@ -85,7 +84,10 @@ ARG ACTIONS_RUNNER_VERSION=v2.312.0
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget actions/runner --tag "${ACTIONS_RUNNER_VERSION}"
+    eget actions/runner \
+    --asset "^noexternals" --asset "^noruntime" --asset ".tar.gz" \
+    --all --file "*" --to "/home/runner" \
+    --tag "${ACTIONS_RUNNER_VERSION}"
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
 ARG ACTIONS_HOOKS_VERSION=v0.5.0
@@ -94,21 +96,26 @@ ARG ACTIONS_HOOKS_VERSION=v0.5.0
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget actions/runner-container-hooks --tag "${ACTIONS_HOOKS_VERSION}"
+    eget actions/runner-container-hooks \
+    --asset "docker" --asset ".zip" \
+    --all --file "*" --to "/home/runner/docker" \
+    --tag "${ACTIONS_HOOKS_VERSION}"
 
 # renovate: datasource=github-releases depName=powershell/powershell
 ARG POWERSHELL_VERSION=v7.4.1
 
+# https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget powershell/powershell --tag "${POWERSHELL_VERSION}"
-
-# install powershell links
-# https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
-RUN chmod +x /opt/microsoft/powershell/7/pwsh && \
-    ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
+    eget powershell/powershell \
+    --asset "powershell" --asset "^fxdependent" --asset "^musl" --asset ".tar.gz" \
+    --all --file "*" --to "/opt/microsoft/powershell/7" \
+    --tag "${POWERSHELL_VERSION}" \
+    && chmod +x /opt/microsoft/powershell/7/pwsh \
+    && ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh \
+    && pwsh -Version
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
 ARG BALENA_CLI_VERSION=v17.5.1
@@ -117,16 +124,35 @@ ARG BALENA_CLI_VERSION=v17.5.1
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget balena-io/balena-cli --tag "${BALENA_CLI_VERSION}"
-
-# install balena-cli links
-RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena
+    eget balena-io/balena-cli \
+    --asset "standalone" --asset ".zip"\
+    --all --file "*" --to "/usr/local/lib/balena-cli" \
+    --tag "${BALENA_CLI_VERSION}" \
+    && ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
+    && balena version
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget mikefarah/yq
+    eget mikefarah/yq \
+    --asset ".tar.gz" \
+    --file "yq_*" --to "/usr/local/bin/yq" \
+    --tag v4.13.2 \
+    && yq --version
+
+# renovate: datasource=github-releases depName=cli/cli
+ARG GH_CLI_VERSION=v2.43.1
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget cli/cli \
+    --asset ".tar.gz" \
+    --file "gh" --to "/usr/local/bin/gh" \
+    --tag "${GH_CLI_VERSION}" \
+    && gh version
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
 ARG S6_OVERLAY_VERSION=3.1.4.2
@@ -135,13 +161,19 @@ ARG S6_OVERLAY_VERSION=3.1.4.2
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget just-containers/s6-overlay --tag "${S6_OVERLAY_VERSION}" --asset "s6-overlay-$(uname -m).tar.xz"
+    eget just-containers/s6-overlay \
+    --asset "s6-overlay-$(uname -m).tar.xz" \
+    --all --file "*" --to "/" \
+    --tag "${S6_OVERLAY_VERSION}"
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
 RUN --mount=type=secret,id=GITHUB_TOKEN \
     GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget just-containers/s6-overlay --tag "${S6_OVERLAY_VERSION}" --asset "s6-overlay-noarch.tar.xz"
+    eget just-containers/s6-overlay \
+    --asset "s6-overlay-noarch.tar.xz" \
+    --all --file "*" --to "/" \
+    --tag "${S6_OVERLAY_VERSION}"
 
 # renovate: datasource=node depName=node
 ARG NODE_VERSION=20.11.0
@@ -151,16 +183,16 @@ ARG NPM_VERSION=10.4.0
 
 # install nodejs and npm
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
-	then \
-		NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" ; \
-	else \
-		NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-arm64.tar.gz" ; \
-	fi && \
-	curl -fsSL "${NODE_URL}" | tar xz -C /usr/local --strip-components=1 --no-same-owner \
-	&& npm install -g npm@"$NPM_VERSION" \
-	&& rm -rf /root/.npm/_cacache \
-	&& npm cache clear --force \
-	&& rm -rf /tmp/*
+    then \
+    NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" ; \
+    else \
+    NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-arm64.tar.gz" ; \
+    fi && \
+    curl -fsSL "${NODE_URL}" | tar xz -C /usr/local --strip-components=1 --no-same-owner \
+    && npm install -g npm@"$NPM_VERSION" \
+    && rm -rf /root/.npm/_cacache \
+    && npm cache clear --force \
+    && rm -rf /tmp/*
 
 # install github-app-installation-token
 # https://www.npmjs.com/package/github-app-installation-token
