@@ -1,4 +1,25 @@
 - commits:
+    - subject: Previouse `yq` install step didn't pin to a release. Fixing outdated
+        pinned release to current latest.
+      hash: 45a54d397b58883044b13c4bb633d31a971799fa
+      body: >
+        https://github.com/product-os/self-hosted-
+
+        runners/actions/runs/7720131779/job/21044549426#step:17:2897
+
+
+        Pinning yq to latest available release: https://github.com/mikefarah/yq/releases/tag/v4.40.5
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Harald Fischer <harald@balena.io>
+        signed-off-by: Harald Fischer <harald@balena.io>
+      author: Harald Fischer
+      nested: []
+  version: 3.8.57
+  title: ""
+  date: 2024-02-06T14:52:58.230Z
+- commits:
     - subject: Remove eget config file and put eget flags inline
       hash: 7b9f67f45730e3bfb234b0e6322e4ca436de3b33
       body: |
