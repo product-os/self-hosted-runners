@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.5.1
+      hash: d88c5be08e8521990951538b8ba4586d5a1006e7
+      body: |
+        Update actions/runner-container-hooks from 0.5.0 to 0.5.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.58
+  title: ""
+  date: 2024-02-06T18:06:41.601Z
+- commits:
     - subject: Previouse `yq` install step didn't pin to a release. Fixing outdated
         pinned release to current latest.
       hash: 45a54d397b58883044b13c4bb633d31a971799fa
