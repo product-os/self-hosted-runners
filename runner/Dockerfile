@@ -138,7 +138,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     eget mikefarah/yq \
     --asset ".tar.gz" \
     --file "yq_*" --to "/usr/local/bin/yq" \
-    --tag v4.13.2 \
+    --tag v4.40.5 \
     && yq --version
 
 # renovate: datasource=github-releases depName=cli/cli
