@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add /home/runner/.local/bin to runner PATH
+      hash: 7976b27226f3af0de2be92a307166722023d7106
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.59
+  title: ""
+  date: 2024-02-08T15:49:53.677Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.5.1
       hash: d88c5be08e8521990951538b8ba4586d5a1006e7
       body: |
