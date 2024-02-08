@@ -85,6 +85,9 @@ runs:
       run: |
         docker info
         docker run hello-world
+        touch runner/.env
+        docker compose --project-directory runner config
+        yq '.' runner/docker-compose.yml
 
     - name: Check packages
       shell: bash --noprofile --norc -eo pipefail -x {0}
