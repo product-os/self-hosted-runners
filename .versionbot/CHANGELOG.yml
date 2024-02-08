@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.22.0
+      hash: 5ed8bf8aaf1836271f38e2da1500bc107874f1bc
+      body: |
+        Update golang from 1.21.6 to 1.22.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.60
+  title: ""
+  date: 2024-02-08T17:04:22.789Z
+- commits:
     - subject: Add /home/runner/.local/bin to runner PATH
       hash: 7976b27226f3af0de2be92a307166722023d7106
       body: ""
