@@ -211,6 +211,9 @@ RUN chown -R runner:runner /home/runner
 # switch to runner user to check package versions
 USER runner
 
+# hadolint ignore=SC2016
+RUN echo 'export PATH=/home/runner/.local/bin:$PATH' >> /home/runner/.profile
+
 # For reference, here are the packages in the official hosted runners:
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
