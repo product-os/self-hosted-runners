@@ -1,4 +1,18 @@
 - commits:
+    - subject: Test docker compose and yq commands in draft runner
+      hash: f966bcc947090a1af05437e3087fd7fe031c8662
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.61
+  title: ""
+  date: 2024-02-09T15:21:59.965Z
+- commits:
     - subject: Update golang Docker tag to v1.22.0
       hash: 5ed8bf8aaf1836271f38e2da1500bc107874f1bc
       body: |
