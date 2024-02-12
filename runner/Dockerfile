@@ -78,7 +78,7 @@ RUN echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /
 COPY --from=eget-build /src/eget /usr/local/bin/eget
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.312.0
+ARG ACTIONS_RUNNER_VERSION=v2.313.0
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
