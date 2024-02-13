@@ -253,7 +253,7 @@ ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 CMD [ "/etc/s6-overlay/scripts/remount", "/init" ]
 
 # https://github.com/balena-io-experimental/container-jail
-FROM ghcr.io/balena-io-experimental/container-jail:0.0.36 AS vm
+FROM ghcr.io/balena-io-experimental/container-jail:0.0.37 AS vm
 
 COPY --from=runtime / /usr/src/app/rootfs
 
