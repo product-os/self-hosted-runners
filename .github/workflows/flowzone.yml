@@ -47,5 +47,5 @@ jobs:
         ]
       runs_on: >
         [
-          "self-hosted"
+          "self-hosted", "X64"
         ]
