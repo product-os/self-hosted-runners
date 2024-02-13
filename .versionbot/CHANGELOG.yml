@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.313.0
+      hash: ffe60010f69dddab74d9ee46e8d3675e64d5cd5a
+      body: |
+        Update actions/runner from 2.312.0 to 2.313.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.63
+  title: ""
+  date: 2024-02-13T00:11:21.077Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v18
       hash: a5083f5bdddf641d5975744c5b2e80f60ef74ad3
       body: |
