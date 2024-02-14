@@ -176,7 +176,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --tag "${S6_OVERLAY_VERSION}"
 
 # renovate: datasource=node depName=node
-ARG NODE_VERSION=20.11.0
+ARG NODE_VERSION=20.11.1
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=10.4.0
