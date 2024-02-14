@@ -1,4 +1,18 @@
 - commits:
+    - subject: Test hostname change is not generating sudo warnings
+      hash: cef168618984c082ddf0e32e7ae8fac697e40e70
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.66
+  title: ""
+  date: 2024-02-14T16:28:40.873Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.37
       hash: 452ad4c6d9afbfcb5f0d3d8e744cb19282c01b4b
