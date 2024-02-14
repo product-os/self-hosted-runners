@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.11.1
+      hash: e37373d11b37b06b7f4c8f965c5680a10a369e01
+      body: |
+        Update node from 20.11.0 to 20.11.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.67
+  title: ""
+  date: 2024-02-14T18:10:06.547Z
+- commits:
     - subject: Test hostname change is not generating sudo warnings
       hash: cef168618984c082ddf0e32e7ae8fac697e40e70
       body: ""
