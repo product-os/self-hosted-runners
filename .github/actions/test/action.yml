@@ -71,6 +71,8 @@ runs:
       shell: bash --noprofile --norc -eo pipefail -x {0}
       run: |
         hostname
+        cat /etc/hosts
+        test -z "$(sudo hostname 2>&1 | grep "unable to resolve host")" || exit 1
 
         ip addr
         ip link list
