@@ -1,4 +1,18 @@
 - commits:
+    - subject: Test mounting shares as an NFS client
+      hash: fc8a0be001aa6b4143cd2c4ec8ab2013a429e3a2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.8.71
+  title: ""
+  date: 2024-02-21T02:11:45.167Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.38
       hash: 256afbd08d923c58240bac0759b8f33fad13f833
