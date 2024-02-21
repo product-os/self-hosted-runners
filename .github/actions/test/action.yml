@@ -91,6 +91,18 @@ runs:
         docker compose --project-directory runner config
         yq '.' runner/docker-compose.yml
 
+    # if this share goes away, just delete this test, no one will miss it
+    - name: Check NFS client support
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      env:
+        YOCTO_CACHE_HOST: nfs.product-os.io
+        YOCTO_CACHE_DIR: /var/lib/yocto
+      run: |
+        sudo mkdir -p "${YOCTO_CACHE_DIR}"
+        sudo chown $(id -u):$(id -g) "${YOCTO_CACHE_DIR}"
+        sudo mount -t nfs "${YOCTO_CACHE_HOST}:/" "${YOCTO_CACHE_DIR}" -o fsc,nolock
+        ls -al "${YOCTO_CACHE_DIR}"/
+
     - name: Check packages
       shell: bash --noprofile --norc -eo pipefail -x {0}
       run: |

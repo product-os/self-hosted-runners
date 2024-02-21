@@ -7,6 +7,7 @@ imvirt
 iproute2
 iptables
 jq
+nfs-common
 openssh-client
 podman
 python3
