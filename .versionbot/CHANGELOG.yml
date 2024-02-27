@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.314.1
+      hash: 294bd1eee2cd5b039309662f0eb05f6e98057943
+      body: |
+        Update actions/runner from 2.314.0 to 2.314.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.74
+  title: ""
+  date: 2024-02-27T21:07:44.523Z
+- commits:
     - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
         v0.0.39
       hash: 79be76f2a7d6535f5331283f95f7e1f90c56b1f8
