@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.5.0
+      hash: ffe3676df0b73b9101e6f267a5be407d1a471fb9
+      body: |
+        Update npm from 10.4.0 to 10.5.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.75
+  title: ""
+  date: 2024-02-28T19:12:46.919Z
+- commits:
     - subject: Update dependency actions/runner to v2.314.1
       hash: 294bd1eee2cd5b039309662f0eb05f6e98057943
       body: |
