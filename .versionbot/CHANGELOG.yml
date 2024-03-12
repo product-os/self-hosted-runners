@@ -1,4 +1,19 @@
 - commits:
+    - subject: Update ghcr.io/balena-io-experimental/container-jail Docker tag to
+        v0.0.40
+      hash: 2538ae9be4ef6476f08d0f59e3179de01205618e
+      body: >
+        Update ghcr.io/balena-io-experimental/container-jail from 0.0.39 to
+        0.0.40
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.82
+  title: ""
+  date: 2024-03-12T22:26:27.143Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 7074757c6a888acb8ed560121be1881c5c583393
       body: |
