@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.6.0
+      hash: 1e4008ed9b3c318a9310e79984ad3cf95ab0d36c
+      body: |
+        Update actions/runner-container-hooks from 0.5.1 to 0.6.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.86
+  title: ""
+  date: 2024-03-18T15:50:25.399Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v18.1.5
       hash: 063a33fb91bd3179d09a06598013e6afd674ba70
       body: |
