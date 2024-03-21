@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.46.0
+      hash: a6736fabfb623eba9d11c6395cdbe6d0e84fb56f
+      body: |
+        Update cli/cli from 2.45.0 to 2.46.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.87
+  title: ""
+  date: 2024-03-21T14:58:17.406Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.6.0
       hash: 1e4008ed9b3c318a9310e79984ad3cf95ab0d36c
       body: |
