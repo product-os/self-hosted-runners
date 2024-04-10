@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.12.2
+      hash: 7a0fe2d07ae8fbd57fb76c3ced41109b8ce874bf
+      body: |
+        Update node from 20.11.1 to 20.12.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.8.88
+  title: ""
+  date: 2024-04-10T17:21:54.482Z
+- commits:
     - subject: Update dependency cli/cli to v2.46.0
       hash: a6736fabfb623eba9d11c6395cdbe6d0e84fb56f
       body: |
