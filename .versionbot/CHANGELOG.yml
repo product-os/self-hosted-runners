@@ -1,4 +1,20 @@
 - commits:
+    - subject: Allow registration to a single repository
+      hash: 50a8bde2499297999ce798225e634e8f883b3ccd
+      body: |
+        This is mostly useful for CI testing but in general
+        makes the image more flexible.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.9.0
+  title: ""
+  date: 2024-04-23T21:44:25.535Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v18.1.10
       hash: 26845275986469a4c50f774ea07772e4a84c5186
       body: |
