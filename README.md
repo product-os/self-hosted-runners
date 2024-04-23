@@ -22,7 +22,9 @@ services:
     # host networking is required to modify host iptables
     network_mode: host
     environment:
-      GITHUB_ORG: product-os
+      ACTIONS_RUNNER_REGISTRATION_SLUG: orgs/product-os
+      # ACTIONS_RUNNER_REGISTRATION_SLUG: enterprises/balena
+      # ACTIONS_RUNNER_REGISTRATION_SLUG: repos/product-os/self-hosted-runners
       ACTIONS_RUNNER_GROUP: self-hosted-internal
       # optionally authenticate via GitHub App installation token (organization only, not enterprise)
       ACTIONS_RUNNER_APP_ID: "********" # GitHub App ID with permissions to manage self hosted runners
@@ -57,7 +59,9 @@ services:
     # hostname will be used as the runner machine name
     hostname: my-runner
     environment:
-      GITHUB_ORG: product-os
+      ACTIONS_RUNNER_REGISTRATION_SLUG: orgs/product-os
+      # ACTIONS_RUNNER_REGISTRATION_SLUG: enterprises/balena
+      # ACTIONS_RUNNER_REGISTRATION_SLUG: repos/product-os/self-hosted-runners
       ACTIONS_RUNNER_GROUP: self-hosted-internal
       # optionally authenticate via GitHub App installation token (organization only, not enterprise)
       ACTIONS_RUNNER_APP_ID: "********" # GitHub App ID with permissions to manage self hosted runners

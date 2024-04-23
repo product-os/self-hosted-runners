@@ -51,17 +51,30 @@ if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
     exit 1
 fi
 
-slug="orgs/${GITHUB_ORG:-balena-io}"
-if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
-    slug="enterprises/${GITHUB_ENTERPRISE}"
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+    if [[ -n "${GITHUB_ENTERPRISE:-}" ]]; then
+        ACTIONS_RUNNER_REGISTRATION_SLUG="enterprises/${GITHUB_ENTERPRISE}"
+    fi
+fi
+
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+    if [[ -n "${GITHUB_ORG:-}" ]]; then
+        ACTIONS_RUNNER_REGISTRATION_SLUG="orgs/${GITHUB_ORG}"
+    fi
+fi
+
+if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
+    exit 1
 fi
 
 curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
 
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-a-repository
 # https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
-registration_url="https://api.github.com/${slug}/actions/runners/registration-token"
+registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
 echo "Requesting registration token..."
 curl_with_opts -sX POST "${registration_url}" \
     -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token >"/run/runner.token" || {
