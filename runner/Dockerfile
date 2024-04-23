@@ -102,7 +102,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --tag "${ACTIONS_HOOKS_VERSION}"
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.4.1
+ARG POWERSHELL_VERSION=v7.4.2
 
 # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
