@@ -45,7 +45,3 @@ jobs:
           ["distro:focal","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
           ["distro:focal","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"]
         ]
-      runs_on: >
-        [
-          "self-hosted", "X64"
-        ]
