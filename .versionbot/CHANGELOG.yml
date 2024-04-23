@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.2
+      hash: 6edb2f9337222667f9000c5ed9e2ce778e429f2d
+      body: |
+        Update powershell/powershell from 7.4.1 to 7.4.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.9.1
+  title: ""
+  date: 2024-04-23T22:16:07.696Z
+- commits:
     - subject: Allow registration to a single repository
       hash: 50a8bde2499297999ce798225e634e8f883b3ccd
       body: |
