@@ -12,15 +12,14 @@ ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
 ACTIONS_RUNNER_EPHEMERAL=${ACTIONS_RUNNER_EPHEMERAL:-true}
 # Replace any existing runner with the same name (default false)
 ACTIONS_RUNNER_REPLACE=${ACTIONS_RUNNER_REPLACE:-false}
-ACTIONS_RUNNER_GROUP=${ACTIONS_RUNNER_GROUP:-Default}
 ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
 ACTIONS_RUNNER_NO_DEFAULT_LABELS=${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-false}
 ACTIONS_RUNNER_DISABLE_UPDATE=${ACTIONS_RUNNER_DISABLE_UPDATE:-true}
 
 # set hostname
 new_hostname="${ACTIONS_RUNNER_MACHINE_NAME:-$(hostname)}"
-echo "${new_hostname}" > /etc/hostname
-awk -v newhost="${new_hostname}" '/localhost/ {print $0 " " newhost; next} 1' /etc/hosts > /tmp/hosts
+echo "${new_hostname}" >/etc/hostname
+awk -v newhost="${new_hostname}" '/localhost/ {print $0 " " newhost; next} 1' /etc/hosts >/tmp/hosts
 sed "s/$(hostname)/${new_hostname}/g" -i /tmp/hosts
 mv /tmp/hosts /etc/hosts
 hostname -F /etc/hostname
@@ -62,19 +61,19 @@ runner_tags+=("balena_device_uuid:${BALENA_DEVICE_UUID:-unknown}")
 # comma-separated list of tags to add to the runner
 if [ -n "${ACTIONS_RUNNER_BUILD_TAGS:-}" ]; then
     # split the string into an array
-    IFS=',' read -r -a build_tags <<< "${ACTIONS_RUNNER_BUILD_TAGS}"
+    IFS=',' read -r -a build_tags <<<"${ACTIONS_RUNNER_BUILD_TAGS}"
 fi
 
 # comma-separated list of tags to add to the runner
 if [ -n "${ACTIONS_RUNNER_EXTRA_TAGS:-}" ]; then
     # split the string into an array
-    IFS=',' read -r -a extra_tags <<< "${ACTIONS_RUNNER_EXTRA_TAGS}"
+    IFS=',' read -r -a extra_tags <<<"${ACTIONS_RUNNER_EXTRA_TAGS}"
 fi
 
 # comma-separated list of tags to remove from the runner
 if [ -n "${ACTIONS_RUNNER_REMOVE_TAGS:-}" ]; then
     # split the string into an array
-    IFS=',' read -r -a remove_tags <<< "${ACTIONS_RUNNER_REMOVE_TAGS}"
+    IFS=',' read -r -a remove_tags <<<"${ACTIONS_RUNNER_REMOVE_TAGS}"
 fi
 
 # add the build tags to the runner tags
@@ -82,17 +81,35 @@ runner_tags+=("${build_tags[@]}")
 # add the extra tags to the runner tags
 runner_tags+=("${extra_tags[@]}")
 # remove the remove tags from the runner tags
-runner_tags=("${runner_tags[@]/${remove_tags[@]}}")
+runner_tags=("${runner_tags[@]/${remove_tags[@]}/}")
 
 # Join the array elements with commas
 runner_tags_str=$(printf "%s," "${runner_tags[@]}")
 # Remove the trailing comma
 runner_tags_str=${runner_tags_str%,}
 
-url="https://github.com/${GITHUB_ORG:-balena-io}"
-if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
-    url="https://github.com/enterprises/${GITHUB_ENTERPRISE}"
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+    if [[ -n "${GITHUB_ENTERPRISE:-}" ]]; then
+        ACTIONS_RUNNER_REGISTRATION_SLUG="enterprises/${GITHUB_ENTERPRISE}"
+    fi
 fi
+
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+    if [[ -n "${GITHUB_ORG:-}" ]]; then
+        ACTIONS_RUNNER_REGISTRATION_SLUG="orgs/${GITHUB_ORG}"
+    fi
+fi
+
+if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
+    exit 1
+fi
+
+# remove orgs/ and repos/ from the slug
+registration_slug=${ACTIONS_RUNNER_REGISTRATION_SLUG}
+registration_slug="${registration_slug/orgs\//}"
+registration_slug="${registration_slug/repos\//}"
+registration_url="https://github.com/${registration_slug}"
 
 # https://github.com/actions/runner/blob/main/src/Runner.Listener/Runner.cs
 config_args=()
@@ -100,8 +117,10 @@ config_args+=("--disableupdate")
 config_args+=("--unattended")
 config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
 config_args+=("--token" "$(</run/runner.token)")
-config_args+=("--url" "${url}")
-config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
+config_args+=("--url" "${registration_url}")
+if [[ -n "${ACTIONS_RUNNER_GROUP}" ]]; then
+    config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
+fi
 config_args+=("--work" "${ACTIONS_RUNNER_WORK_DIRECTORY}")
 config_args+=("--labels" "\"${runner_tags_str}\"")
 
