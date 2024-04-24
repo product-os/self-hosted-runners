@@ -251,21 +251,3 @@ ENV S6_READ_ONLY_ROOT 1
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 
 CMD [ "/etc/s6-overlay/scripts/remount", "/init" ]
-
-# https://github.com/balena-io-experimental/container-jail
-FROM ghcr.io/balena-io-experimental/container-jail:0.0.40 AS vm
-
-COPY --from=runtime / /usr/src/app/rootfs
-
-ARG TARGETPLATFORM
-
-ENV ACTIONS_RUNNER_BUILD_TAGS "platform:${TARGETPLATFORM},runtime:vm"
-ENV RUNNER_ALLOW_RUNASROOT 0
-ENV RUNNER_MANUALLY_TRAP_SIG 1
-ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
-ENV S6_KEEP_ENV 1
-ENV S6_READ_ONLY_ROOT 1
-# default is 5000ms
-ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
-
-CMD [ "/init" ]
