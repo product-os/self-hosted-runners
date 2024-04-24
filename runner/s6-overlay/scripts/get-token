@@ -51,19 +51,19 @@ if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
     exit 1
 fi
 
-if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" ]]; then
     if [[ -n "${GITHUB_ENTERPRISE:-}" ]]; then
         ACTIONS_RUNNER_REGISTRATION_SLUG="enterprises/${GITHUB_ENTERPRISE}"
     fi
 fi
 
-if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG}" ]]; then
+if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" ]]; then
     if [[ -n "${GITHUB_ORG:-}" ]]; then
         ACTIONS_RUNNER_REGISTRATION_SLUG="orgs/${GITHUB_ORG}"
     fi
 fi
 
-if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
     echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
     exit 1
 fi
