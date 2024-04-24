@@ -1,4 +1,18 @@
 - commits:
+    - subject: Handle unbound variables
+      hash: d7aefcda3464313bb8cc7ad2d9ff5b0d7465fc35
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.9.2
+  title: ""
+  date: 2024-04-24T00:10:42.613Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.4.2
       hash: 6edb2f9337222667f9000c5ed9e2ce778e429f2d
       body: |
