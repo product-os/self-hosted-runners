@@ -27,21 +27,18 @@ jobs:
         ghcr.io/product-os/self-hosted-runners
       docker_runs_on: >
         {
-          "linux/arm64": ["self-hosted","runtime:container","ARM64"],
-          "linux/amd64": ["self-hosted","runtime:container","X64"]
+          "linux/arm64": ["self-hosted","ARM64"],
+          "linux/amd64": ["self-hosted","X64"]
         }
-      bake_targets: |
-        default,focal,jammy-vm,focal-vm
+      bake_targets: default,focal
       jobs_timeout_minutes: 60
       # These runners will be brought online by the docker test jobs
-      custom_runs_on: >
-        [
-          ["distro:jammy","platform:linux/amd64","runtime:container","commit:${{ github.sha }}"],
-          ["distro:jammy","platform:linux/amd64","runtime:vm","commit:${{ github.sha }}"],
-          ["distro:jammy","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
-          ["distro:jammy","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"],
-          ["distro:focal","platform:linux/amd64","runtime:container","commit:${{ github.sha }}"],
-          ["distro:focal","platform:linux/amd64","runtime:vm","commit:${{ github.sha }}"],
-          ["distro:focal","platform:linux/arm64","runtime:container","commit:${{ github.sha }}"],
-          ["distro:focal","platform:linux/arm64","runtime:vm","commit:${{ github.sha }}"]
-        ]
+      custom_test_matrix: >
+        {
+          "os": [
+            ["distro:jammy","platform:linux/amd64","commit:${{ github.sha }}"],
+            ["distro:jammy","platform:linux/arm64","commit:${{ github.sha }}"],
+            ["distro:focal","platform:linux/amd64","commit:${{ github.sha }}"],
+            ["distro:focal","platform:linux/arm64","commit:${{ github.sha }}"]
+          ]
+        }

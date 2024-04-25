@@ -22,24 +22,8 @@ target "jammy" {
   }
 }
 
-target "jammy-vm" {
-  inherits = ["default"]
-  target = "vm"
-  args = {
-    OS_CODENAME = "jammy"
-  }
-}
-
 target "focal" {
   inherits = ["default"]
-  args = {
-    OS_CODENAME = "focal"
-  }
-}
-
-target "focal-vm" {
-  inherits = ["default"]
-  target = "vm"
   args = {
     OS_CODENAME = "focal"
   }
