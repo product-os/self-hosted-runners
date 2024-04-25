@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v18.2.1
+      hash: 401198e64ba54d53040e1bff30ccfa1b7eae0fbc
+      body: |
+        Update balena-io/balena-cli from 18.1.10 to 18.2.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.9.5
+  title: ""
+  date: 2024-04-25T03:12:41.906Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 4b34279e7f88a4e4978127a02e3bf96fc55944cf
       body: |
