@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.5.2
+      hash: e96e7d03ebf36df709c50e988d29247009e9a667
+      body: |
+        Update npm from 10.5.0 to 10.5.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.9.3
+  title: ""
+  date: 2024-04-25T01:21:03.945Z
+- commits:
     - subject: Handle unbound variables
       hash: d7aefcda3464313bb8cc7ad2d9ff5b0d7465fc35
       body: ""
