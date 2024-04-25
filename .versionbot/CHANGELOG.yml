@@ -1,4 +1,28 @@
 - commits:
+    - subject: Spinoff VM-wrapped runners into another repo
+      hash: 6ea48efc54b8c62005cba7258c417e0962e93443
+      body: |
+        This repo will generate the runner container rootfs only.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Update dependency cli/cli to v2.48.0
+      hash: 194f2ad0b3431cdd280a4fd57e17c0259e76f259
+      body: |
+        Update cli/cli from 2.46.0 to 2.48.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.10.0
+  title: ""
+  date: 2024-04-25T17:51:21.447Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v18.2.1
       hash: 401198e64ba54d53040e1bff30ccfa1b7eae0fbc
       body: |
