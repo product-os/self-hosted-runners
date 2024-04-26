@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.316.0
+      hash: 6bea1f46dc9cb8edf9ef9be34decdaabaaa85a51
+      body: |
+        Update actions/runner from 2.314.1 to 2.316.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.10.2
+  title: ""
+  date: 2024-04-26T01:21:11.686Z
+- commits:
     - subject: Update dependency npm to v10.6.0
       hash: 5c26eaf50a409464d19d3a0d208aac857342b960
       body: |
