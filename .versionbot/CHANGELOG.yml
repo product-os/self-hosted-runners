@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.49.0
+      hash: 4f1c626790f9fa49c759a72b70b9905f4e007e60
+      body: |
+        Update cli/cli from 2.48.0 to 2.49.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.10.4
+  title: ""
+  date: 2024-04-30T14:13:51.273Z
+- commits:
     - subject: Update golang Docker tag to v1.22.2
       hash: 5c30d3fb3fe36175fc8828cbb654a8bc87d5cd32
       body: |
