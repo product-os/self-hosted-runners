@@ -27,8 +27,8 @@ jobs:
         ghcr.io/product-os/self-hosted-runners
       docker_runs_on: >
         {
-          "linux/arm64": ["self-hosted","ARM64"],
-          "linux/amd64": ["self-hosted","X64"]
+          "linux/amd64": ["actuated-8cpu-32gb"],
+          "linux/arm64": ["actuated-arm64-8cpu-32gb"]
         }
       bake_targets: default,focal
       jobs_timeout_minutes: 60
