@@ -1,4 +1,18 @@
 - commits:
+    - subject: Build and test images on Actuated runners
+      hash: 825a65927619e77232af1ce4c2eecfa762e12328
+      body: |
+        This avoids the chicken-egg effect where we can't merge
+        self-hosted runner changes when self-hosted runners are down.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Kyle Harding
+      nested: []
+  version: 3.11.1
+  title: ""
+  date: 2024-05-09T14:12:16.398Z
+- commits:
     - subject: Remove container tools that are only available via opensuse mirrors
       hash: 99fe29709cd7000cec6167507d5d84ece70595b0
       body: |
