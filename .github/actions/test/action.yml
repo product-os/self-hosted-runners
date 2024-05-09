@@ -108,7 +108,6 @@ runs:
       run: |
         aws --version
         balena version
-        buildah --version
         containerd --version
         ctr --version
         dockerd --version
@@ -117,11 +116,9 @@ runs:
         gh version
         node --version
         npm --version
-        podman --version
         python3 --version
         pwsh -Version
         runc --version
-        skopeo --version
         socat -V
         yq --version
         zstd --version

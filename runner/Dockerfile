@@ -52,12 +52,6 @@ RUN mkdir -p /etc/apt/keyrings \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-# Add keyring for container tools (podman, buildah, skopeo)
-# https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
-RUN url="https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x$(lsb_release -is)_$(lsb_release -rs)" \
-    && sh -c "echo 'deb ${url}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
-    && curl -fsSL "${url}/Release.key" | apt-key add -
-
 # Add keyring for GH CLI releases
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg \
@@ -71,9 +65,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     $(<./config/packages.txt) \
     $(<./config/packages."$(lsb_release -cs)".txt) \
     && rm -rf /var/lib/apt/lists/*
-
-# https://github.com/actions/runner-images/blob/main/images/linux/scripts/installers/containers.sh
-RUN echo -e "[registries.search]\nregistries = ['docker.io', 'quay.io']" | tee /etc/containers/registries.conf
 
 COPY --from=eget-build /src/eget /usr/local/bin/eget
 
@@ -219,18 +210,15 @@ RUN echo 'export PATH=/home/runner/.local/bin:$PATH' >> /home/runner/.profile
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
 RUN aws --version && \
     balena version && \
-    buildah --version && \
     ctr --version && \
     docker buildx version && \
     docker compose version && \
     gh version && \
     node --version && \
     npm --version && \
-    podman --version && \
     pwsh -Version && \
     python3 --version && \
     runc --version && \
-    skopeo --version && \
     socat -V && \
     yq --version && \
     zstd --version

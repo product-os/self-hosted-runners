@@ -1,6 +1,5 @@
 awscli
 build-essential
-buildah
 git
 htop
 imvirt
@@ -9,13 +8,11 @@ iptables
 jq
 nfs-common
 openssh-client
-podman
 python3
 python3-dev
 python3-pip
 python3-venv
 rsync
-skopeo
 socat
 unzip
 zstd
