@@ -1,4 +1,23 @@
 - commits:
+    - subject: Remove container tools that are only available via opensuse mirrors
+      hash: 99fe29709cd7000cec6167507d5d84ece70595b0
+      body: |
+        These mirrors have proven unreliable, and are only really required
+        for focal images.
+
+        Instead, we should install tools as part of the workflow.
+        See: https://github.com/product-os/setup-skopeo-action
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.11.0
+  title: ""
+  date: 2024-05-09T00:32:24.854Z
+- commits:
     - subject: Update dependency npm to v10.7.0
       hash: 72cfcaa7dc5f5af8b5b9cabb8c42442c7fc3be4c
       body: |
