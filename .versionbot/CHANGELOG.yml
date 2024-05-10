@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.316.1
+      hash: c858804421a4e0b336fd370302cef00307aae4c5
+      body: |
+        Update actions/runner from 2.316.0 to 2.316.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.2
+  title: ""
+  date: 2024-05-10T03:52:12.580Z
+- commits:
     - subject: Build and test images on Actuated runners
       hash: 825a65927619e77232af1ce4c2eecfa762e12328
       body: |
