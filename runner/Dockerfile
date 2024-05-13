@@ -133,7 +133,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     && yq --version
 
 # renovate: datasource=github-releases depName=cli/cli
-ARG GH_CLI_VERSION=v2.49.1
+ARG GH_CLI_VERSION=v2.49.2
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
