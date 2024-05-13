@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.49.2
+      hash: 278642d71d0fad320918301169affd54dfa2a9a7
+      body: |
+        Update cli/cli from 2.49.1 to 2.49.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.6
+  title: ""
+  date: 2024-05-13T18:08:16.208Z
+- commits:
     - subject: Update dependency cli/cli to v2.49.1
       hash: d1f568fd81120689c1d4866e54a99d6909970cd1
       body: |
