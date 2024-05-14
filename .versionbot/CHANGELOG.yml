@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 5862675779777aaac540b94b9d2687b91ba75406
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 6.0.29 to 6.0.30
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.7
+  title: ""
+  date: 2024-05-14T16:09:42.426Z
+- commits:
     - subject: Update dependency cli/cli to v2.49.2
       hash: 278642d71d0fad320918301169affd54dfa2a9a7
       body: |
