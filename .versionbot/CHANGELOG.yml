@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.8.0
+      hash: 68d7956c40223b6aaff51daf59a9bf7d4a286987
+      body: |
+        Update npm from 10.7.0 to 10.8.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.8
+  title: ""
+  date: 2024-05-15T23:08:46.119Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 5862675779777aaac540b94b9d2687b91ba75406
       body: |
