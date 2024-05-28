@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.14.0
+      hash: e3d607120c002b7df7e2b9de30a1eeeb822cffbf
+      body: |
+        Update node from 20.13.1 to 20.14.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.9
+  title: ""
+  date: 2024-05-28T18:08:31.914Z
+- commits:
     - subject: Update dependency npm to v10.8.0
       hash: 68d7956c40223b6aaff51daf59a9bf7d4a286987
       body: |
