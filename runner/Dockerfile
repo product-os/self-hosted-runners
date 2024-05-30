@@ -69,7 +69,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=eget-build /src/eget /usr/local/bin/eget
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.316.1
+ARG ACTIONS_RUNNER_VERSION=v2.317.0
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
