@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v6.0.31
+      hash: 00c7675d750508702b5b4bce94326dc309552869
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 6.0.30 to 6.0.31
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.11.14
+  title: ""
+  date: 2024-05-31T18:09:42.568Z
+- commits:
     - subject: Update dependency actions/runner to v2.317.0
       hash: aff06109feab14980e852f53a2080c67080e12fb
       body: |
