@@ -2,6 +2,7 @@
 
 set -e
 
+# shellcheck disable=SC2154
 [[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
 
 # these tmpfs mounts need the executable bit set
@@ -10,24 +11,24 @@ mount -o remount,rw,exec tmpfs /run
 
 # Create tmpfs mounts for each top-level directory under /
 for dir in /*; do
-    [ -d "$dir" ] || continue
+    [[ -d "${dir}" ]] || continue
 
     # skip directories that are mount points
-    if mountpoint -q "$dir"; then
+    if mountpoint -q "${dir}"; then
         continue
     fi
 
-    echo "Remounting $dir as tmpfs..."
+    echo "Remounting ${dir} as tmpfs..."
 
     # create a tmpfs mount
     tmp="$(mktemp -d)"
-    mount -t tmpfs tmpfs "$tmp"
+    mount -t tmpfs tmpfs "${tmp}"
 
     # copy all files from the directory to the tmpfs mount
-    rsync -aAX "$dir/" "$tmp/"
+    rsync -aAX "${dir}/" "${tmp}/"
 
     # bind mount the tmpfs over / making it ephemeral
-    mount -v --bind "$tmp" "$dir"
+    mount -v --bind "${tmp}" "${dir}"
 done
 
 # Execute the provided command
