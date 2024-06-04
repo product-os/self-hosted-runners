@@ -11,13 +11,13 @@ set -euo pipefail
 shopt -s lastpipe
 
 # decode app key and write to a file if one was provided via env vars
-if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ] && [ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]; then
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
     echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
 fi
 
-if [ -f "/tmp/private.pem" ] && [ -n "${ACTIONS_RUNNER_APP_ID:-}" ] && [ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]; then
+if [[ -f "/tmp/private.pem" ]] && [[ -n "${ACTIONS_RUNNER_APP_ID:-}" ]] && [[ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]]; then
 
-    if [ -n "${GITHUB_ENTERPRISE:-}" ]; then
+    if [[ -n "${GITHUB_ENTERPRISE:-}" ]]; then
         # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
         echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
     else
@@ -36,17 +36,12 @@ fi
 # cleanup secret files
 rm -f /tmp/private.pem
 
-if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
-    echo "Using PAT 'GH_TOKEN' for authentication..."
-    ACTIONS_RUNNER_AUTH_TOKEN="${GH_TOKEN:-}"
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN}}" ]]; then
+    echo "Using PAT 'GITHUB_TOKEN/GH_TOKEN' for authentication..."
+    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
 fi
 
-if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
-    echo "Using PAT 'GITHUB_TOKEN' for authentication..."
-    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-}"
-fi
-
-if [ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]; then
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
     echo "No authentication methods provided!"
     exit 1
 fi
@@ -76,6 +71,7 @@ curl_with_opts() {
 # https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
 registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
 echo "Requesting registration token..."
+# shellcheck disable=SC2310
 curl_with_opts -sX POST "${registration_url}" \
     -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token >"/run/runner.token" || {
     echo "Failed to get registration token from ${registration_url}"
