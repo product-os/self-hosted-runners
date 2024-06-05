@@ -2,6 +2,11 @@
 
 # Get a GitHub authentication token for the runner either via GitHub App or PAT
 
+if [[ -f /home/runner/.runner ]]; then
+    echo "Runner is already registered, skipping..."
+    exit 0
+fi
+
 # force debug tracing to off as we are dealing with secrets
 set +x
 
@@ -16,7 +21,7 @@ shopt -s lastpipe
 # set allowed environment vars from /var/environment
 load_variables
 # set allowed secrets from /var/secrets
-load_secrets
+load_secrets || true
 
 # decode app key and write to a file if one was provided via env vars
 if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
@@ -174,9 +179,6 @@ chown -R "runner:runner" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
 
 # chown the current directory since files will be written by the runner process
 chown -R "runner:runner" /home/runner/
-
-# remove any existing runner registration files
-rm -f /home/runner/.runner
 
 # disable tracing to avoid leaking the runner token
 set +x

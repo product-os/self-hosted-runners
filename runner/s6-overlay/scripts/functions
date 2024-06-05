@@ -12,18 +12,13 @@ env_to_file() {
     key_list="${1}"
     outfile="${2}"
 
-    if [[ ! -f "${key_list}" ]]; then
-        echo "File not found: ${key_list}"
-        return 1
-    fi
-
     # Clear the output file
     echo > "${outfile}"
 
     # Read variables.txt and write allowed variables to /var/environment
     while IFS='=' read -r key; do
         # Check if the variable is set in the current environment
-        if [[ "${key}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && [[ -n "${!key}" ]]; then
+        if [[ "${key:-}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && [[ -n "${!key:-}" ]]; then
             echo "${key}=${!key}" >> "${outfile}"
         fi
     done < "${key_list}"
@@ -55,7 +50,7 @@ unload_secrets() {
     secrets_file="${1:-"/var/secrets"}"
     # Clear the environment of sensitive information
     while IFS='=' read -r key; do
-        if [[ "${key}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+        if [[ "${key:-}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
             unset "${key}"
         fi
     done < "${secrets_file}"

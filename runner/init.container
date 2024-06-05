@@ -39,5 +39,9 @@ done
 save_variables
 save_secrets
 
+# Remove any existing runner registration files,
+# otherwise the registration s6-service will be skipped
+rm -f /home/runner/.runner
+
 # Execute the s6-overlay entrypoint
 exec /init
