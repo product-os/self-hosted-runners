@@ -58,12 +58,12 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 
-COPY config/packages.* ./config/
+COPY root/*.txt /
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    $(<./config/packages.txt) \
-    $(<./config/packages."$(lsb_release -cs)".txt) \
+    $(</packages.txt) \
+    $(</packages."$(lsb_release -cs)".txt) \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=eget-build /src/eget /usr/local/bin/eget
@@ -196,6 +196,10 @@ RUN npm install -g github-app-installation-token@^1.2.0 \
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 
+# install container init script
+COPY init.container /init.container
+RUN chmod +x /init.container
+
 # hadolint ignore=DL3059
 RUN chown -R runner:runner /home/runner
 
@@ -233,9 +237,10 @@ ENV ACTIONS_RUNNER_BUILD_TAGS "platform:${TARGETPLATFORM},runtime:container"
 ENV RUNNER_ALLOW_RUNASROOT 0
 ENV RUNNER_MANUALLY_TRAP_SIG 1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
-ENV S6_KEEP_ENV 1
+# disable services inheriting orginal set of env vars for security reasons
+ENV S6_KEEP_ENV 0
 ENV S6_READ_ONLY_ROOT 1
 # default is 5000ms
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 
-CMD [ "/etc/s6-overlay/scripts/remount", "/init" ]
+CMD [ "/init.container" ]

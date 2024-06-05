@@ -2,8 +2,11 @@
 
 set -e
 
-# shellcheck disable=SC2154
-[[ ${VERBOSE,,} =~ true|yes|on|1 ]] && set -x
+# shellcheck disable=SC1091
+. /etc/s6-overlay/scripts/functions
+
+# shellcheck disable=SC2310
+truthy "${VERBOSE:-}" && set -x
 
 # these tmpfs mounts need the executable bit set
 mount -o remount,rw,exec tmpfs /tmp
@@ -31,6 +34,10 @@ for dir in /*; do
     mount -v --bind "${tmp}" "${dir}"
 done
 
-# Execute the provided command
-# shellcheck disable=SC2068
-exec $@
+# Write env vars and secrets to the filesystem
+# so we can exec s6-overlay with S6_KEEP_ENV=0
+save_variables
+save_secrets
+
+# Execute the s6-overlay entrypoint
+exec /init

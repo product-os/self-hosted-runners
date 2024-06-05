@@ -10,39 +10,13 @@ set -euo pipefail
 # required to use `read` with pipes
 shopt -s lastpipe
 
-curl_with_opts() {
-    curl --fail --silent --retry 3 --connect-timeout 3 "$@"
-}
+# shellcheck disable=SC1091
+. /etc/s6-overlay/scripts/functions
 
-truthy() {
-    [[ ${1,,} =~ true|yes|on|1 ]]
-}
-
-get_geo() {
-    # shellcheck disable=SC2310
-    if curl_with_opts -I https://ipinfo.io; then
-        geoip_api_url=https://ipinfo.io
-        if [[ -n ${GEOIP_API_TOKEN:-} ]]; then
-            geoip_api_url="${geoip_api_url}?token=${GEOIP_API_TOKEN}"
-        fi
-        ipinfo="$(curl_with_opts "${geoip_api_url}")"
-    else
-        ipinfo='{"city":"Unknown","region":"Unknown","country":"Unknown"}'
-    fi
-}
-
-# source environment & secret files if they exist
-set -a
-for f in /var/environment /etc/environment /var/secrets; do
-    [[ -f "${f}" ]] || continue
-    # shellcheck disable=SC1090
-    . "${f}"
-    sed '/^ACTIONS_RUNNER_AUTH_TOKEN=/d' -i "${f}" || true
-    sed '/^ACTIONS_RUNNER_APP_KEY_B64=/d' -i "${f}" || true
-    sed '/^GITHUB_TOKEN=/d' -i "${f}" || true
-    sed '/^GH_TOKEN=/d' -i "${f}" || true
-done
-set +a
+# set allowed environment vars from /var/environment
+load_variables
+# set allowed secrets from /var/secrets
+load_secrets
 
 # decode app key and write to a file if one was provided via env vars
 if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
@@ -80,18 +54,6 @@ if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
     exit 1
 fi
 
-if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" ]]; then
-    if [[ -n "${GITHUB_ENTERPRISE:-}" ]]; then
-        ACTIONS_RUNNER_REGISTRATION_SLUG="enterprises/${GITHUB_ENTERPRISE}"
-    fi
-fi
-
-if [[ -z "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" ]]; then
-    if [[ -n "${GITHUB_ORG:-}" ]]; then
-        ACTIONS_RUNNER_REGISTRATION_SLUG="orgs/${GITHUB_ORG}"
-    fi
-fi
-
 if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
     echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
     exit 1
@@ -101,10 +63,25 @@ fi
 # https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
 registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
 echo "Requesting registration token..."
-runner_token="$(curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token)"
+curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token > /run/runner.token
 
-# unset secrets
-unset ACTIONS_RUNNER_AUTH_TOKEN ACTIONS_RUNNER_APP_KEY_B64 GH_TOKEN GITHUB_TOKEN
+get_geo() {
+    # shellcheck disable=SC2310
+    if curl_with_opts -I https://ipinfo.io; then
+        geoip_api_url=https://ipinfo.io
+        if [[ -n ${GEOIP_API_TOKEN:-} ]]; then
+            geoip_api_url="${geoip_api_url}?token=${GEOIP_API_TOKEN}"
+        fi
+        ipinfo="$(curl_with_opts "${geoip_api_url}")"
+    else
+        ipinfo='{"city":"Unknown","region":"Unknown","country":"Unknown"}'
+    fi
+}
+
+get_geo
+
+# unload all secrets and delete secrets file
+unload_secrets
 
 # shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x
@@ -117,8 +94,6 @@ sed "s/$(hostname)/${new_hostname}/g" -i /tmp/hosts
 mv /tmp/hosts /etc/hosts
 hostname -F /etc/hostname
 hostname
-
-get_geo
 
 runner_tags=()
 runner_tags+=("family:$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')")
@@ -172,14 +147,13 @@ registration_slug="${registration_slug/repos\//}"
 registration_url="https://github.com/${registration_slug}"
 
 ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
-ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-/home/runner/_work}
+ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-"/home/runner/_work"}
 
 # https://github.com/actions/runner/blob/main/src/Runner.Listener/Runner.cs
 config_args=()
 config_args+=("--disableupdate")
 config_args+=("--unattended")
 config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
-config_args+=("--token" "${runner_token}")
 config_args+=("--url" "${registration_url}")
 if [[ -n "${ACTIONS_RUNNER_GROUP:-}" ]]; then
     config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
@@ -204,7 +178,10 @@ chown -R "runner:runner" /home/runner/
 # remove any existing runner registration files
 rm -f /home/runner/.runner
 
-# configure as runner user
-su - runner -c "/home/runner/config.sh ${config_args[*]}" 2>&1
+# disable tracing to avoid leaking the runner token
+set +x
 
-unset config_args runner_token
+# configure as runner user
+su - runner -c "/home/runner/config.sh --token $(</run/runner.token) ${config_args[*]}" 2>&1
+
+rm -f /run/runner.token
