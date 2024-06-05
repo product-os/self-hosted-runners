@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Exit if script is executed, not sourced
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "This script must be sourced, not executed."
+    exit 1
+fi
+
+# Write allowed environment variables and secrets to disk for sourcing.
+# This allows us to clear the environment of sensitive information.
+env_to_file() {
+    key_list="${1}"
+    outfile="${2}"
+
+    if [[ ! -f "${key_list}" ]]; then
+        echo "File not found: ${key_list}"
+        return 1
+    fi
+
+    # Clear the output file
+    echo > "${outfile}"
+
+    # Read variables.txt and write allowed variables to /var/environment
+    while IFS='=' read -r key; do
+        # Check if the variable is set in the current environment
+        if [[ "${key}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && [[ -n "${!key}" ]]; then
+            echo "${key}=${!key}" >> "${outfile}"
+        fi
+    done < "${key_list}"
+}
+
+save_variables() {
+    variables_file="${1:-"/var/variables"}"
+    env_to_file "/variables.txt" "${variables_file}"
+}
+
+save_secrets() {
+    secrets_file="${1:-"/var/secrets"}"
+    env_to_file "/secrets.txt" "${secrets_file}"
+}
+
+load_variables() {
+    variables_file="${1:-"/var/variables"}"
+    # shellcheck disable=SC1090
+    . "${variables_file}"
+}
+
+load_secrets() {
+    secrets_file="${1:-"/var/secrets"}"
+    # shellcheck disable=SC1090
+    . "${secrets_file}"
+}
+
+unload_secrets() {
+    secrets_file="${1:-"/var/secrets"}"
+    # Clear the environment of sensitive information
+    while IFS='=' read -r key; do
+        if [[ "${key}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+            unset "${key}"
+        fi
+    done < "${secrets_file}"
+    rm -f "${secrets_file}"
+}
+
+curl_with_opts() {
+    curl --fail --silent --retry 3 --connect-timeout 3 "$@"
+}
+
+truthy() {
+    [[ ${1,,} =~ true|yes|on|1 ]]
+}

@@ -2,12 +2,16 @@
 
 set -ae
 
-# unset secrets
-unset ACTIONS_RUNNER_AUTH_TOKEN ACTIONS_RUNNER_APP_KEY_B64 GH_TOKEN GITHUB_TOKEN
+# shellcheck disable=SC1091
+. /etc/s6-overlay/scripts/functions
 
-[[ $VERBOSE =~ true|True|yes|Yes|on|On|1 ]] && set -x
+# set allowed environment vars from /var/environment
+load_variables
 
-DOCKER_REGISTRY_MIRROR_INTERNAL=${DOCKER_REGISTRY_MIRROR_INTERNAL:-""}
+# shellcheck disable=SC2310
+truthy "${VERBOSE:-}" && set -x
+
+INSECURE_REGISTRY=${INSECURE_REGISTRY:-""}
 DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
 MAX_CONCURRENT_DOWNLOADS=${MAX_CONCURRENT_DOWNLOADS:-3}
 MAX_CONCURRENT_UPLOADS=${MAX_CONCURRENT_UPLOADS:-5}
@@ -22,11 +26,11 @@ dockerd_args+=("--mtu=$(cat /sys/class/net/"$(ip route get 8.8.8.8 | awk '{ prin
 dockerd_args+=("--max-concurrent-downloads=${MAX_CONCURRENT_DOWNLOADS}")
 dockerd_args+=("--max-concurrent-uploads=${MAX_CONCURRENT_UPLOADS}")
 
-for registry in ${DOCKER_REGISTRY_MIRROR_INTERNAL}; do
+for registry in ${INSECURE_REGISTRY}; do
   dockerd_args+=("--insecure-registry=${registry}")
 done
 
-if [ -n "${DOCKER_REGISTRY_MIRROR}" ]; then
+if [[ -n "${DOCKER_REGISTRY_MIRROR}" ]]; then
   dockerd_args+=("--registry-mirror=${DOCKER_REGISTRY_MIRROR}")
 fi
 
@@ -34,4 +38,4 @@ mount -t cgroup cgroup /sys/fs/cgroup || true
 update-alternatives --set iptables /usr/sbin/iptables-legacy
 
 # shellcheck disable=SC2086
-exec dockerd "${dockerd_args[@]}" ${EXTRA_DOCKERD_ARGS} 2>&1
+exec dockerd "${dockerd_args[@]}" ${EXTRA_DOCKERD_ARGS:-} 2>&1
