@@ -16,7 +16,7 @@ env_to_file() {
     echo > "${outfile}"
 
     # Read variables.txt and write allowed variables to /var/environment
-    while IFS='=' read -r key; do
+    while read -r key; do
         # Check if the variable is set in the current environment
         if [[ "${key:-}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]] && [[ -n "${!key:-}" ]]; then
             echo "${key}=${!key}" >> "${outfile}"
@@ -37,24 +37,34 @@ save_secrets() {
 load_variables() {
     variables_file="${1:-"/var/variables"}"
     # shellcheck disable=SC1090
-    . "${variables_file}"
+    . "${variables_file}" || true
 }
 
 load_secrets() {
     secrets_file="${1:-"/var/secrets"}"
     # shellcheck disable=SC1090
-    . "${secrets_file}"
+    . "${secrets_file}" || true
 }
 
 unload_secrets() {
-    secrets_file="${1:-"/var/secrets"}"
-    # Clear the environment of sensitive information
+    key_list="${1:-"/secrets.txt"}"
+    secrets_file="${2:-"/var/secrets"}"
+
+    # unset any secrets defined in the secrets values file
     while IFS='=' read -r key; do
         if [[ "${key:-}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
             unset "${key}"
         fi
-    done < "${secrets_file}"
+    done < "${secrets_file}" || true
+
     rm -f "${secrets_file}"
+
+    # unset any secrets defined in the secrets key list
+    while read -r key; do
+        if [[ "${key:-}" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+            unset "${key}"
+        fi
+    done < "${key_list}" || true
 }
 
 curl_with_opts() {
