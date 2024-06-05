@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1091
+. /etc/s6-overlay/scripts/functions
+
+unload_secrets
+
 # run as runner user
 exec su - runner -c "/home/runner/run.sh" 2>&1
