@@ -1,4 +1,20 @@
 - commits:
+    - subject: Combine token generation and runner configuration
+      hash: 299a244bf574003944470a3911cf7d874e2a3531
+      body: |
+        Perform these steps isolated from the runner process
+        so VMs can attempt to register as part of initrd.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.11.15
+  title: ""
+  date: 2024-06-05T13:56:19.902Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v6.0.31
       hash: 00c7675d750508702b5b4bce94326dc309552869
       body: |
