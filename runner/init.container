@@ -31,6 +31,5 @@ for dir in /*; do
     mount -v --bind "${tmp}" "${dir}"
 done
 
-# Execute the provided command
-# shellcheck disable=SC2068
-exec $@
+# Execute the s6-overlay entrypoint
+exec /init

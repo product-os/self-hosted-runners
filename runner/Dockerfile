@@ -196,6 +196,10 @@ RUN npm install -g github-app-installation-token@^1.2.0 \
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 
+# install container init script
+COPY init.container /init.container
+RUN chmod +x /init.container
+
 # hadolint ignore=DL3059
 RUN chown -R runner:runner /home/runner
 
@@ -238,4 +242,4 @@ ENV S6_READ_ONLY_ROOT 1
 # default is 5000ms
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
 
-CMD [ "/etc/s6-overlay/scripts/remount", "/init" ]
+CMD [ "/init.container" ]
