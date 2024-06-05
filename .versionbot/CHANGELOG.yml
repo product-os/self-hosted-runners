@@ -1,4 +1,21 @@
 - commits:
+    - subject: Allow pre-registration of the runner
+      hash: 135383142854d478d38adc71a8cb031419e394b1
+      body: |
+        This should be no-op for the container runtime as we delete
+        any existing runner config on container init, but it will
+        allow the VM runtime to pre-register earlier in startup.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.12.1
+  title: ""
+  date: 2024-06-05T20:01:15.543Z
+- commits:
     - subject: Refactor secret and variable management to common functions
       hash: 5cb875d223e8bd3361474c0644672ef622e0b944
       body: |
