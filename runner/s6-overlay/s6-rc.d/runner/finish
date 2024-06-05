@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -s "/run/runner.token" ]; then
+if [[ -s "/run/runner.token" ]]; then
   su - runner -c "/home/runner/config.sh remove --token $(</run/runner.token)"
 fi
 
