@@ -1,4 +1,36 @@
 - commits:
+    - subject: Refactor secret and variable management to common functions
+      hash: 5cb875d223e8bd3361474c0644672ef622e0b944
+      body: |
+        The goal is to categorize all env vars as either secrets or variables
+        before loading them in each service where they are required.
+
+        This allows better control of secrets, like when they are loaded
+        and when they are deleted from the filesystem, in a common way that can
+        be shared with the VM runner environment.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Move remount script to an init.container entrypoint
+      hash: 59ea38d5ab11160a5e3bb4d8f0acdbaa50b000e8
+      body: |
+        This makes it more clear that the script is only
+        run for container startup and is not used by VM runners.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.12.0
+  title: ""
+  date: 2024-06-05T18:21:55.584Z
+- commits:
     - subject: Combine token generation and runner configuration
       hash: 299a244bf574003944470a3911cf7d874e2a3531
       body: |
