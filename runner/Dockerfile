@@ -146,7 +146,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     && gh version
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay
-ARG S6_OVERLAY_VERSION=3.1.4.2
+ARG S6_OVERLAY_VERSION=v3.1.4.2
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
@@ -237,10 +237,11 @@ ENV ACTIONS_RUNNER_BUILD_TAGS "platform:${TARGETPLATFORM},runtime:container"
 ENV RUNNER_ALLOW_RUNASROOT 0
 ENV RUNNER_MANUALLY_TRAP_SIG 1
 ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
-# disable services inheriting orginal set of env vars for security reasons
-ENV S6_KEEP_ENV 0
+
+# allow propegating env vars to s6-services
+ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
-# default is 5000ms
-ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 20000
+# disable services timeout
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 0
 
 CMD [ "/init.container" ]

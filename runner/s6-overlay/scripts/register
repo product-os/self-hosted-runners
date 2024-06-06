@@ -7,30 +7,25 @@ if [[ -f /home/runner/.runner ]]; then
     exit 0
 fi
 
-# force debug tracing to off as we are dealing with secrets
-set +x
-
 set -euo pipefail
 
 # required to use `read` with pipes
 shopt -s lastpipe
 
+# force debug tracing to off as we are dealing with secrets
+set +x
+
 # shellcheck disable=SC1091
 . /etc/s6-overlay/scripts/functions
 
-# set allowed environment vars from /var/environment
-load_variables
-# set allowed secrets from /var/secrets
-load_secrets || true
-
 # decode app key and write to a file if one was provided via env vars
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
+if [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
     echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
 fi
 
 if [[ -f "/tmp/private.pem" ]] && [[ -n "${ACTIONS_RUNNER_APP_ID:-}" ]] && [[ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]]; then
 
-    if [[ -n "${GITHUB_ENTERPRISE:-}" ]] || [[ "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^enterprises\/.*$ ]]; then
+    if [[ "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^enterprises\/.*$ ]]; then
         # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
         echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
     else
@@ -49,9 +44,9 @@ fi
 # cleanup secret files
 rm -f /tmp/private.pem
 
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN}}" ]]; then
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN:-}}" ]]; then
     echo "Using PAT 'GITHUB_TOKEN/GH_TOKEN' for authentication..."
-    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN}}"
+    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
 fi
 
 if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
@@ -84,9 +79,6 @@ get_geo() {
 }
 
 get_geo
-
-# unload all secrets and delete secrets file
-unload_secrets
 
 # shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x

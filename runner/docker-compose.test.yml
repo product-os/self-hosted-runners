@@ -11,7 +11,6 @@ services:
       - .env
     environment:
       VERBOSE: "true"
-      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 50000
       ACTIONS_RUNNER_REGISTRATION_SLUG: repos/product-os/self-hosted-runners
       ACTIONS_RUNNER_EXTRA_TAGS: commit:${GITHUB_SHA:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
