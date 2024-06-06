@@ -34,11 +34,6 @@ for dir in /*; do
     mount -v --bind "${tmp}" "${dir}"
 done
 
-# Write env vars and secrets to the filesystem
-# so we can exec s6-overlay with S6_KEEP_ENV=0
-save_variables
-save_secrets
-
 # Remove any existing runner registration files,
 # otherwise the registration s6-service will be skipped
 rm -f /home/runner/.runner

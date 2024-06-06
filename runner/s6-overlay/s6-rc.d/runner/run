@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
-. /etc/s6-overlay/scripts/functions
+# make sure we've cleaned up our environment of secrets
+rm -f /var/envrionment
+rm -f /var/variables
+rm -f /var/secrets
+rm -f /run/runner.token
 
-unload_secrets
-
-# run as runner user
+# run as runner user in a clean environment without secrets
 exec su - runner -c "/home/runner/run.sh" 2>&1
