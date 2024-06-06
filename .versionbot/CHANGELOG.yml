@@ -1,4 +1,22 @@
 - commits:
+    - subject: Allow propegating env vars to s6-services
+      hash: 12dc4cf57ef39cf20005e36bd1ca9786ae07bfeb
+      body: |
+        This is a revert of the previous change, but with
+        additional considerations to use 'exec su -' when replacing
+        the current process with long-running processes that could be
+        inspected at runtime.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.13.0
+  title: ""
+  date: 2024-06-06T18:15:47.530Z
+- commits:
     - subject: Update golang Docker tag to v1.22.4
       hash: 4e62d71c90f2e4d1b6a3859b5784bb951570bc3f
       body: |
