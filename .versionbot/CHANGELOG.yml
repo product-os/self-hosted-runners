@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.22.4
+      hash: 4e62d71c90f2e4d1b6a3859b5784bb951570bc3f
+      body: |
+        Update golang from 1.22.3 to 1.22.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.12.3
+  title: ""
+  date: 2024-06-06T01:19:42.971Z
+- commits:
     - subject: Improve cleanup of secrets to include all supported keys
       hash: f7a277b22349784b4b3b2e6dceb381084155ac2a
       body: ""
