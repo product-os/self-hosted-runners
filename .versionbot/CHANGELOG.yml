@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add kvm tag if support detected at runtime
+      hash: deeff56ec75ff3785edc7dfab073b2d34b93468b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.13.1
+  title: ""
+  date: 2024-06-08T01:28:52.402Z
+- commits:
     - subject: Allow propegating env vars to s6-services
       hash: 12dc4cf57ef39cf20005e36bd1ca9786ae07bfeb
       body: |
