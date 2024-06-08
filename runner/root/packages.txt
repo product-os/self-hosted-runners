@@ -1,5 +1,6 @@
 awscli
 build-essential
+cpu-checker
 git
 htop
 imvirt
