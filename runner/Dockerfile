@@ -146,7 +146,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     && gh version
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
-ARG S6_OVERLAY_VERSION=v3.1.4.2
+ARG S6_OVERLAY_VERSION=v3.1.6.2
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
