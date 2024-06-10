@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency just-containers/s6-overlay to v3.2.0.0
+      hash: 062b583d988768327e9f6003eeaa940df5f56daa
+      body: |
+        Update just-containers/s6-overlay from 3.1.4.2 to 3.2.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.14.2
+  title: ""
+  date: 2024-06-10T23:10:28.814Z
+- commits:
     - subject: Enable loose versioning for s6-overlay releases
       hash: ddcdc1df64e1d28f32eea629960b5957ffef7e5b
       body: |
