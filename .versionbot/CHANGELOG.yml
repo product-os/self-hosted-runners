@@ -1,4 +1,23 @@
 - commits:
+    - subject: Enable loose versioning for s6-overlay releases
+      hash: ddcdc1df64e1d28f32eea629960b5957ffef7e5b
+      body: |
+        This package is almost semver, with this format:
+        `<major>.<minor>.<patch>.<build>`
+
+        If loose versioning still does not find a match
+        we can add a regex version scheme for this package.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.1
+  title: ""
+  date: 2024-06-10T22:33:15.173Z
+- commits:
     - subject: Clean up additional runner tags
       hash: 88988d3661636949bf39ed162e675c687c18c624
       body: |
