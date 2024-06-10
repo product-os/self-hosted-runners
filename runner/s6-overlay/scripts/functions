@@ -13,3 +13,28 @@ curl_with_opts() {
 truthy() {
     [[ ${1,,} =~ true|yes|on|1 ]]
 }
+
+get_geo() {
+    # shellcheck disable=SC2310
+    if curl_with_opts -I https://ipinfo.io >/dev/null 2>&1; then
+        geoip_api_url=https://ipinfo.io
+        if [[ -n ${GEOIP_API_TOKEN:-} ]]; then
+            geoip_api_url="${geoip_api_url}?token=${GEOIP_API_TOKEN}"
+        fi
+        curl_with_opts "${geoip_api_url}"
+    fi
+}
+
+round_up_to_8() {
+    local num="${1}"
+    local remainder
+    remainder=$((num % 8))
+    echo $((num + 8 - remainder))
+}
+
+get_mem_gib() {
+    local total_gib
+    total_gib=$(free -g | awk '/^Mem:/ {print $2}') || true
+    # round up to the nearest 8 GiB
+    round_up_to_8 "${total_gib}"
+}
