@@ -1,4 +1,20 @@
 - commits:
+    - subject: Clean up additional runner tags
+      hash: 88988d3661636949bf39ed162e675c687c18c624
+      body: |
+        Avoid adding tags when the value is unknown, and group
+        logical keys together for readability.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.0
+  title: ""
+  date: 2024-06-10T19:15:04.208Z
+- commits:
     - subject: Add kvm tag if support detected at runtime
       hash: deeff56ec75ff3785edc7dfab073b2d34b93468b
       body: ""
