@@ -243,5 +243,7 @@ ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
 # disable services timeout
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 0
+# warn if stage2 fails
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS: 1
 
 CMD [ "/init.container" ]

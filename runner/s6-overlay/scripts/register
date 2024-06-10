@@ -65,21 +65,6 @@ registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/act
 echo "Requesting registration token..."
 curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token > /run/runner.token
 
-get_geo() {
-    # shellcheck disable=SC2310
-    if curl_with_opts -I https://ipinfo.io; then
-        geoip_api_url=https://ipinfo.io
-        if [[ -n ${GEOIP_API_TOKEN:-} ]]; then
-            geoip_api_url="${geoip_api_url}?token=${GEOIP_API_TOKEN}"
-        fi
-        ipinfo="$(curl_with_opts "${geoip_api_url}")"
-    else
-        ipinfo='{"city":"Unknown","region":"Unknown","country":"Unknown"}'
-    fi
-}
-
-get_geo
-
 # shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x
 
@@ -93,25 +78,46 @@ hostname -F /etc/hostname
 hostname
 
 runner_tags=()
-runner_tags+=("family:$(cat </etc/lsb-release | grep DISTRIB_ID | awk -F'=' '{print $2}')")
-runner_tags+=("distro:$(cat </etc/lsb-release | grep DISTRIB_CODENAME | awk -F'=' '{print $2}' | sed 's/"//g')")
-runner_tags+=("major:$(cat </etc/lsb-release | grep DISTRIB_RELEASE | awk -F'=' '{print $2}' | sed 's/"//g')")
-runner_tags+=("minor:$(cat </etc/lsb-release | grep DISTRIB_DESCRIPTION | awk -F'=' '{print $2}' | sed 's/"//g')")
+
 runner_tags+=("machine:$(uname -m)")
 runner_tags+=("arch:$(dpkg --print-architecture)")
-runner_tags+=("board:$(cat </sys/devices/virtual/dmi/id/board_name 2>/dev/null || echo 'unknown')")
-runner_tags+=("cpu:$(nproc)")
-runner_tags+=("mem:$(($(cat </proc/meminfo | grep MemTotal | awk '{print $2}') / 1024 / 1024))Gi")
-runner_tags+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-runner_tags+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-runner_tags+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
 
-if [[ -n "${BALENA_DEVICE_UUID:-}" ]]; then
-    runner_tags+=("balena_device_uuid:${BALENA_DEVICE_UUID}")
+if lsb_release; then
+    runner_tags+=("family:$(lsb_release --id --short)")
+    runner_tags+=("id:$(lsb_release --id --short)")
+
+    runner_tags+=("distro:$(lsb_release --codename --short)")
+    runner_tags+=("codename:$(lsb_release --codename --short)")
+
+    runner_tags+=("release:$(lsb_release --release --short)")
+    runner_tags+=("codename:$(lsb_release --description --short)")
+fi
+
+ipinfo="$(get_geo)" || true
+if [[ -n "${ipinfo}" ]]; then
+    runner_tags+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+    runner_tags+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+    runner_tags+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+fi
+
+numgib="$(get_mem_gib)" || true
+if [[ -n "${numgib}" ]]; then
+    runner_tags+=("${numgib}gb")
+    runner_tags+=("mem:${numgib}Gi")
+fi
+
+numcpu="$(nproc)"
+if [[ -n "${numcpu}" ]]; then
+    runner_tags+=("${numcpu}cpu")
+    runner_tags+=("cpu:${numcpu}")
 fi
 
 if kvm-ok; then
     runner_tags+=("kvm")
+fi
+
+if [[ -f /sys/devices/virtual/dmi/id/board_name ]]; then
+    runner_tags+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
 fi
 
 # comma-separated list of tags to add to the runner
