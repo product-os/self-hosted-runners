@@ -145,7 +145,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --tag "${GH_CLI_VERSION}" \
     && gh version
 
-# renovate: datasource=github-releases depName=just-containers/s6-overlay
+# renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
 ARG S6_OVERLAY_VERSION=v3.1.4.2
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
