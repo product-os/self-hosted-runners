@@ -36,9 +36,9 @@ jobs:
       custom_test_matrix: >
         {
           "os": [
-            ["distro:jammy","platform:linux/amd64","commit:${{ github.sha }}"],
-            ["distro:jammy","platform:linux/arm64","commit:${{ github.sha }}"],
-            ["distro:focal","platform:linux/amd64","commit:${{ github.sha }}"],
-            ["distro:focal","platform:linux/arm64","commit:${{ github.sha }}"]
+            ["distro:jammy","platform:linux/amd64","run_id:${{ github.run_id }}"],
+            ["distro:jammy","platform:linux/arm64","run_id:${{ github.run_id }}"],
+            ["distro:focal","platform:linux/amd64","run_id:${{ github.run_id }}"],
+            ["distro:focal","platform:linux/arm64","run_id:${{ github.run_id }}"]
           ]
         }
