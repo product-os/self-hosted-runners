@@ -85,12 +85,9 @@ runner_tags+=("arch:$(dpkg --print-architecture)")
 if lsb_release; then
     runner_tags+=("family:$(lsb_release --id --short)")
     runner_tags+=("id:$(lsb_release --id --short)")
-
     runner_tags+=("distro:$(lsb_release --codename --short)")
     runner_tags+=("codename:$(lsb_release --codename --short)")
-
     runner_tags+=("release:$(lsb_release --release --short)")
-    runner_tags+=("codename:$(lsb_release --description --short)")
 fi
 
 ipinfo="$(get_geo)" || true
