@@ -24,17 +24,3 @@ get_geo() {
         curl_with_opts "${geoip_api_url}"
     fi
 }
-
-round_up_to_8() {
-    local num="${1}"
-    local remainder
-    remainder=$((num % 8))
-    echo $((num + 8 - remainder))
-}
-
-get_mem_gib() {
-    local total_gib
-    total_gib=$(free -g | awk '/^Mem:/ {print $2}') || true
-    # round up to the nearest 8 GiB
-    round_up_to_8 "${total_gib}"
-}
