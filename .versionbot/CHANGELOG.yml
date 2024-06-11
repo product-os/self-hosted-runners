@@ -1,4 +1,20 @@
 - commits:
+    - subject: Round up to the power of 2 when tagging memory size
+      hash: 6774cbc33f423353a11a7a6bd91ac3559abd48b5
+      body: |
+        Memory is generally provisioned as a power of 2 so it's
+        more useful to find matching runners this way.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.6
+  title: ""
+  date: 2024-06-11T19:50:48.547Z
+- commits:
     - subject: Remove OS description tag
       hash: c358612d655f6c77b585f8e6d571f5d0a1b16729
       body: ""
