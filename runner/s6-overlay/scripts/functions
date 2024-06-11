@@ -24,3 +24,12 @@ get_geo() {
         curl_with_opts "${geoip_api_url}"
     fi
 }
+
+round_up_to_power_of_two() {
+    local value=$1
+    awk -v v="${value}" 'BEGIN {
+        p=int(log(v)/log(2));
+        if (2^p < v) p++;
+        print 2^p
+    }'
+}
