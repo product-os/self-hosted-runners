@@ -1,4 +1,24 @@
 - commits:
+    - subject: Revert the rounding of memory sizes for runner tags
+      hash: c79d2267b3903447e1f0e9380b14717dc2edb06a
+      body: |
+        Instead just rely on the output of 'free -g' to avoid
+        any weird results when rounding up from smaller sizes.
+
+        This means that often the memory shown on the runner
+        tag will be slightly less than the actual allocated,
+        but at least it will be consistent.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.3
+  title: ""
+  date: 2024-06-11T00:05:58.621Z
+- commits:
     - subject: Update dependency just-containers/s6-overlay to v3.2.0.0
       hash: 062b583d988768327e9f6003eeaa940df5f56daa
       body: |
