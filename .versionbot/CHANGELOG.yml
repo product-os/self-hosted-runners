@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.3
+      hash: 968d26bbf255d2137c55553f3df58a087fc7e78c
+      body: |
+        Update powershell/powershell from 7.4.2 to 7.4.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.14.7
+  title: ""
+  date: 2024-06-19T00:12:49.220Z
+- commits:
     - subject: Round up to the power of 2 when tagging memory size
       hash: 6774cbc33f423353a11a7a6bd91ac3559abd48b5
       body: |
