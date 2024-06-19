@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.51.0
+      hash: acb32d570f0fc6dbe92778a25d98b281def41656
+      body: |
+        Update cli/cli from 2.50.0 to 2.51.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.14.8
+  title: ""
+  date: 2024-06-19T01:28:47.713Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.4.3
       hash: 968d26bbf255d2137c55553f3df58a087fc7e78c
       body: |
