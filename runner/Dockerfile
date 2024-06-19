@@ -81,7 +81,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --tag "${ACTIONS_RUNNER_VERSION}"
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
-ARG ACTIONS_HOOKS_VERSION=v0.6.0
+ARG ACTIONS_HOOKS_VERSION=v0.6.1
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
