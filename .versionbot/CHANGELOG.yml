@@ -1,4 +1,21 @@
 - commits:
+    - subject: Remove hostname manual override
+      hash: 6754ef8d947544740a4b364c4fd6cc928ef7bde2
+      body: |
+        Both the VM and container runners have other
+        methods of setting hostnames and it does not need
+        to be done at runtime.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.10
+  title: ""
+  date: 2024-06-20T23:26:45.288Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.6.1
       hash: d3cc1f2c8800b1380b090c53245aeef626878231
       body: |
