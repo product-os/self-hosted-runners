@@ -68,15 +68,6 @@ curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS
 # shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x
 
-# set hostname
-new_hostname="${ACTIONS_RUNNER_MACHINE_NAME:-$(hostname)}"
-echo "${new_hostname}" >/etc/hostname
-awk -v newhost="${new_hostname}" '/localhost/ {print $0 " " newhost; next} 1' /etc/hosts >/tmp/hosts
-sed "s/$(hostname)/${new_hostname}/g" -i /tmp/hosts
-mv /tmp/hosts /etc/hosts
-hostname -F /etc/hostname
-hostname
-
 runner_tags=()
 
 runner_tags+=("machine:$(uname -m)")
