@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.15.0
+      hash: d13cc8b67cb059a55f078de0e922e224f4a4fa3d
+      body: |
+        Update node from 20.14.0 to 20.15.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 3.14.11
+  title: ""
+  date: 2024-06-21T00:06:24.213Z
+- commits:
     - subject: Remove hostname manual override
       hash: 6754ef8d947544740a4b364c4fd6cc928ef7bde2
       body: |
