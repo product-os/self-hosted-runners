@@ -109,7 +109,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     && pwsh -Version
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v18.2.5
+ARG BALENA_CLI_VERSION=v18.2.6
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
