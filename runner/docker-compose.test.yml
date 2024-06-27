@@ -15,5 +15,3 @@ services:
       ACTIONS_RUNNER_EXTRA_TAGS: run_id:${GITHUB_RUN_ID:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
       ACTIONS_RUNNER_MACHINE_NAME: run-id-${GITHUB_RUN_ID:-dev}
-      # stop the container if stage2 fails so we can exit tests
-      S6_BEHAVIOUR_IF_STAGE2_FAILS: 2
