@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-# make sure we've cleaned up our environment of secrets
-rm -f /var/envrionment
-rm -f /var/variables
-rm -f /var/secrets
+# Cleanup any leftover credentials
+rm -f /tmp/private.pem
 rm -f /run/runner.token
 
 # run as runner user in a clean environment without secrets

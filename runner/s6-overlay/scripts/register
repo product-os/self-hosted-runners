@@ -1,72 +1,27 @@
 #!/usr/bin/env bash
-
-# Get a GitHub authentication token for the runner either via GitHub App or PAT
-
-if [[ -f /home/runner/.runner ]]; then
-    echo "Runner is already registered, skipping..."
-    exit 0
-fi
+# shellcheck disable=SC1091,SC2310
 
 set -euo pipefail
 
-# required to use `read` with pipes
-shopt -s lastpipe
-
-# force debug tracing to off as we are dealing with secrets
-set +x
-
-# shellcheck disable=SC1091
 . /etc/s6-overlay/scripts/functions
 
-# decode app key and write to a file if one was provided via env vars
-if [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
-    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
-fi
-
-if [[ -f "/tmp/private.pem" ]] && [[ -n "${ACTIONS_RUNNER_APP_ID:-}" ]] && [[ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]]; then
-
-    if [[ "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^enterprises\/.*$ ]]; then
-        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
-        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
-    else
-        # https://www.npmjs.com/package/github-app-installation-token
-        # https://github.com/gagoar/github-app-installation-token
-        echo "Requesting installation token from GitHub App..."
-        github-app-installation-token \
-            --appId "${ACTIONS_RUNNER_APP_ID}" \
-            --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
-            --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 | read -r ACTIONS_RUNNER_AUTH_TOKEN || {
-            echo "GitHub App installation token request failed!"
-        }
-    fi
-fi
-
-# cleanup secret files
-rm -f /tmp/private.pem
-
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN:-}}" ]]; then
-    echo "Using PAT 'GITHUB_TOKEN/GH_TOKEN' for authentication..."
-    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
-fi
-
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
-    echo "No authentication methods provided!"
-    exit 1
-fi
-
-if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
-    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
-    exit 1
-fi
-
-# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-a-repository
-# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
-registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
-echo "Requesting registration token..."
-curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token > /run/runner.token
-
-# shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x
+
+if [[ -f /home/runner/.runner ]]; then
+    echo "Runner is already registered, exiting..."
+    exit 0
+fi
+
+token_file="/run/runner.token"
+
+if [[ ! -f "${token_file}" ]]; then
+    echo "Token file not found, calling get-token script..."
+    /etc/s6-overlay/scripts/get-token "${token_file}"
+fi
+
+rm -f /home/runner/.runner
+rm -f /home/runner/.credentials
+rm -f /home/runner/.credentials_rsaparams
 
 runner_tags=()
 
@@ -139,45 +94,45 @@ runner_tags_str=$(printf "%s," "${runner_tags[@]}")
 # Remove the trailing comma
 runner_tags_str=${runner_tags_str%,}
 
+if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
+    exit 1
+fi
+
 # remove orgs/ and repos/ from the slug to get the registration URL
 registration_slug=${ACTIONS_RUNNER_REGISTRATION_SLUG}
 registration_slug="${registration_slug/orgs\//}"
 registration_slug="${registration_slug/repos\//}"
 registration_url="https://github.com/${registration_slug}"
 
-ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
-ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-"/home/runner/_work"}
+runner_name=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
+work_directory=${ACTIONS_RUNNER_WORK_DIRECTORY:-"/home/runner/_work"}
 
 # https://github.com/actions/runner/blob/main/src/Runner.Listener/Runner.cs
 config_args=()
 config_args+=("--disableupdate")
 config_args+=("--unattended")
-config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
-config_args+=("--url" "${registration_url}")
-if [[ -n "${ACTIONS_RUNNER_GROUP:-}" ]]; then
-    config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
-fi
-config_args+=("--work" "${ACTIONS_RUNNER_WORK_DIRECTORY}")
+config_args+=("--name" "${runner_name}")
+config_args+=("--work" "${work_directory}")
 config_args+=("--labels" "\"${runner_tags_str}\"")
 
-# shellcheck disable=SC2310
+config_args+=("--url" "${registration_url}")
+config_args+=("--token" "$(<"${token_file}")")
+
+[[ -n "${ACTIONS_RUNNER_GROUP:-}" ]] && config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
+
 truthy "${ACTIONS_RUNNER_EPHEMERAL:-true}" && config_args+=("--ephemeral")
-# shellcheck disable=SC2310
 truthy "${ACTIONS_RUNNER_REPLACE:-}" && config_args+=("--replace")
-# shellcheck disable=SC2310
 truthy "${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-}" && config_args+=("--no-default-labels")
 
 # create and chown the work directory
-mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
-chown -R "runner:runner" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
+mkdir -p "${work_directory}"
+chown -R "runner:runner" "${work_directory}"
 
 # chown the current directory since files will be written by the runner process
 chown -R "runner:runner" /home/runner/
 
-# disable tracing to avoid leaking the runner token
-set +x
-
 # configure as runner user
-su - runner -c "/home/runner/config.sh --token $(</run/runner.token) ${config_args[*]}" 2>&1
+su - runner -c "/home/runner/config.sh ${config_args[*]}" 2>&1
 
-rm -f /run/runner.token
+rm -f "${token_file}"

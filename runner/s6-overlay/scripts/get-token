@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091,SC2310
+
+# Get a GitHub authentication token for the runner either via GitHub App or PAT
+
+set -euo pipefail
+
+# required to use `read` with pipes
+shopt -s lastpipe
+
+# force debug tracing to off as we are dealing with secrets
+set +x
+
+. /etc/s6-overlay/scripts/functions
+
+token_file="${1:-"/run/runner.token"}"
+
+if [[ -f "${token_file}" ]]; then
+    echo "Token file already exists, exiting..."
+    exit 0
+fi
+
+# decode app key and write to a file if one was provided via env vars
+if [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
+    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
+fi
+
+if [[ -f "/tmp/private.pem" ]] && [[ -n "${ACTIONS_RUNNER_APP_ID:-}" ]] && [[ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]]; then
+
+    if [[ "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^enterprises\/.*$ ]]; then
+        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
+        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
+    else
+        # https://www.npmjs.com/package/github-app-installation-token
+        # https://github.com/gagoar/github-app-installation-token
+        echo "Requesting installation token from GitHub App..."
+        github-app-installation-token \
+            --appId "${ACTIONS_RUNNER_APP_ID}" \
+            --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
+            --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 | read -r ACTIONS_RUNNER_AUTH_TOKEN || {
+            echo "GitHub App installation token request failed!"
+        }
+    fi
+fi
+
+# cleanup secret files
+rm -f /tmp/private.pem
+
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN:-}}" ]]; then
+    echo "Using PAT 'GITHUB_TOKEN/GH_TOKEN' for authentication..."
+    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
+fi
+
+if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
+    echo "No authentication methods provided!"
+    exit 1
+fi
+
+if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
+    exit 1
+fi
+
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-a-repository
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
+registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
+echo "Requesting registration token..."
+curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token > "${token_file}"
