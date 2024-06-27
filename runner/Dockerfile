@@ -241,9 +241,9 @@ ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
 # allow propegating env vars to s6-services
 ENV S6_KEEP_ENV 1
 ENV S6_READ_ONLY_ROOT 1
-# disable services timeout
-ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 0
-# warn if stage2 fails
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS: 1
+# give services 30 seconds to start
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 30000
+# stop the container if any services fail to start
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS: 2
 
 CMD [ "/init.container" ]
