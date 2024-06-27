@@ -1,4 +1,20 @@
 - commits:
+    - subject: Improve handling of s6 service exit codes
+      hash: 73e6eae26fa46b75a47c45e5d4e02abde49cdd7d
+      body: |
+        This should prevent services like dockerd from overwriting
+        the exit code if the runner service fails, for example.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.21
+  title: ""
+  date: 2024-06-27T18:54:00.481Z
+- commits:
     - subject: Improve dockerd entrypoint to avoid breaking /dev/console
       hash: 2f33e3e32793a4190937232f6818035ba294ed37
       body: |
