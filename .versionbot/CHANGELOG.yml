@@ -1,4 +1,16 @@
 - commits:
+    - subject: Remove registration from dockerd dependencies
+      hash: cf488f596b81bb323037e648a814992106b66b21
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Kyle Harding
+      nested: []
+  version: 3.14.19
+  title: ""
+  date: 2024-06-27T04:02:39.171Z
+- commits:
     - subject: Update dependency cli/cli to v2.52.0
       hash: ff9bd9e6bc1f2a6511f4b6a8f152dab21b39ab1f
       body: |
