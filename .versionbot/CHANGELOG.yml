@@ -1,4 +1,20 @@
 - commits:
+    - subject: Improve dockerd entrypoint to avoid breaking /dev/console
+      hash: 2f33e3e32793a4190937232f6818035ba294ed37
+      body: |
+        Performing su - root while already running as root resulted
+        in resetting of permissions on /dev/console when running in a VM.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 3.14.20
+  title: ""
+  date: 2024-06-27T17:06:52.233Z
+- commits:
     - subject: Remove registration from dockerd dependencies
       hash: cf488f596b81bb323037e648a814992106b66b21
       body: ""
