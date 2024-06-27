@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091,SC2310,SC2312
 
 set -euo pipefail
 
-# shellcheck disable=SC1091
 . /etc/s6-overlay/scripts/functions
 
-# shellcheck disable=SC2310
 truthy "${VERBOSE:-}" && set -x
 
 INSECURE_REGISTRY=${INSECURE_REGISTRY:-""}
@@ -31,8 +30,17 @@ if [[ -n "${DOCKER_REGISTRY_MIRROR}" ]]; then
   dockerd_args+=("--registry-mirror=${DOCKER_REGISTRY_MIRROR}")
 fi
 
-mount -t cgroup cgroup /sys/fs/cgroup || true
-update-alternatives --set iptables /usr/sbin/iptables-legacy
+# comma-separated list of tags to add to the runner
+if [[ -n "${EXTRA_DOCKERD_ARGS:-}" ]]; then
+  # split the string into an array
+  read -r -a extra_args <<<"${EXTRA_DOCKERD_ARGS}"
+fi
 
-# run as root user in a clean environment without secrets
-exec su - root -c "dockerd ${dockerd_args[*]} ${EXTRA_DOCKERD_ARGS:-}" 2>&1
+# add the extra tags to the runner tags
+dockerd_args+=("${extra_args[@]}")
+
+mount -t cgroup cgroup /sys/fs/cgroup || true
+update-alternatives --set iptables /usr/sbin/iptables-legacy || true
+
+# reset the environment and execute dockerd
+exec env -i PATH="${PATH}" dockerd "${dockerd_args[@]}" 2>&1
