@@ -166,6 +166,19 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --all --file "*" --to "/" \
     --tag "${S6_OVERLAY_VERSION}"
 
+# renovate: datasource=github-releases depName=nabeken/go-github-apps
+ARG GO_GITHUB_APPS_VERSION=v0.1.15
+
+# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
+# hadolint ignore=DL3059
+RUN --mount=type=secret,id=GITHUB_TOKEN \
+    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
+    eget nabeken/go-github-apps \
+    --asset ".tar.gz" \
+    --file "go-github-apps" --to "/usr/local/bin/go-github-apps" \
+    --tag "${GO_GITHUB_APPS_VERSION}" \
+    && go-github-apps -version
+
 # renovate: datasource=node depName=node
 ARG NODE_VERSION=20.15.0
 
@@ -181,13 +194,6 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
     fi && \
     curl -fsSL "${NODE_URL}" | tar xz -C /usr/local --strip-components=1 --no-same-owner \
     && npm install -g npm@"$NPM_VERSION" \
-    && rm -rf /root/.npm/_cacache \
-    && npm cache clear --force \
-    && rm -rf /tmp/*
-
-# install github-app-installation-token
-# https://www.npmjs.com/package/github-app-installation-token
-RUN npm install -g github-app-installation-token@^1.2.0 \
     && rm -rf /root/.npm/_cacache \
     && npm cache clear --force \
     && rm -rf /tmp/*
@@ -233,10 +239,7 @@ USER root
 
 ARG TARGETPLATFORM
 
-ENV ACTIONS_RUNNER_BUILD_TAGS "platform:${TARGETPLATFORM},runtime:container"
-ENV RUNNER_ALLOW_RUNASROOT 0
-ENV RUNNER_MANUALLY_TRAP_SIG 1
-ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT 1
+ENV ACTIONS_RUNNER_BUILD_LABELS "platform:${TARGETPLATFORM} runtime:container"
 
 # allow propegating env vars to s6-services
 ENV S6_KEEP_ENV 1

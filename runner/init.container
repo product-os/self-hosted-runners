@@ -34,9 +34,10 @@ for dir in /*; do
     mount -v --bind "${tmp}" "${dir}"
 done
 
-# Remove any existing runner registration files,
-# otherwise the registration s6-service will be skipped
-rm -f /home/runner/.runner
+# Remove any existing runner configuration files
+rm -f /home/runner/.jitconfig
+rm -f /home/runner/.credentials
+rm -f /home/runner/.credentials_rsaparams
 
 # Execute the s6-overlay entrypoint
 exec /init
