@@ -215,6 +215,13 @@ USER runner
 # hadolint ignore=SC2016
 RUN echo 'export PATH=/home/runner/.local/bin:$PATH' >> /home/runner/.profile
 
+# disable balena analytics and sentry
+ENV BALENARC_NO_SENTRY 1
+ENV BALENARC_NO_ANALYTICS 1
+
+# set balena to offline mode in this context only
+ARG BALENARC_OFFLINE_MODE 1
+
 # For reference, here are the packages in the official hosted runners:
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
