@@ -1,4 +1,18 @@
 - commits:
+    - subject: Disable balena CLI analytics and sentry
+      hash: 4b40083e1c3a9967f82dc7e1701364550f8c34c2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.0.1
+  title: ""
+  date: 2024-07-02T17:46:29.346Z
+- commits:
     - subject: Register runner via jitconfig API endpoint
       hash: e6a476e5ee21214d0ffc6319be36d9f542284247
       body: |
