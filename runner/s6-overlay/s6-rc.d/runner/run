@@ -1,10 +1,25 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2310
 
-# make sure we've cleaned up our environment of secrets
-rm -f /var/envrionment
-rm -f /var/variables
-rm -f /var/secrets
-rm -f /run/runner.token
+set -euo pipefail
 
-# run as runner user in a clean environment without secrets
-exec su - runner -c "/home/runner/run.sh" 2>&1
+truthy() {
+    [[ ${1,,} =~ true|yes|on|1 ]]
+}
+
+truthy "${VERBOSE:-}" && set -x
+
+# Cleanup any leftover credentials
+rm -f /tmp/private.pem
+
+# FIXME: either use ACTIONS_RUNNER_WORK_DIRECTORY here or remove the option from registration
+mkdir -p /home/runner/_work
+chown runner:runner -R /home/runner/
+
+# Reset the environment when starting the runner, to make sure we have the default PATH, HOME, etc.
+# and that we haven't inherited any unwanted environment variables.
+# We can selectively pass through environment variables that we want to keep, but they will be also be set in GHA workflows.
+# See: https://github.com/search?q=repo:actions/runner%20GetEnvironmentVariable&type=code
+exec su - runner -c "\
+    export ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1 ; \
+    /home/runner/run.sh --jitconfig '$(</home/runner/.jitconfig)'" 2>&1

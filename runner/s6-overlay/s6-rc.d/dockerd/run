@@ -30,13 +30,11 @@ if [[ -n "${DOCKER_REGISTRY_MIRROR}" ]]; then
   dockerd_args+=("--registry-mirror=${DOCKER_REGISTRY_MIRROR}")
 fi
 
-# comma-separated list of tags to add to the runner
 if [[ -n "${EXTRA_DOCKERD_ARGS:-}" ]]; then
   # split the string into an array
   read -r -a extra_args <<<"${EXTRA_DOCKERD_ARGS}"
 fi
 
-# add the extra tags to the runner tags
 dockerd_args+=("${extra_args[@]}")
 
 mount -t cgroup cgroup /sys/fs/cgroup || true

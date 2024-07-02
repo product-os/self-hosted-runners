@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091,SC2310,SC2312
 
 # Get a GitHub authentication token for the runner either via GitHub App or PAT
-
-if [[ -f /home/runner/.runner ]]; then
-    echo "Runner is already registered, skipping..."
-    exit 0
-fi
 
 set -euo pipefail
 
@@ -15,169 +11,332 @@ shopt -s lastpipe
 # force debug tracing to off as we are dealing with secrets
 set +x
 
-# shellcheck disable=SC1091
-. /etc/s6-overlay/scripts/functions
+curl_with_opts() {
+    curl --fail --silent --retry 3 --connect-timeout 3 "$@"
+}
 
-# decode app key and write to a file if one was provided via env vars
-if [[ -n "${ACTIONS_RUNNER_APP_KEY_B64:-}" ]]; then
-    echo "${ACTIONS_RUNNER_APP_KEY_B64}" | base64 -d >"/tmp/private.pem" || true
-fi
+# Helper function to replace the lack of --fail-with-body in versions of curl < 7.76.0
+curl_fail_with_body() {
+    local _http_code
+    local _http_body
 
-if [[ -f "/tmp/private.pem" ]] && [[ -n "${ACTIONS_RUNNER_APP_ID:-}" ]] && [[ -n "${ACTIONS_RUNNER_INSTALLATION_ID:-}" ]]; then
+    _http_body=$(mktemp)
+    _http_code="$(curl --silent --write-out "%{http_code}" --output "${_http_body}" "$@")"
 
-    if [[ "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^enterprises\/.*$ ]]; then
-        # this endpoint does not work with GitHub Enterprise as no such permission exists for GitHub Apps
-        echo "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
-    else
-        # https://www.npmjs.com/package/github-app-installation-token
-        # https://github.com/gagoar/github-app-installation-token
-        echo "Requesting installation token from GitHub App..."
-        github-app-installation-token \
-            --appId "${ACTIONS_RUNNER_APP_ID}" \
-            --installationId "${ACTIONS_RUNNER_INSTALLATION_ID}" \
-            --privateKeyLocation /tmp/private.pem 2>/dev/null | tail -n1 | read -r ACTIONS_RUNNER_AUTH_TOKEN || {
-            echo "GitHub App installation token request failed!"
-        }
+    cat "${_http_body}"
+    rm -f "${_http_body}"
+
+    if [[ "${_http_code}" -ge 400 ]]; then
+        return 22
     fi
-fi
+}
 
-# cleanup secret files
-rm -f /tmp/private.pem
+truthy() {
+    [[ ${1,,} =~ true|yes|on|1 ]]
+}
 
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]] && [[ -n "${GITHUB_TOKEN:-${GH_TOKEN:-}}" ]]; then
-    echo "Using PAT 'GITHUB_TOKEN/GH_TOKEN' for authentication..."
-    ACTIONS_RUNNER_AUTH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
-fi
+get_geo() {
+    local _geoip_api_url
+    if curl_with_opts -I https://ipinfo.io >/dev/null 2>&1; then
+        _geoip_api_url=https://ipinfo.io
+        if [[ -n ${GEOIP_API_TOKEN:-} ]]; then
+            _geoip_api_url="${_geoip_api_url}?token=${GEOIP_API_TOKEN}"
+        fi
+        curl_with_opts -L "${_geoip_api_url}"
+    fi
+}
 
-if [[ -z "${ACTIONS_RUNNER_AUTH_TOKEN:-}" ]]; then
-    echo "No authentication methods provided!"
+round_up_to_power_of_two() {
+    local _value=$1
+    awk -v v="${_value}" 'BEGIN {
+        p=int(log(v)/log(2));
+        if (2^p < v) p++;
+        print 2^p
+    }'
+}
+
+get_rounded_mem_gib() {
+    local _memgib
+    _memgib="$(free -g | awk '/^Mem:/ {print $2}')"
+    round_up_to_power_of_two "${_memgib}"
+}
+
+get_app_token() {
+    local _app_id="${1}"
+    local _installation_id="${2}"
+    local _private_key_file="${3}"
+    local _registration_slug="${4}"
+
+    if [[ "${_registration_slug:-}" =~ ^enterprises\/.*$ ]]; then
+        warn "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
+        return 1
+    fi
+
+    if [[ -n "${_app_id}" ]]; then
+        info "Using GitHub App ID: ${_app_id}"
+    else
+        warn "GitHub App ID not provided!"
+        return 1
+    fi
+
+    if [[ -n "${_installation_id}" ]]; then
+        info "Using GitHub App Installation ID: ${_installation_id}"
+    else
+        warn "GitHub App Installation ID not provided!"
+        return 1
+    fi
+
+    if [[ -n "${_private_key_file}" ]]; then
+        info "Using GitHub App Private Key File: ${_private_key_file}"
+    else
+        warn "GitHub App Private Key File not provided!"
+        return 1
+    fi
+
+    info "Requesting installation token from GitHub App..."
+
+    # https://github.com/nabeken/go-github-apps
+    GITHUB_PRIV_KEY=$(<"${_private_key_file}")
+    export GITHUB_PRIV_KEY
+    eval "$(go-github-apps -export -app-id "${_app_id}" -inst-id "${_installation_id}" || exit 1)"
+
+    info "GitHub App token has been exported to GITHUB_TOKEN environment variable."
+
+    unset GITHUB_PRIV_KEY
+    rm -f "${_private_key_file}"
+}
+
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runner-groups?apiVersion=2022-11-28#list-self-hosted-runner-groups-for-an-enterprise
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runner-groups?apiVersion=2022-11-28#list-self-hosted-runner-groups-for-an-organization
+get_runner_group_id() {
+    local _registration_slug="${1}"
+    local _runner_group_name="${2}"
+    local _github_token="${3}"
+    local _api_url="https://api.github.com/${_registration_slug}/actions/runner-groups"
+
+    info "Getting runner group ID from GitHub..."
+
+    curl_fail_with_body --location "${_api_url}" -H "Authorization: token ${_github_token}" \
+        | jq --arg name "${_runner_group_name}" '.runner_groups[] | select(.name == $name) | .id'
+}
+
+# Create a just-in-time runner for the repository, organization, or enterprise
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-configuration-for-a-just-in-time-runner-for-an-enterprise
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-configuration-for-a-just-in-time-runner-for-an-organization
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-configuration-for-a-just-in-time-runner-for-a-repository
+register_runner() {
+    local _registration_slug="${1}"
+    local _github_token="${2}"
+    local _json_payload="${3}"
+    local _api_url="https://api.github.com/${_registration_slug}/actions/runners/generate-jitconfig"
+
+    info "Registering runner with GitHub..."
+    curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" -d "${_json_payload}" \
+        | jq -r '.encoded_jit_config'
+}
+
+log() {
+    _level="$1"
+    _message="$2"
+    printf "[%s][%s] %s\n" "${0}" "${_level}" "${_message}" >&2
+}
+
+fail() {
+    error "$1"
+    sleep 10
     exit 1
-fi
+}
 
-if [[ ! "${ACTIONS_RUNNER_REGISTRATION_SLUG:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
-    echo "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
-    exit 1
-fi
+error() {
+    log "ERROR" "$1"
+}
 
-# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-a-repository
-# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
-registration_url="https://api.github.com/${ACTIONS_RUNNER_REGISTRATION_SLUG}/actions/runners/registration-token"
-echo "Requesting registration token..."
-curl_with_opts -sX POST "${registration_url}" -H "Authorization: token ${ACTIONS_RUNNER_AUTH_TOKEN}" | jq -r .token > /run/runner.token
+warn() {
+    log "WARN" "$1"
+}
 
-# shellcheck disable=SC2310
+info() {
+    log "INFO" "$1"
+}
+
+cleanup() {
+    info "cleaning up..."
+    rm -f /tmp/private.pem
+}
+
+# Default labels for the runner, these would otherwise be set by config.sh
+# Returns a space-separated list of labels
+get_default_labels() {
+    local _labels=()
+
+    # Allow the user to disable default labels
+    truthy "${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-}" && return
+
+    _labels+=("self-hosted")
+    _labels+=("Linux")
+
+    case $(uname -m) in
+        x86_64) _labels+=("X64") ;;
+        aarch64) _labels+=("ARM64") ;;
+        *) fail "Unsupported architecture: $(uname -m)" ;;
+    esac
+
+    printf '%s ' "${_labels[@]}"
+}
+
+# Autmatically detect and add labels based on the environment
+get_automatic_labels() {
+    local _labels=()
+
+    # Allow the user to disable automatic labels
+    truthy "${ACTIONS_RUNNER_NO_AUTOMATIC_LABELS:-}" && return
+
+    _labels+=("machine:$(uname -m)")
+    _labels+=("arch:$(dpkg --print-architecture)")
+
+    if command lsb_release; then
+        _labels+=("family:$(lsb_release --id --short)")
+        _labels+=("id:$(lsb_release --id --short)")
+        _labels+=("distro:$(lsb_release --codename --short)")
+        _labels+=("codename:$(lsb_release --codename --short)")
+        _labels+=("release:$(lsb_release --release --short)")
+    fi
+
+    ipinfo="$(get_geo)"
+    if [[ -n "${ipinfo}" ]]; then
+        _labels+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+        _labels+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+        _labels+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+    fi
+
+    memgib="$(get_rounded_mem_gib)"
+    if [[ -n "${memgib}" ]]; then
+        _labels+=("${memgib}gib")
+        _labels+=("mem:${memgib}Gi")
+    fi
+
+    numcpu="$(nproc)"
+    if [[ -n "${numcpu}" ]]; then
+        _labels+=("${numcpu}cpu")
+        _labels+=("cpu:${numcpu}")
+    fi
+
+    if kvm-ok >/dev/null; then
+        _labels+=("kvm")
+    fi
+
+    if [[ -f /sys/devices/virtual/dmi/id/board_name ]]; then
+        _labels+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
+    fi
+
+    printf '%s ' "${_labels[@]}"
+}
+
+# Labels are used to filter runner jobs
+get_runner_labels_json() {
+
+    local _runner_labels=()
+
+    local _default_labels=()
+    local _automatic_labels=()
+
+    local _build_labels=()
+    local _extra_labels=()
+    local _remove_labels=()
+
+    read -r -a _default_labels < <(get_default_labels)
+    read -r -a _automatic_labels < <(get_automatic_labels)
+
+    # shellcheck disable=SC2086
+    read -r -a _build_labels <<< "$(printf '%s ' ${ACTIONS_RUNNER_BUILD_LABELS:-})"
+    # shellcheck disable=SC2086
+    read -r -a _extra_labels <<< "$(printf '%s ' ${ACTIONS_RUNNER_EXTRA_LABELS:-})"
+
+    # add the default labels
+    _runner_labels+=("${_default_labels[@]}")
+    # add the automatic labels
+    _runner_labels+=("${_automatic_labels[@]}")
+
+    # add the build labels
+    _runner_labels+=("${_build_labels[@]}")
+    # add the extra labels
+    _runner_labels+=("${_extra_labels[@]}")
+
+    # Format as JSON array
+    printf '%s\n' "${_runner_labels[@]}" | jq -R . | jq -s .
+}
+
+trap cleanup EXIT
+
 truthy "${VERBOSE:-}" && set -x
 
-runner_tags=()
+registration_slug="${ACTIONS_RUNNER_REGISTRATION_SLUG:-}"
+runner_name="${ACTIONS_RUNNER_NAME:-$(uuidgen)}"
+runner_work_folder="${ACTIONS_RUNNER_WORK_DIRECTORY:-"/home/runner/_work"}"
+# This is the default runner group for repositories, organizations, and enterprises
+runner_group_name="${ACTIONS_RUNNER_GROUP:-"Default"}"
+runner_group_id="1"
 
-runner_tags+=("machine:$(uname -m)")
-runner_tags+=("arch:$(dpkg --print-architecture)")
+app_id="${ACTIONS_RUNNER_APP_ID:-}"
+installation_id="${ACTIONS_RUNNER_INSTALLATION_ID:-}"
+private_key_file="${ACTIONS_RUNNER_PRIVATE_KEY_FILE:-"/tmp/private.pem"}"
+private_key_base64="${ACTIONS_RUNNER_APP_KEY_B64:-}"
 
-if lsb_release; then
-    runner_tags+=("family:$(lsb_release --id --short)")
-    runner_tags+=("id:$(lsb_release --id --short)")
-    runner_tags+=("distro:$(lsb_release --codename --short)")
-    runner_tags+=("codename:$(lsb_release --codename --short)")
-    runner_tags+=("release:$(lsb_release --release --short)")
+runner_config_file="${1:-"/home/runner/.jitconfig"}"
+
+if [[ -f "${runner_config_file}" ]]; then
+    info "Runner is already registered, skipping..."
+    exit 0
 fi
 
-ipinfo="$(get_geo)" || true
-if [[ -n "${ipinfo}" ]]; then
-    runner_tags+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-    runner_tags+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-    runner_tags+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
+runner_labels_json="$(get_runner_labels_json)"
+
+if truthy "${DRY_RUN:-}"; then
+    info "Dry run enabled, exiting..."
+    exit 0
 fi
 
-numgib="$(free -g | awk '/^Mem:/ {print $2}')"
-numgib="$(round_up_to_power_of_two "${numgib}")"
-if [[ -n "${numgib}" ]]; then
-    runner_tags+=("${numgib}gib")
-    runner_tags+=("mem:${numgib}Gi")
+if [[ ! "${registration_slug:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    fail "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
 fi
 
-numcpu="$(nproc)"
-if [[ -n "${numcpu}" ]]; then
-    runner_tags+=("${numcpu}cpu")
-    runner_tags+=("cpu:${numcpu}")
+for key in ACTIONS_RUNNER_AUTH_TOKEN GITHUB_TOKEN GH_TOKEN; do
+    if [[ -n "${!key:-}" ]]; then
+        info "Using '${key}' for authentication..."
+        github_token="${!key}"
+        break
+    fi
+done
+
+if [[ -z "${github_token:-}" ]]; then
+    # decode app key and write to a file if one was provided via env vars
+    if [[ ! -f "${private_key_file}" ]] && [[ -n "${private_key_base64}" ]]; then
+        echo "${private_key_base64}" | base64 -d >"${private_key_file}" || true
+    fi
+
+    get_app_token "${app_id}" "${installation_id}" "${private_key_file}" "${registration_slug}" || true
+    github_token="${GITHUB_TOKEN:-}"
 fi
 
-if kvm-ok; then
-    runner_tags+=("kvm")
+if [[ -z "${github_token:-}" ]]; then
+    fail "No authentication methods provided!"
 fi
 
-if [[ -f /sys/devices/virtual/dmi/id/board_name ]]; then
-    runner_tags+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
+# Runner groups are only available for organizations and enterprises
+if [[ ! "${registration_slug:-}" =~ ^repos\/.*$ ]]; then
+    runner_group_id="$(get_runner_group_id "${registration_slug}" "${runner_group_name}" "${github_token}")"
 fi
 
-# comma-separated list of tags to add to the runner
-if [[ -n "${ACTIONS_RUNNER_BUILD_TAGS:-}" ]]; then
-    # split the string into an array
-    IFS=',' read -r -a build_tags <<<"${ACTIONS_RUNNER_BUILD_TAGS}"
-fi
+# Use jq to construct the JSON object
+json_payload=$(jq -nc \
+    --arg name "${runner_name}" \
+    --argjson runner_group_id "${runner_group_id}" \
+    --argjson labels "${runner_labels_json}" \
+    --arg work_folder "${runner_work_folder}" \
+    '{name: $name, runner_group_id: $runner_group_id, labels: $labels, work_folder: $work_folder}')
 
-# comma-separated list of tags to add to the runner
-if [[ -n "${ACTIONS_RUNNER_EXTRA_TAGS:-}" ]]; then
-    # split the string into an array
-    IFS=',' read -r -a extra_tags <<<"${ACTIONS_RUNNER_EXTRA_TAGS}"
-fi
+jq . <<<"${json_payload}"
 
-# comma-separated list of tags to remove from the runner
-if [[ -n "${ACTIONS_RUNNER_REMOVE_TAGS:-}" ]]; then
-    # split the string into an array
-    IFS=',' read -r -a remove_tags <<<"${ACTIONS_RUNNER_REMOVE_TAGS}"
-fi
+register_runner "${registration_slug}" "${github_token}" "${json_payload}" >"${runner_config_file}"
 
-# add the build tags to the runner tags
-runner_tags+=("${build_tags[@]}")
-# add the extra tags to the runner tags
-runner_tags+=("${extra_tags[@]}")
-# remove the remove tags from the runner tags
-runner_tags=("${runner_tags[@]/${remove_tags[@]}/}")
-
-# Join the array elements with commas
-runner_tags_str=$(printf "%s," "${runner_tags[@]}")
-# Remove the trailing comma
-runner_tags_str=${runner_tags_str%,}
-
-# remove orgs/ and repos/ from the slug to get the registration URL
-registration_slug=${ACTIONS_RUNNER_REGISTRATION_SLUG}
-registration_slug="${registration_slug/orgs\//}"
-registration_slug="${registration_slug/repos\//}"
-registration_url="https://github.com/${registration_slug}"
-
-ACTIONS_RUNNER_NAME=${ACTIONS_RUNNER_NAME:-$(uuidgen)}
-ACTIONS_RUNNER_WORK_DIRECTORY=${ACTIONS_RUNNER_WORK_DIRECTORY:-"/home/runner/_work"}
-
-# https://github.com/actions/runner/blob/main/src/Runner.Listener/Runner.cs
-config_args=()
-config_args+=("--disableupdate")
-config_args+=("--unattended")
-config_args+=("--name" "${ACTIONS_RUNNER_NAME}")
-config_args+=("--url" "${registration_url}")
-if [[ -n "${ACTIONS_RUNNER_GROUP:-}" ]]; then
-    config_args+=("--runnergroup" "${ACTIONS_RUNNER_GROUP}")
-fi
-config_args+=("--work" "${ACTIONS_RUNNER_WORK_DIRECTORY}")
-config_args+=("--labels" "\"${runner_tags_str}\"")
-
-# shellcheck disable=SC2310
-truthy "${ACTIONS_RUNNER_EPHEMERAL:-true}" && config_args+=("--ephemeral")
-# shellcheck disable=SC2310
-truthy "${ACTIONS_RUNNER_REPLACE:-}" && config_args+=("--replace")
-# shellcheck disable=SC2310
-truthy "${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-}" && config_args+=("--no-default-labels")
-
-# create and chown the work directory
-mkdir -p "${ACTIONS_RUNNER_WORK_DIRECTORY}"
-chown -R "runner:runner" "${ACTIONS_RUNNER_WORK_DIRECTORY}"
-
-# chown the current directory since files will be written by the runner process
-chown -R "runner:runner" /home/runner/
-
-# disable tracing to avoid leaking the runner token
-set +x
-
-# configure as runner user
-su - runner -c "/home/runner/config.sh --token $(</run/runner.token) ${config_args[*]}" 2>&1
-
-rm -f /run/runner.token
+info "Runner configuration written to ${runner_config_file}."
