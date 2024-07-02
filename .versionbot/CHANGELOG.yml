@@ -1,4 +1,20 @@
 - commits:
+    - subject: Register runner via jitconfig API endpoint
+      hash: e6a476e5ee21214d0ffc6319be36d9f542284247
+      body: |
+        This method gives us more control over the authentication
+        process by removing the abstration provided by config.sh
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.0.0
+  title: ""
+  date: 2024-07-02T14:46:58.325Z
+- commits:
     - subject: Improve handling of s6 service exit codes
       hash: 73e6eae26fa46b75a47c45e5d4e02abde49cdd7d
       body: |
