@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v18.2.17
+      hash: 5ff28f97e357148d9af565bb1417e9b4d3ea0787
+      body: |
+        Update balena-io/balena-cli from 18.2.10 to 18.2.17
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.0.2
+  title: ""
+  date: 2024-07-03T01:19:31.022Z
+- commits:
     - subject: Disable balena CLI analytics and sentry
       hash: 4b40083e1c3a9967f82dc7e1701364550f8c34c2
       body: ""
