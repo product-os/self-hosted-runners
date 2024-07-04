@@ -1,6 +1,6 @@
 ARG OS_CODENAME=jammy
 
-FROM golang:1.22.4 AS eget-build
+FROM golang:1.22.5 AS eget-build
 
 WORKDIR /src
 
