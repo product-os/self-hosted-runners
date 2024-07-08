@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.15.1
+      hash: 369b1ac00ad859ac824da6e7d882a908d260f5f7
+      body: |
+        Update node from 20.15.0 to 20.15.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.0.4
+  title: ""
+  date: 2024-07-08T19:13:36.690Z
+- commits:
     - subject: Update golang Docker tag to v1.22.5
       hash: 1f34407d03e8c8b5e2677568fd36861ec36f082a
       body: |
