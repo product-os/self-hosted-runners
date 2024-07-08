@@ -180,7 +180,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     && go-github-apps -version
 
 # renovate: datasource=node depName=node
-ARG NODE_VERSION=20.15.0
+ARG NODE_VERSION=20.15.1
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=10.8.1
