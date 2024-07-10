@@ -183,7 +183,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
 ARG NODE_VERSION=20.15.1
 
 # renovate: datasource=npm depName=npm
-ARG NPM_VERSION=10.8.1
+ARG NPM_VERSION=10.8.2
 
 # install nodejs and npm
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
