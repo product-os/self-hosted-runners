@@ -21,5 +21,5 @@ chown runner:runner -R /home/runner/
 # We can selectively pass through environment variables that we want to keep, but they will be also be set in GHA workflows.
 # See: https://github.com/search?q=repo:actions/runner%20GetEnvironmentVariable&type=code
 exec su - runner -c "\
-    export ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1 ; \
+    export 'ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=${ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT:-}' ; \
     /home/runner/run.sh --jitconfig '$(</home/runner/.jitconfig)'" 2>&1
