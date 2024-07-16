@@ -7,28 +7,21 @@ set -euo pipefail
 
 truthy "${VERBOSE:-}" && set -x
 
-INSECURE_REGISTRY=${INSECURE_REGISTRY:-""}
-DOCKER_REGISTRY_MIRROR=${DOCKER_REGISTRY_MIRROR:-""}
-MAX_CONCURRENT_DOWNLOADS=${MAX_CONCURRENT_DOWNLOADS:-3}
-MAX_CONCURRENT_UPLOADS=${MAX_CONCURRENT_UPLOADS:-5}
-
 sysctl -w user.max_user_namespaces=15000 || true
 
 rm -f /var/run/docker.pid
 
 dockerd_args=()
-dockerd_args+=("--data-root=/scratch/docker")
-dockerd_args+=("--mtu=$(cat /sys/class/net/"$(ip route get 8.8.8.8 | awk '{ print $5 }')"/mtu)")
-dockerd_args+=("--max-concurrent-downloads=${MAX_CONCURRENT_DOWNLOADS}")
-dockerd_args+=("--max-concurrent-uploads=${MAX_CONCURRENT_UPLOADS}")
 
-for registry in ${INSECURE_REGISTRY}; do
+# FIXME: deprecate this and use INSECURE_REGISTRIES via remco
+for registry in ${INSECURE_REGISTRY:-}; do
   dockerd_args+=("--insecure-registry=${registry}")
 done
 
-if [[ -n "${DOCKER_REGISTRY_MIRROR}" ]]; then
-  dockerd_args+=("--registry-mirror=${DOCKER_REGISTRY_MIRROR}")
-fi
+# FIXME: deprecate this and use REGISTRY_MIRRORS via remco
+for mirror in ${DOCKER_REGISTRY_MIRROR:-}; do
+  dockerd_args+=("--registry-mirror=${mirror}")
+done
 
 if [[ -n "${EXTRA_DOCKERD_ARGS:-}" ]]; then
   # split the string into an array
@@ -40,5 +33,19 @@ dockerd_args+=("${extra_args[@]}")
 mount -t cgroup cgroup /sys/fs/cgroup || true
 update-alternatives --set iptables /usr/sbin/iptables-legacy || true
 
+echo "Starting dockerd with extra args: ${dockerd_args[*]}"
+jq . /etc/docker/daemon.json
+
 # reset the environment and execute dockerd
-exec env -i PATH="${PATH}" dockerd "${dockerd_args[@]}" 2>&1
+# https://docs.docker.com/reference/cli/dockerd/#environment-variables
+exec env -i \
+  PATH="${PATH}" \
+  DOCKER_CERT_PATH="${DOCKER_CERT_PATH:-}" \
+  DOCKER_DRIVER="${DOCKER_DRIVER:-}" \
+  DOCKER_RAMDISK="${DOCKER_RAMDISK:-}" \
+  DOCKER_TLS_VERIFY="${DOCKER_TLS_VERIFY:-}" \
+  HTTP_PROXY="${HTTP_PROXY:-}" \
+  HTTPS_PROXY="${HTTPS_PROXY:-}" \
+  MOBY_DISABLE_PIGZ="${MOBY_DISABLE_PIGZ:-}" \
+  NO_PROXY="${NO_PROXY:-}" \
+  dockerd --config-file /etc/docker/daemon.json "${dockerd_args[@]}" 2>&1
