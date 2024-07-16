@@ -1,4 +1,20 @@
 - commits:
+    - subject: Support ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT env var at runtime
+      hash: e119533293900de50a431dc16f2583d03bc598aa
+      body: |
+        This flag is very verbose when enabled, it would be nice
+        to turn it on/off via env vars.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.0.12
+  title: ""
+  date: 2024-07-16T16:55:49.421Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v18.2.29
       hash: f287be4d53b18b63555fa9a385d23cc760ac4999
       body: |
