@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency nabeken/go-github-apps to v0.1.16
+      hash: 7f213aa88334f523d83bdefc39a31965507154a8
+      body: |
+        Update nabeken/go-github-apps from 0.1.15 to 0.1.16
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.1
+  title: ""
+  date: 2024-07-19T03:13:46.146Z
+- commits:
     - subject: Use remco to configure dockerd via templates
       hash: 775212efc1b3ec765f559c2ea9db3274027a52b6
       body: ""
