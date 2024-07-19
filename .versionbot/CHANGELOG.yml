@@ -1,4 +1,20 @@
 - commits:
+    - subject: Avoid dockerd flags that are already in the daemon.json
+      hash: 633ec3cf2ec11470293e304e2d4ee415c73df6c8
+      body: |
+        Providing both at runtime will prevent the docker daemon
+        from starting.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.1.2
+  title: ""
+  date: 2024-07-19T13:05:39.260Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.1.16
       hash: 7f213aa88334f523d83bdefc39a31965507154a8
       body: |
