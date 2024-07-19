@@ -1,5 +1,7 @@
 ARG OS_CODENAME=jammy
 
+####################################################################################################
+
 FROM golang:1.22.5 AS remco-build
 
 WORKDIR /src
@@ -14,6 +16,8 @@ RUN git clone https://github.com/HeavyHorst/remco.git . \
 
 RUN bin/remco -version
 
+####################################################################################################
+
 FROM golang:1.22.5 AS eget-build
 
 WORKDIR /src
@@ -23,12 +27,138 @@ ARG CGO_ENABLED=0
 
 RUN git clone https://github.com/zyedidia/eget . \
     && git checkout -q ${EGET_VERSION} \
-    && make build
+    && make build \
+    && make install
+
+WORKDIR /opt
+
+####################################################################################################
+
+FROM eget-build AS actions-runner
+
+# renovate: datasource=github-releases depName=actions/runner
+ARG ACTIONS_RUNNER_VERSION=v2.317.0
+
+RUN eget actions/runner \
+    --asset "^noexternals" --asset "^noruntime" --asset ".tar.gz" \
+    --all --file "*" --to "/opt/" \
+    --tag "${ACTIONS_RUNNER_VERSION}"
+
+####################################################################################################
+
+FROM eget-build AS runner-container-hooks
+
+# renovate: datasource=github-releases depName=actions/runner-container-hooks
+ARG ACTIONS_HOOKS_VERSION=v0.6.1
+
+RUN eget actions/runner-container-hooks \
+    --asset "docker" --asset ".zip" \
+    --all --file "*" --to "./" \
+    --tag "${ACTIONS_HOOKS_VERSION}"
+
+####################################################################################################
+
+FROM eget-build AS powershell
+
+# renovate: datasource=github-releases depName=powershell/powershell
+ARG POWERSHELL_VERSION=v7.4.3
+
+# https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
+RUN eget powershell/powershell \
+    --asset "powershell" --asset "^fxdependent" --asset "^musl" --asset ".tar.gz" \
+    --all --file "*" --to "./" \
+    --tag "${POWERSHELL_VERSION}" \
+    && chmod +x pwsh
+
+####################################################################################################
+
+FROM eget-build AS balena-cli
+
+# renovate: datasource=github-releases depName=balena-io/balena-cli
+ARG BALENA_CLI_VERSION=v18.2.33
+
+RUN eget balena-io/balena-cli \
+    --asset "standalone" --asset ".zip"\
+    --all --file "*" --to "./" \
+    --tag "${BALENA_CLI_VERSION}" \
+    && ./balena version
+
+####################################################################################################
+
+FROM eget-build AS yq
+
+# renovate: datasource=github-releases depName=mikefarah/yq
+ARG YQ_VERSION=v4.40.5
+
+RUN eget mikefarah/yq \
+    --asset ".tar.gz" \
+    --file "yq_*" --to "./yq" \
+    --tag "${YQ_VERSION}" \
+    && ./yq --version
+
+####################################################################################################
+
+FROM eget-build AS gh-cli
+
+# renovate: datasource=github-releases depName=cli/cli
+ARG GH_CLI_VERSION=v2.53.0
+
+RUN eget cli/cli \
+    --asset ".tar.gz" \
+    --file "gh" --to "./gh" \
+    --tag "${GH_CLI_VERSION}" \
+    && ./gh version
+
+####################################################################################################
+
+FROM eget-build AS s6-overlay
+
+# renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
+ARG S6_OVERLAY_VERSION=v3.2.0.0
+
+RUN eget just-containers/s6-overlay \
+    --asset "s6-overlay-$(uname -m).tar.xz" \
+    --all --file "*" --to "./" \
+    --tag "${S6_OVERLAY_VERSION}"
+
+RUN eget just-containers/s6-overlay \
+    --asset "s6-overlay-noarch.tar.xz" \
+    --all --file "*" --to "./" \
+    --tag "${S6_OVERLAY_VERSION}"
+
+####################################################################################################
+
+FROM eget-build AS go-github-apps
+
+# renovate: datasource=github-releases depName=nabeken/go-github-apps
+ARG GO_GITHUB_APPS_VERSION=v0.1.15
+
+RUN eget nabeken/go-github-apps \
+    --asset ".tar.gz" \
+    --file "go-github-apps" --to "./go-github-apps" \
+    --tag "${GO_GITHUB_APPS_VERSION}" \
+    && ./go-github-apps -version
+
+####################################################################################################
+
+FROM eget-build AS node
+
+# renovate: datasource=node depName=node
+ARG NODE_VERSION=20.15.1
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN eget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(dpkg --print-architecture | sed 's/amd/x/').tar.gz" \
+    --all --file "*/*" --to "./" \
+    && ./bin/node --version
+
+####################################################################################################
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.7-jammy AS jammy
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.32-focal AS focal
+
 # hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
 
@@ -50,15 +180,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-RUN adduser --disabled-password --gecos "" --uid 1001 runner \
-    && groupadd docker --gid 123 \
-    && usermod -aG sudo runner \
-    && usermod -aG docker runner \
-    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
-    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
-
-WORKDIR /home/runner
-
 # Add keyring for docker-ce
 # https://docs.docker.com/engine/install/ubuntu/
 RUN mkdir -p /etc/apt/keyrings \
@@ -66,149 +187,109 @@ RUN mkdir -p /etc/apt/keyrings \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-# Add keyring for GH CLI releases
-# https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg \
-    && chmod a+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
+# Create the docker group with our chosen GID
+# otherwise the apt installation of docker-ce will create the group with a different GID
+RUN groupadd docker --gid 123
 
-COPY root/*.txt /
-
+# Install common packages
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    $(</packages.txt) \
-    $(</packages."$(lsb_release -cs)".txt) \
+    awscli \
+    build-essential \
+    cpu-checker \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-ce-cli \
+    docker-ce \
+    docker-compose-plugin \
+    git \
+    htop \
+    imvirt \
+    iproute2 \
+    iptables \
+    jq \
+    nfs-common \
+    openssh-client \
+    pigz \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-venv \
+    rsync \
+    socat \
+    unzip \
+    zstd \
+    uuid-runtime \
+    vim \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=eget-build /src/eget /usr/local/bin/
+# install dotnet dependencies for focal (Ubuntu 20.04)
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
+# hadolint ignore=DL3008
+RUN [[ "$(lsb_release -cs)" = "focal" ]] || exit 0 ; \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu66 \
+    libssl1.1 \
+    libstdc++6 \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# install dotnet dependencies for jammy (Ubuntu 22.04)
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
+# hadolint ignore=DL3008
+RUN [[ "$(lsb_release -cs)" = "jammy" ]] || exit 0 ; \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu70 \
+    liblttng-ust1 \
+    libssl3 \
+    libstdc++6 \
+    libunwind8 \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create runner user and add to groups
+RUN adduser --disabled-password --gecos "" --uid 1001 runner \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
+
+WORKDIR /home/runner
+
+COPY --from=actions-runner /opt/ /home/runner/
+COPY --from=runner-container-hooks /opt/ /home/runner/docker/
+COPY --from=powershell /opt/ /opt/microsoft/powershell/7/
+
+RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
+    pwsh -Version
+
+COPY --from=yq /opt/ /usr/local/bin/
+COPY --from=gh-cli /opt/ /usr/local/bin/
+COPY --from=go-github-apps /opt/ /usr/local/bin/
 COPY --from=remco-build /src/bin/remco /usr/local/bin/
+COPY --from=balena-cli /opt/ /usr/local/lib/balena-cli/
 
-# renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.317.0
+RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena && \
+    balena version
 
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget actions/runner \
-    --asset "^noexternals" --asset "^noruntime" --asset ".tar.gz" \
-    --all --file "*" --to "/home/runner" \
-    --tag "${ACTIONS_RUNNER_VERSION}"
+COPY --from=s6-overlay /opt/ /
 
-# renovate: datasource=github-releases depName=actions/runner-container-hooks
-ARG ACTIONS_HOOKS_VERSION=v0.6.1
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget actions/runner-container-hooks \
-    --asset "docker" --asset ".zip" \
-    --all --file "*" --to "/home/runner/docker" \
-    --tag "${ACTIONS_HOOKS_VERSION}"
-
-# renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.4.3
-
-# https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget powershell/powershell \
-    --asset "powershell" --asset "^fxdependent" --asset "^musl" --asset ".tar.gz" \
-    --all --file "*" --to "/opt/microsoft/powershell/7" \
-    --tag "${POWERSHELL_VERSION}" \
-    && chmod +x /opt/microsoft/powershell/7/pwsh \
-    && ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh \
-    && pwsh -Version
-
-# renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v18.2.33
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget balena-io/balena-cli \
-    --asset "standalone" --asset ".zip"\
-    --all --file "*" --to "/usr/local/lib/balena-cli" \
-    --tag "${BALENA_CLI_VERSION}" \
-    && ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena \
-    && balena version
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget mikefarah/yq \
-    --asset ".tar.gz" \
-    --file "yq_*" --to "/usr/local/bin/yq" \
-    --tag v4.40.5 \
-    && yq --version
-
-# renovate: datasource=github-releases depName=cli/cli
-ARG GH_CLI_VERSION=v2.53.0
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget cli/cli \
-    --asset ".tar.gz" \
-    --file "gh" --to "/usr/local/bin/gh" \
-    --tag "${GH_CLI_VERSION}" \
-    && gh version
-
-# renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
-ARG S6_OVERLAY_VERSION=v3.2.0.0
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget just-containers/s6-overlay \
-    --asset "s6-overlay-$(uname -m).tar.xz" \
-    --all --file "*" --to "/" \
-    --tag "${S6_OVERLAY_VERSION}"
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget just-containers/s6-overlay \
-    --asset "s6-overlay-noarch.tar.xz" \
-    --all --file "*" --to "/" \
-    --tag "${S6_OVERLAY_VERSION}"
-
-# renovate: datasource=github-releases depName=nabeken/go-github-apps
-ARG GO_GITHUB_APPS_VERSION=v0.1.16
-
-# mount a secret with the id GITHUB_TOKEN to avoid api rate limits
-# hadolint ignore=DL3059
-RUN --mount=type=secret,id=GITHUB_TOKEN \
-    GITHUB_TOKEN=$(</run/secrets/GITHUB_TOKEN) \
-    eget nabeken/go-github-apps \
-    --asset ".tar.gz" \
-    --file "go-github-apps" --to "/usr/local/bin/go-github-apps" \
-    --tag "${GO_GITHUB_APPS_VERSION}" \
-    && go-github-apps -version
-
-# renovate: datasource=node depName=node
-ARG NODE_VERSION=20.15.1
+COPY --from=node /opt/ /usr/local/
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=10.8.2
 
-# install nodejs and npm
-RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
-    then \
-    NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" ; \
-    else \
-    NODE_URL="https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-arm64.tar.gz" ; \
-    fi && \
-    curl -fsSL "${NODE_URL}" | tar xz -C /usr/local --strip-components=1 --no-same-owner \
-    && npm install -g npm@"$NPM_VERSION" \
+# install npm
+RUN npm install -g "npm@${NPM_VERSION}" \
     && rm -rf /root/.npm/_cacache \
     && npm cache clear --force \
     && rm -rf /tmp/*

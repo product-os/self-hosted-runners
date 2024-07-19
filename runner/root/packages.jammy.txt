@@ -1,8 +1,0 @@
-containerd.io=1.6.18-1
-docker-buildx-plugin
-docker-ce-cli=5:23.0.1-1~ubuntu.22.04~jammy
-docker-ce=5:23.0.1-1~ubuntu.22.04~jammy
-docker-compose-plugin=2.16.0-1~ubuntu.22.04~jammy
-libgcc-s1
-liblttng-ust1
-libunwind8
