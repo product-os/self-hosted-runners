@@ -1,4 +1,32 @@
 - commits:
+    - subject: Move dotnet dependencies and common packages to Dockerfile
+      hash: df2bb28a8d175282cb58310e643134a8d3271191
+      body: |
+        This improves the potential for caching, and allows
+        for better commenting around each dependency grouping.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Install packages via eget in build stages
+      hash: 2d3db89116c6b4621174ca68d8c95307698fe994
+      body: |
+        This improves caching and build time by executing
+        more steps in parallel.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.1.3
+  title: ""
+  date: 2024-07-19T14:27:31.610Z
+- commits:
     - subject: Avoid dockerd flags that are already in the daemon.json
       hash: 633ec3cf2ec11470293e304e2d4ee415c73df6c8
       body: |
