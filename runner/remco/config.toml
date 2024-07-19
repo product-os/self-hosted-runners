@@ -1,0 +1,22 @@
+# https://github.com/HeavyHorst/remco/blob/fbd1eb066af9ca58fc452263eeceee685e2a14fd/integration/env/env.toml
+################################################################
+# Global configuration
+################################################################
+log_level = "debug"
+log_format = "text"
+
+################################################################
+# Resource configuration
+################################################################
+[[resource]]
+name = "docker-config"
+
+[[resource.template]]
+src = "/etc/remco/templates/daemon.json.tmpl"
+dst = "/etc/docker/daemon.json"
+
+[resource.backend]
+[resource.backend.env]
+# prefix = "docker/"
+onetime = true
+keys = ["/"]

@@ -1,5 +1,19 @@
 ARG OS_CODENAME=jammy
 
+FROM golang:1.22.5 AS remco-build
+
+WORKDIR /src
+
+# renovate: datasource=github-releases depName=HeavyHorst/remco
+ARG REMOCO_VERSION=v0.12.4
+ARG CGO_ENABLED=0
+
+RUN git clone https://github.com/HeavyHorst/remco.git . \
+    && git checkout -q ${REMOCO_VERSION} \
+    && make build
+
+RUN bin/remco -version
+
 FROM golang:1.22.5 AS eget-build
 
 WORKDIR /src
@@ -66,7 +80,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     $(</packages."$(lsb_release -cs)".txt) \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=eget-build /src/eget /usr/local/bin/eget
+COPY --from=eget-build /src/eget /usr/local/bin/
+COPY --from=remco-build /src/bin/remco /usr/local/bin/
 
 # renovate: datasource=github-releases depName=actions/runner
 ARG ACTIONS_RUNNER_VERSION=v2.317.0
@@ -202,6 +217,9 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ] ; \
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 
+# install remco templates
+COPY remco/ /etc/remco/
+
 # install container init script
 COPY init.container /init.container
 RUN chmod +x /init.container
@@ -255,5 +273,14 @@ ENV S6_READ_ONLY_ROOT 1
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 30000
 # stop the container if any services fail to start
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS: 2
+
+ENV DOCKER_DATA_ROOT /scratch/docker
+ENV DOCKER_PIDFILE /var/run/docker.pid
+ENV DOCKER_DEFAULT_ULIMITS_NOFILE_HARD 65535
+ENV DOCKER_DEFAULT_ULIMITS_NOFILE_SOFT 65535
+
+# Test remco templating
+RUN remco --config /etc/remco/config.toml \
+    && jq . /etc/docker/daemon.json
 
 CMD [ "/init.container" ]
