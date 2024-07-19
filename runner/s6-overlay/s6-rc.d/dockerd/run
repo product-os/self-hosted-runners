@@ -13,16 +13,6 @@ rm -f /var/run/docker.pid
 
 dockerd_args=()
 
-# FIXME: deprecate this and use INSECURE_REGISTRIES via remco
-for registry in ${INSECURE_REGISTRY:-}; do
-  dockerd_args+=("--insecure-registry=${registry}")
-done
-
-# FIXME: deprecate this and use REGISTRY_MIRRORS via remco
-for mirror in ${DOCKER_REGISTRY_MIRROR:-}; do
-  dockerd_args+=("--registry-mirror=${mirror}")
-done
-
 if [[ -n "${EXTRA_DOCKERD_ARGS:-}" ]]; then
   # split the string into an array
   read -r -a extra_args <<<"${EXTRA_DOCKERD_ARGS}"
