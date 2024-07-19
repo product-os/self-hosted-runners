@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.44.2
+      hash: 679c2d50fa090e1e9a078f2fcb589d41a6a4b430
+      body: |
+        Update mikefarah/yq from 4.40.5 to 4.44.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.4
+  title: ""
+  date: 2024-07-19T15:29:31.812Z
+- commits:
     - subject: Move dotnet dependencies and common packages to Dockerfile
       hash: df2bb28a8d175282cb58310e643134a8d3271191
       body: |
