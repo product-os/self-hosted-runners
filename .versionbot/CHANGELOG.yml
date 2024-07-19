@@ -1,4 +1,18 @@
 - commits:
+    - subject: Use remco to configure dockerd via templates
+      hash: 775212efc1b3ec765f559c2ea9db3274027a52b6
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.1.0
+  title: ""
+  date: 2024-07-19T02:31:33.216Z
+- commits:
     - subject: Update dependency cli/cli to v2.53.0
       hash: 8a0282619a2b050127ab246a6fea2f7ed50446d1
       body: |
