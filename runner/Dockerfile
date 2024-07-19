@@ -182,7 +182,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN \
     --tag "${S6_OVERLAY_VERSION}"
 
 # renovate: datasource=github-releases depName=nabeken/go-github-apps
-ARG GO_GITHUB_APPS_VERSION=v0.1.15
+ARG GO_GITHUB_APPS_VERSION=v0.1.16
 
 # mount a secret with the id GITHUB_TOKEN to avoid api rate limits
 # hadolint ignore=DL3059
