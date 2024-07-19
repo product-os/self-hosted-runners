@@ -180,15 +180,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-RUN adduser --disabled-password --gecos "" --uid 1001 runner \
-    && groupadd docker --gid 123 \
-    && usermod -aG sudo runner \
-    && usermod -aG docker runner \
-    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
-    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
-
-WORKDIR /home/runner
-
 # Add keyring for docker-ce
 # https://docs.docker.com/engine/install/ubuntu/
 RUN mkdir -p /etc/apt/keyrings \
@@ -196,15 +187,83 @@ RUN mkdir -p /etc/apt/keyrings \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-COPY root/*.txt /
+# Create the docker group with our chosen GID
+# otherwise the apt installation of docker-ce will create the group with a different GID
+RUN groupadd docker --gid 123
 
+# Install common packages
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    $(</packages.txt) \
-    $(</packages."$(lsb_release -cs)".txt) \
+    awscli \
+    build-essential \
+    cpu-checker \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-ce-cli \
+    docker-ce \
+    docker-compose-plugin \
+    git \
+    htop \
+    imvirt \
+    iproute2 \
+    iptables \
+    jq \
+    nfs-common \
+    openssh-client \
+    pigz \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-venv \
+    rsync \
+    socat \
+    unzip \
+    zstd \
+    uuid-runtime \
+    vim \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=remco-build /src/bin/remco /usr/local/bin/
+# install dotnet dependencies for focal (Ubuntu 20.04)
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
+# hadolint ignore=DL3008
+RUN [[ "$(lsb_release -cs)" = "focal" ]] || exit 0 ; \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu66 \
+    libssl1.1 \
+    libstdc++6 \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# install dotnet dependencies for jammy (Ubuntu 22.04)
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
+# hadolint ignore=DL3008
+RUN [[ "$(lsb_release -cs)" = "jammy" ]] || exit 0 ; \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu70 \
+    liblttng-ust1 \
+    libssl3 \
+    libstdc++6 \
+    libunwind8 \
+    zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create runner user and add to groups
+RUN adduser --disabled-password --gecos "" --uid 1001 runner \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
+
+WORKDIR /home/runner
 
 COPY --from=actions-runner /opt/ /home/runner/
 COPY --from=runner-container-hooks /opt/ /home/runner/docker/
@@ -216,6 +275,7 @@ RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
 COPY --from=yq /opt/ /usr/local/bin/
 COPY --from=gh-cli /opt/ /usr/local/bin/
 COPY --from=go-github-apps /opt/ /usr/local/bin/
+COPY --from=remco-build /src/bin/remco /usr/local/bin/
 COPY --from=balena-cli /opt/ /usr/local/lib/balena-cli/
 
 RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena && \
@@ -229,7 +289,7 @@ COPY --from=node /opt/ /usr/local/
 ARG NPM_VERSION=10.8.2
 
 # install npm
-RUN npm install -g npm@"$NPM_VERSION" \
+RUN npm install -g "npm@${NPM_VERSION}" \
     && rm -rf /root/.npm/_cacache \
     && npm cache clear --force \
     && rm -rf /tmp/*
