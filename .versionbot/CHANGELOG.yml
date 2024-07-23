@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.4
+      hash: c7d74b19158db5dabb7a20b5dfa41a804aaffc3f
+      body: |
+        Update powershell/powershell from 7.4.3 to 7.4.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.5
+  title: ""
+  date: 2024-07-23T20:09:22.922Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.44.2
       hash: 679c2d50fa090e1e9a078f2fcb589d41a6a4b430
       body: |
