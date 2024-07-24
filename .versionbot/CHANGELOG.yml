@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.16.0
+      hash: eab55da852fb788b3427e105ff5a07ff277f2e11
+      body: |
+        Update node from 20.15.1 to 20.16.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.6
+  title: ""
+  date: 2024-07-24T13:18:53.888Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.4.4
       hash: c7d74b19158db5dabb7a20b5dfa41a804aaffc3f
       body: |
