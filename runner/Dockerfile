@@ -144,7 +144,7 @@ RUN eget nabeken/go-github-apps \
 FROM eget-build AS node
 
 # renovate: datasource=node depName=node
-ARG NODE_VERSION=20.15.1
+ARG NODE_VERSION=20.16.0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
