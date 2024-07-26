@@ -37,7 +37,7 @@ WORKDIR /opt
 FROM eget-build AS actions-runner
 
 # renovate: datasource=github-releases depName=actions/runner
-ARG ACTIONS_RUNNER_VERSION=v2.317.0
+ARG ACTIONS_RUNNER_VERSION=v2.318.0
 
 RUN eget actions/runner \
     --asset "^noexternals" --asset "^noruntime" --asset ".tar.gz" \
