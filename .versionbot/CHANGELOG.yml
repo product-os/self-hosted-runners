@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.44.3
+      hash: 3197fa41bedff3536efab51898037e6a0338cff9
+      body: |
+        Update mikefarah/yq from 4.44.2 to 4.44.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.10
+  title: ""
+  date: 2024-08-05T08:10:51.006Z
+- commits:
     - subject: Update dependency cli/cli to v2.54.0
       hash: 6323bbb3985521b300bba706004ba7b160afea73
       body: |
