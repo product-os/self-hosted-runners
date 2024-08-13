@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency nabeken/go-github-apps to v0.1.16
+      hash: dd1c7f1546869b1db72ac7a7e15c1f0203d9497e
+      body: |
+        Update nabeken/go-github-apps from 0.1.15 to 0.1.16
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.2.1
+  title: ""
+  date: 2024-08-13T23:39:15.349Z
+- commits:
     - subject: Install packages used for testing runners
       hash: 34c75ed88fb5d5a45235cb5ab261cb1372426eef
       body: |
