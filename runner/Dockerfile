@@ -195,6 +195,7 @@ RUN groupadd docker --gid 123
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
     awscli \
+    bind9-dnsutils \
     build-essential \
     cpu-checker \
     containerd.io \
@@ -202,11 +203,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     docker-ce-cli \
     docker-ce \
     docker-compose-plugin \
+    dosfstools \
     git \
     htop \
     imvirt \
     iproute2 \
     iptables \
+    iputils-ping \
     jq \
     nfs-common \
     openssh-client \
