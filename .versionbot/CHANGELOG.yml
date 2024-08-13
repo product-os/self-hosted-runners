@@ -1,4 +1,23 @@
 - commits:
+    - subject: Install packages used for testing runners
+      hash: 34c75ed88fb5d5a45235cb5ab261cb1372426eef
+      body: |
+        Some of these packages are used for unit tests
+        of the VM-based runners.
+
+        Also some of these packages are included in
+        the hosted GitHub runner images anyway.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.2.0
+  title: ""
+  date: 2024-08-13T22:04:38.330Z
+- commits:
     - subject: Update golang Docker tag to v1.22.6
       hash: c1d5f40ce09b60444d5cd65a48915f85d53be21c
       body: |
