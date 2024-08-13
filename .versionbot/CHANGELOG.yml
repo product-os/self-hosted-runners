@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.319.1
+      hash: 534a575824a0a05d05eb2c085ab606927a51d31b
+      body: |
+        Update actions/runner from 2.318.0 to 2.319.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.11
+  title: ""
+  date: 2024-08-13T17:15:48.005Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.44.3
       hash: 3197fa41bedff3536efab51898037e6a0338cff9
       body: |
