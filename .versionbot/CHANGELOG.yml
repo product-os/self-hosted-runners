@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 3803b88579757033c824b369ec5a47fb3e3c5009
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 6.0.32 to 6.0.33
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 4.1.12
+  title: ""
+  date: 2024-08-13T18:15:43.627Z
+- commits:
     - subject: Update dependency actions/runner to v2.319.1
       hash: 534a575824a0a05d05eb2c085ab606927a51d31b
       body: |
