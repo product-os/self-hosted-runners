@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add Ubuntu 24.04 (noble) images
+      hash: d89264115cc65c3e99f469835cf27f29579301f5
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 5.0.0
+  title: ""
+  date: 2024-08-14T16:49:40.337Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.1.16
       hash: dd1c7f1546869b1db72ac7a7e15c1f0203d9497e
       body: |
