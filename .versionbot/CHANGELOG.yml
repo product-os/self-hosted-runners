@@ -1,4 +1,19 @@
 - commits:
+    - subject: Discontinue untagged image version pointing to jammy
+      hash: 18d13b529811889ae234a87bbb6c197a8074ba61
+      body: |
+        Going forward all pulls will require the -CODENAME suffix.
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.0.0
+  title: ""
+  date: 2024-08-14T17:36:52.458Z
+- commits:
     - subject: Add Ubuntu 24.04 (noble) images
       hash: d89264115cc65c3e99f469835cf27f29579301f5
       body: ""
