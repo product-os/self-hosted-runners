@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.30
+      hash: 6eb2058abe38020c69ee905616b226850382cfa8
+      body: |
+        Update aws/aws-cli from 2.17.29 to 2.17.30
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.0.1
+  title: ""
+  date: 2024-08-14T20:13:25.132Z
+- commits:
     - subject: Discontinue untagged image version pointing to jammy
       hash: 18d13b529811889ae234a87bbb6c197a8074ba61
       body: |
