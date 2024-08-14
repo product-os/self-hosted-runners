@@ -98,7 +98,7 @@ runs:
         balena version
         containerd --version
         ctr --version
-        dockerd --version
+        docker version
         docker buildx version
         docker compose version
         gh version

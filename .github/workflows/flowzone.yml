@@ -30,15 +30,19 @@ jobs:
           "linux/amd64": ["self-hosted","X64"],
           "linux/arm64": ["self-hosted","ARM64"]
         }
-      bake_targets: default,focal
+      # TODO: replace default with jammy in this list so we only publish variants
+      # and nothing with the default tag
+      bake_targets: default,focal,noble
       jobs_timeout_minutes: 60
       # These runners will be brought online by the docker test jobs
       custom_test_matrix: >
         {
           "os": [
+            ["distro:focal","platform:linux/amd64","run_id:${{ github.run_id }}"],
+            ["distro:focal","platform:linux/arm64","run_id:${{ github.run_id }}"],
             ["distro:jammy","platform:linux/amd64","run_id:${{ github.run_id }}"],
             ["distro:jammy","platform:linux/arm64","run_id:${{ github.run_id }}"],
-            ["distro:focal","platform:linux/amd64","run_id:${{ github.run_id }}"],
-            ["distro:focal","platform:linux/arm64","run_id:${{ github.run_id }}"]
+            ["distro:noble","platform:linux/amd64","run_id:${{ github.run_id }}"],
+            ["distro:noble","platform:linux/arm64","run_id:${{ github.run_id }}"]
           ]
         }
