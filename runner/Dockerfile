@@ -111,6 +111,20 @@ RUN eget cli/cli \
 
 ####################################################################################################
 
+FROM eget-build AS awscli
+
+# renovate: datasource=github-tags depName=aws/aws-cli
+ARG AWSCLI_VERSION=2.17.29
+
+# install awscli manually as it's not available in apt for Ubuntu 24.04
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+RUN eget "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m)-${AWSCLI_VERSION}.zip" \
+    --all --file "*" --to "./" \
+    && ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli \
+    && aws --version
+
+####################################################################################################
+
 FROM eget-build AS s6-overlay
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
@@ -156,8 +170,12 @@ RUN eget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.8-jammy AS jammy
+# Ubuntu 20.04 (focal)
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.33-focal AS focal
+# Ubuntu 22.04 (jammy)
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.8-jammy AS jammy
+# Ubuntu 24.04 (noble)
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.8-noble AS noble
 
 # hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
@@ -166,7 +184,7 @@ WORKDIR /root
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -191,10 +209,7 @@ RUN mkdir -p /etc/apt/keyrings \
 # otherwise the apt installation of docker-ce will create the group with a different GID
 RUN groupadd docker --gid 123
 
-# Install common packages
-# hadolint ignore=DL3008,SC2046
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    awscli \
+ARG PACKAGES_common="\
     bind9-dnsutils \
     build-essential \
     cpu-checker \
@@ -221,18 +236,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rsync \
     socat \
     unzip \
-    zstd \
     uuid-runtime \
     vim \
     wget \
-    && rm -rf /var/lib/apt/lists/*
+    zstd \
+    "
 
 # install dotnet dependencies for focal (Ubuntu 20.04)
 # https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
-# hadolint ignore=DL3008
-RUN [[ "$(lsb_release -cs)" = "focal" ]] || exit 0 ; \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+ARG PACKAGES_focal="\
+    ${PACKAGES_common} \
     libc6 \
     libgcc-s1 \
     libgssapi-krb5-2 \
@@ -240,14 +253,12 @@ RUN [[ "$(lsb_release -cs)" = "focal" ]] || exit 0 ; \
     libssl1.1 \
     libstdc++6 \
     zlib1g \
-    && rm -rf /var/lib/apt/lists/*
+    "
 
 # install dotnet dependencies for jammy (Ubuntu 22.04)
 # https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
-# hadolint ignore=DL3008
-RUN [[ "$(lsb_release -cs)" = "jammy" ]] || exit 0 ; \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+ARG PACKAGES_jammy="\
+    ${PACKAGES_common} \
     libc6 \
     libgcc-s1 \
     libgssapi-krb5-2 \
@@ -257,6 +268,26 @@ RUN [[ "$(lsb_release -cs)" = "jammy" ]] || exit 0 ; \
     libstdc++6 \
     libunwind8 \
     zlib1g \
+    "
+
+# install dotnet dependencies for noble (Ubuntu 24.04)
+# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
+ARG PACKAGES_noble="\
+    ${PACKAGES_common} \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu74 \
+    liblttng-ust1 \
+    libssl3 \
+    libstdc++6 \
+    libunwind8 \
+    zlib1g \
+    "
+
+# hadolint ignore=DL3008,SC2046
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    $(eval echo "\$PACKAGES_$(lsb_release -cs)") \
     && rm -rf /var/lib/apt/lists/*
 
 # Create runner user and add to groups
@@ -277,6 +308,8 @@ RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh && \
 
 COPY --from=yq /opt/ /usr/local/bin/
 COPY --from=gh-cli /opt/ /usr/local/bin/
+COPY --from=awscli /usr/local/aws-cli/ /usr/local/aws-cli/
+COPY --from=awscli /usr/local/bin/ /usr/local/bin/
 COPY --from=go-github-apps /opt/ /usr/local/bin/
 COPY --from=remco-build /src/bin/remco /usr/local/bin/
 COPY --from=balena-cli /opt/ /usr/local/lib/balena-cli/
@@ -287,6 +320,10 @@ RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena && \
 COPY --from=s6-overlay /opt/ /
 
 COPY --from=node /opt/ /usr/local/
+
+# install any missing runner dotnet dependencies
+# https://github.com/actions/runner/blob/main/src/Misc/layoutbin/installdependencies.sh
+RUN /home/runner/bin/installdependencies.sh
 
 # renovate: datasource=npm depName=npm
 ARG NPM_VERSION=10.8.2
@@ -318,11 +355,11 @@ USER runner
 RUN echo 'export PATH=/home/runner/.local/bin:$PATH' >> /home/runner/.profile
 
 # disable balena analytics and sentry
-ENV BALENARC_NO_SENTRY 1
-ENV BALENARC_NO_ANALYTICS 1
+ENV BALENARC_NO_SENTRY=1
+ENV BALENARC_NO_ANALYTICS=1
 
 # set balena to offline mode in this context only
-ARG BALENARC_OFFLINE_MODE 1
+ARG BALENARC_OFFLINE_MODE=1
 
 # For reference, here are the packages in the official hosted runners:
 # - https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md
@@ -330,6 +367,7 @@ ARG BALENARC_OFFLINE_MODE 1
 RUN aws --version && \
     balena version && \
     ctr --version && \
+    docker --version && \
     docker buildx version && \
     docker compose version && \
     gh version && \
@@ -348,20 +386,20 @@ USER root
 
 ARG TARGETPLATFORM
 
-ENV ACTIONS_RUNNER_BUILD_LABELS "platform:${TARGETPLATFORM} runtime:container"
+ENV ACTIONS_RUNNER_BUILD_LABELS="platform:${TARGETPLATFORM} runtime:container"
 
 # allow propegating env vars to s6-services
-ENV S6_KEEP_ENV 1
-ENV S6_READ_ONLY_ROOT 1
+ENV S6_KEEP_ENV=1
+ENV S6_READ_ONLY_ROOT=1
 # give services 30 seconds to start
-ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 30000
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=30000
 # stop the container if any services fail to start
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS: 2
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
-ENV DOCKER_DATA_ROOT /scratch/docker
-ENV DOCKER_PIDFILE /var/run/docker.pid
-ENV DOCKER_DEFAULT_ULIMITS_NOFILE_HARD 65535
-ENV DOCKER_DEFAULT_ULIMITS_NOFILE_SOFT 65535
+ENV DOCKER_DATA_ROOT=/scratch/docker
+ENV DOCKER_PIDFILE=/var/run/docker.pid
+ENV DOCKER_DEFAULT_ULIMITS_NOFILE_HARD=65535
+ENV DOCKER_DEFAULT_ULIMITS_NOFILE_SOFT=65535
 
 # Test remco templating
 RUN remco --config /etc/remco/config.toml \

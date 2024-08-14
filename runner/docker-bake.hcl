@@ -15,6 +15,13 @@ target "default" {
   }
 }
 
+target "focal" {
+  inherits = ["default"]
+  args = {
+    OS_CODENAME = "focal"
+  }
+}
+
 target "jammy" {
   inherits = ["default"]
   args = {
@@ -22,9 +29,9 @@ target "jammy" {
   }
 }
 
-target "focal" {
+target "noble" {
   inherits = ["default"]
   args = {
-    OS_CODENAME = "focal"
+    OS_CODENAME = "noble"
   }
 }
