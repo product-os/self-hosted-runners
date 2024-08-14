@@ -2,7 +2,7 @@ ARG OS_CODENAME=jammy
 
 ####################################################################################################
 
-FROM golang:1.22.6 AS remco-build
+FROM golang:1.23.0 AS remco-build
 
 WORKDIR /src
 
@@ -18,7 +18,7 @@ RUN bin/remco -version
 
 ####################################################################################################
 
-FROM golang:1.22.6 AS eget-build
+FROM golang:1.23.0 AS eget-build
 
 WORKDIR /src
 
