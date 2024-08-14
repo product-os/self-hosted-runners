@@ -2,22 +2,6 @@ ARG OS_CODENAME=jammy
 
 ####################################################################################################
 
-FROM golang:1.23.0 AS remco-build
-
-WORKDIR /src
-
-# renovate: datasource=github-releases depName=HeavyHorst/remco
-ARG REMOCO_VERSION=v0.12.4
-ARG CGO_ENABLED=0
-
-RUN git clone https://github.com/HeavyHorst/remco.git . \
-    && git checkout -q ${REMOCO_VERSION} \
-    && make build
-
-RUN bin/remco -version
-
-####################################################################################################
-
 FROM golang:1.23.0 AS eget-build
 
 WORKDIR /src
@@ -311,7 +295,6 @@ COPY --from=gh-cli /opt/ /usr/local/bin/
 COPY --from=awscli /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=awscli /usr/local/bin/ /usr/local/bin/
 COPY --from=go-github-apps /opt/ /usr/local/bin/
-COPY --from=remco-build /src/bin/remco /usr/local/bin/
 COPY --from=balena-cli /opt/ /usr/local/lib/balena-cli/
 
 RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena && \
@@ -337,9 +320,6 @@ RUN npm install -g "npm@${NPM_VERSION}" \
 # install s6-overlay
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
-
-# install remco templates
-COPY remco/ /etc/remco/
 
 # install container init script
 COPY init.container /init.container
@@ -398,11 +378,6 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 ENV DOCKER_DATA_ROOT=/scratch/docker
 ENV DOCKER_PIDFILE=/var/run/docker.pid
-ENV DOCKER_DEFAULT_ULIMITS_NOFILE_HARD=65535
-ENV DOCKER_DEFAULT_ULIMITS_NOFILE_SOFT=65535
-
-# Test remco templating
-RUN remco --config /etc/remco/config.toml \
-    && jq . /etc/docker/daemon.json
+ENV DOCKER_DEFAULT_ULIMITS="nofile:65535,65535"
 
 CMD [ "/init.container" ]

@@ -1,3 +1,0 @@
-#!/command/execlineb -P
-# shellcheck disable=SC1008
-remco --config /etc/remco/config.toml

@@ -23,6 +23,9 @@ dockerd_args+=("${extra_args[@]}")
 mount -t cgroup cgroup /sys/fs/cgroup || true
 update-alternatives --set iptables /usr/sbin/iptables-legacy || true
 
+# Generate dockerd config file from env vars
+node /etc/s6-overlay/scripts/configure-dockerd > /etc/docker/daemon.json
+
 echo "Starting dockerd with extra args: ${dockerd_args[*]}"
 jq . /etc/docker/daemon.json
 
