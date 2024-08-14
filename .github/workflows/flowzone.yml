@@ -30,9 +30,7 @@ jobs:
           "linux/amd64": ["self-hosted","X64"],
           "linux/arm64": ["self-hosted","ARM64"]
         }
-      # TODO: replace default with jammy in this list so we only publish variants
-      # and nothing with the default tag
-      bake_targets: default,focal,noble
+      bake_targets: focal,jammy,noble
       jobs_timeout_minutes: 60
       # These runners will be brought online by the docker test jobs
       custom_test_matrix: >
