@@ -36,4 +36,16 @@
 {% if getenv("DOCKER_SECCOMP_PROFILE") %}{{ config.Set("seccomp-profile", getenv("DOCKER_SECCOMP_PROFILE")) }}{% endif %}
 {% if getenv("DOCKER_SELINUX_ENABLED") %}{{ config.Set("selinux-enabled", getenv("DOCKER_SELINUX_ENABLED")|lower == "true") }}{% endif %}
 {% if getenv("DOCKER_STORAGE_OPTS") %}{{ config.Set("storage-opts", getenv("DOCKER_STORAGE_OPTS") | split:" ") }}{% endif %}
+{% if getenv("DOCKER_BIP") %}{{ config.Set("bip", getenv("DOCKER_BIP")) }}{% endif %}
+{% if getenv("DOCKER_DEFAULT_ADDRESS_POOLS") %}
+{% set pools = createList() %}
+{% for pool in getenv("DOCKER_DEFAULT_ADDRESS_POOLS") | split:" " %}
+{% set poolConfig = createMap() %}
+{% set poolParts = pool | split:"," %}
+{{ poolConfig.Set("base", poolParts[0]) }}
+{{ poolConfig.Set("size", poolParts[1]|parseInt) }}
+{{ pools.Add(poolConfig) }}
+{% endfor %}
+{{ config.Set("default-address-pools", pools) }}
+{% endif %}
 {{ config | toPrettyJSON }}
