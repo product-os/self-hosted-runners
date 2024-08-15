@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+const config = {};
+
+const envVarToConfig = {
+  DOCKER_DATA_ROOT: ['data-root'],
+  DOCKER_DEBUG: ['debug', v => v.toLowerCase() === 'true'],
+  DOCKER_DEFAULT_CGROUPNS_MODE: ['default-cgroupns-mode'],
+  DOCKER_DEFAULT_RUNTIME: ['default-runtime'],
+  DOCKER_DEFAULT_SHM_SIZE: ['default-shm-size'],
+  DOCKER_DNS: ['dns', v => v.split(' ')],
+  DOCKER_DNS_OPTS: ['dns-opts', v => v.split(' ')],
+  DOCKER_DNS_SEARCH: ['dns-search', v => v.split(' ')],
+  DOCKER_EXEC_OPTS: ['exec-opts', v => v.split(' ')],
+  DOCKER_EXEC_ROOT: ['exec-root'],
+  DOCKER_EXPERIMENTAL: ['experimental', v => v.toLowerCase() === 'true'],
+  DOCKER_GROUP: ['group'],
+  DOCKER_HOSTS: ['hosts', v => v.split(' ')],
+  DOCKER_ICC: ['icc', v => v.toLowerCase() === 'true'],
+  DOCKER_INIT_PATH: ['init-path'],
+  INSECURE_REGISTRIES: ['insecure-registries', v => v.split(' ')],
+  DOCKER_IP_FORWARD: ['ip-forward', v => v.toLowerCase() === 'true'],
+  DOCKER_IPTABLES: ['iptables', v => v.toLowerCase() === 'true'],
+  MAX_CONCURRENT_DOWNLOADS: ['max-concurrent-downloads', parseInt],
+  MAX_CONCURRENT_UPLOADS: ['max-concurrent-uploads', parseInt],
+  MAX_DOWNLOAD_ATTEMPTS: ['max-download-attempts', parseInt],
+  DOCKER_MTU: ['mtu', parseInt],
+  DOCKER_OOM_SCORE_ADJUST: ['oom-score-adjust', parseInt],
+  DOCKER_PIDFILE: ['pidfile'],
+  REGISTRY_MIRRORS: ['registry-mirrors', v => v.split(' ')],
+  DOCKER_SECCOMP_PROFILE: ['seccomp-profile'],
+  DOCKER_SELINUX_ENABLED: ['selinux-enabled', v => v.toLowerCase() === 'true'],
+  DOCKER_STORAGE_OPTS: ['storage-opts', v => v.split(' ')],
+  DOCKER_BIP: ['bip'],
+  DOCKER_DEFAULT_ADDRESS_POOLS: ['default-address-pools', v => v.split(' ').map(pool => {
+    const [base, size] = pool.split(',');
+    return {base, size: parseInt(size)};
+  })],
+  DOCKER_DEFAULT_ULIMITS: ['default-ulimits', v => {
+    const ulimits = {};
+    v.split(' ').forEach(ulimit => {
+      const [name, values] = ulimit.split(':');
+      const [soft, hard] = values.split(',').map(val => parseInt(val, 10));
+      ulimits[name] = {Name: name, Soft: soft, Hard: hard};
+    });
+    return ulimits;
+  }]
+};
+
+Object.entries(envVarToConfig).forEach(([envVar, [configKey, transform = v => v]]) => {
+  const value = process.env[envVar];
+  if (value) config[configKey] = transform(value);
+});
+
+console.log(JSON.stringify(config, null, 2));
