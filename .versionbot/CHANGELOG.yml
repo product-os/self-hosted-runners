@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.23.0
+      hash: 4775bb4ac74388fd734f372685ba6323afc17f1d
+      body: |
+        Update golang from 1.22.6 to 1.23.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.0.2
+  title: ""
+  date: 2024-08-15T01:23:47.362Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.30
       hash: 6eb2058abe38020c69ee905616b226850382cfa8
       body: |
