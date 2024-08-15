@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.31
+      hash: 0b9fa8e21b033cc3cfab71c2855ba16ac2341d67
+      body: |
+        Update aws/aws-cli from 2.17.30 to 2.17.31
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.1
+  title: ""
+  date: 2024-08-15T20:13:47.982Z
+- commits:
     - subject: Use a nodejs script to configure dockerd and remove remco
       hash: 58f4cb20aaf74d3512e6c2e2184797e176eca823
       body: |
