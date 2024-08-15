@@ -1,4 +1,24 @@
 - commits:
+    - subject: Use a nodejs script to configure dockerd and remove remco
+      hash: 58f4cb20aaf74d3512e6c2e2184797e176eca823
+      body: |
+        Golang and pongo templates are simply not the best
+        way to generate complex JSON from templates. Also the documentaion
+        for both is lacking and a simple node script can do the job.
+
+        If we find a need for templated config files for
+        other services we can introduce a confd s6 service.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.1.0
+  title: ""
+  date: 2024-08-15T12:56:48.052Z
+- commits:
     - subject: Update golang Docker tag to v1.23.0
       hash: 4775bb4ac74388fd734f372685ba6323afc17f1d
       body: |
