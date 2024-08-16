@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add more network-related dockerd config options
+      hash: 1e7a323531596bc94f97496554310fc4bba9f63f
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.1.2
+  title: ""
+  date: 2024-08-16T12:51:03.021Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.31
       hash: 0b9fa8e21b033cc3cfab71c2855ba16ac2341d67
       body: |
