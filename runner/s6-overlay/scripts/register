@@ -18,13 +18,13 @@ curl_with_opts() {
 # Helper function to replace the lack of --fail-with-body in versions of curl < 7.76.0
 curl_fail_with_body() {
     local _http_code
-    local _http_body
+    local _output
 
-    _http_body=$(mktemp)
-    _http_code="$(curl --silent --write-out "%{http_code}" --output "${_http_body}" "$@")"
+    _output=$(mktemp)
+    _http_code="$(curl --silent --write-out "%{http_code}" --output "${_output}" "$@")"
 
-    cat "${_http_body}"
-    rm -f "${_http_body}"
+    (jq . "${_output}" || cat "${_output}") | tee /dev/stderr
+    rm -f "${_output}"
 
     if [[ "${_http_code}" -ge 400 ]]; then
         return 22
@@ -115,9 +115,8 @@ get_runner_group_id() {
     local _api_url="https://api.github.com/${_registration_slug}/actions/runner-groups"
 
     info "Getting runner group ID from GitHub..."
-
-    curl_fail_with_body --location "${_api_url}" -H "Authorization: token ${_github_token}" \
-        | jq --arg name "${_runner_group_name}" '.runner_groups[] | select(.name == $name) | .id'
+    (curl_fail_with_body --location "${_api_url}" -H "Authorization: token ${_github_token}") |
+        jq --arg name "${_runner_group_name}" '.runner_groups[] | select(.name == $name) | .id'
 }
 
 # Create a just-in-time runner for the repository, organization, or enterprise
@@ -131,8 +130,8 @@ register_runner() {
     local _api_url="https://api.github.com/${_registration_slug}/actions/runners/generate-jitconfig"
 
     info "Registering runner with GitHub..."
-    curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" -d "${_json_payload}" \
-        | jq -r '.encoded_jit_config'
+    (curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" \
+        -d "${_json_payload}") | jq -r '.encoded_jit_config'
 }
 
 log() {
@@ -176,9 +175,9 @@ get_default_labels() {
     _labels+=("Linux")
 
     case $(uname -m) in
-        x86_64) _labels+=("X64") ;;
-        aarch64) _labels+=("ARM64") ;;
-        *) fail "Unsupported architecture: $(uname -m)" ;;
+    x86_64) _labels+=("X64") ;;
+    aarch64) _labels+=("ARM64") ;;
+    *) fail "Unsupported architecture: $(uname -m)" ;;
     esac
 
     printf '%s ' "${_labels[@]}"
@@ -248,9 +247,9 @@ get_runner_labels_json() {
     read -r -a _automatic_labels < <(get_automatic_labels)
 
     # shellcheck disable=SC2086
-    read -r -a _build_labels <<< "$(printf '%s ' ${ACTIONS_RUNNER_BUILD_LABELS:-})"
+    read -r -a _build_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_BUILD_LABELS:-})"
     # shellcheck disable=SC2086
-    read -r -a _extra_labels <<< "$(printf '%s ' ${ACTIONS_RUNNER_EXTRA_LABELS:-})"
+    read -r -a _extra_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_EXTRA_LABELS:-})"
 
     # add the default labels
     _runner_labels+=("${_default_labels[@]}")
