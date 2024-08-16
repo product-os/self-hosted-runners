@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Generate a JSON configuration object for the Docker daemon based on environment variables.
+// See https://docs.docker.com/reference/cli/dockerd/
+
 const config = {};
 
 const envVarToConfig = {
@@ -32,6 +35,10 @@ const envVarToConfig = {
   DOCKER_SELINUX_ENABLED: ['selinux-enabled', v => v.toLowerCase() === 'true'],
   DOCKER_STORAGE_OPTS: ['storage-opts', v => v.split(' ')],
   DOCKER_BIP: ['bip'],
+  DOCKER_FIXED_CIDR: ['fixed-cidr'],
+  DOCKER_FIXED_CIDR_V6: ['fixed-cidr-v6'],
+  DOCKER_DEFAULT_GATEWAY: ['default-gateway'],
+  DOCKER_DEFAULT_GATEWAY_V6: ['default-gateway-v6'],
   DOCKER_DEFAULT_ADDRESS_POOLS: ['default-address-pools', v => v.split(' ').map(pool => {
     const [base, size] = pool.split(',');
     return {base, size: parseInt(size)};
