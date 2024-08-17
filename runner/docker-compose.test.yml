@@ -10,8 +10,7 @@ services:
     env_file:
       - .env
     environment:
-      VERBOSE: "true"
+      VERBOSE: ${VERBOSE:-true}
       ACTIONS_RUNNER_REGISTRATION_SLUG: repos/product-os/self-hosted-runners
       ACTIONS_RUNNER_EXTRA_LABELS: run_id:${GITHUB_RUN_ID:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
-      ACTIONS_RUNNER_MACHINE_NAME: run-id-${GITHUB_RUN_ID:-dev}
