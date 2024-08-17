@@ -183,81 +183,31 @@ get_default_labels() {
     printf '%s ' "${_labels[@]}"
 }
 
-# Autmatically detect and add labels based on the environment
-get_automatic_labels() {
-    local _labels=()
-
-    # Allow the user to disable automatic labels
-    truthy "${ACTIONS_RUNNER_NO_AUTOMATIC_LABELS:-}" && return
-
-    _labels+=("machine:$(uname -m)")
-    _labels+=("arch:$(dpkg --print-architecture)")
-
-    if command lsb_release; then
-        _labels+=("family:$(lsb_release --id --short)")
-        _labels+=("id:$(lsb_release --id --short)")
-        _labels+=("distro:$(lsb_release --codename --short)")
-        _labels+=("codename:$(lsb_release --codename --short)")
-        _labels+=("release:$(lsb_release --release --short)")
-    fi
-
-    ipinfo="$(get_geo)"
-    if [[ -n "${ipinfo}" ]]; then
-        _labels+=("country:$(echo "${ipinfo}" | jq -r .country | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-        _labels+=("region:$(echo "${ipinfo}" | jq -r .region | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-        _labels+=("city:$(echo "${ipinfo}" | jq -r .city | tr ' ' '_' | tr '[:upper:]' '[:lower:]')")
-    fi
-
-    memgib="$(get_rounded_mem_gib)"
-    if [[ -n "${memgib}" ]]; then
-        _labels+=("${memgib}gib")
-        _labels+=("mem:${memgib}Gi")
-    fi
-
-    numcpu="$(nproc)"
-    if [[ -n "${numcpu}" ]]; then
-        _labels+=("${numcpu}cpu")
-        _labels+=("cpu:${numcpu}")
-    fi
-
-    if kvm-ok >/dev/null; then
-        _labels+=("kvm")
-    fi
-
-    if [[ -f /sys/devices/virtual/dmi/id/board_name ]]; then
-        _labels+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
-    fi
-
-    printf '%s ' "${_labels[@]}"
-}
-
 # Labels are used to filter runner jobs
 get_runner_labels_json() {
 
     local _runner_labels=()
 
     local _default_labels=()
-    local _automatic_labels=()
-
     local _build_labels=()
+    local _runtime_labels=()
     local _extra_labels=()
-    local _remove_labels=()
 
     read -r -a _default_labels < <(get_default_labels)
-    read -r -a _automatic_labels < <(get_automatic_labels)
 
     # shellcheck disable=SC2086
     read -r -a _build_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_BUILD_LABELS:-})"
+    # shellcheck disable=SC2086
+    read -r -a _runtime_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_RUNTIME_LABELS:-})"
     # shellcheck disable=SC2086
     read -r -a _extra_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_EXTRA_LABELS:-})"
 
     # add the default labels
     _runner_labels+=("${_default_labels[@]}")
-    # add the automatic labels
-    _runner_labels+=("${_automatic_labels[@]}")
-
     # add the build labels
     _runner_labels+=("${_build_labels[@]}")
+    # add the runtime labels
+    _runner_labels+=("${_runtime_labels[@]}")
     # add the extra labels
     _runner_labels+=("${_extra_labels[@]}")
 
