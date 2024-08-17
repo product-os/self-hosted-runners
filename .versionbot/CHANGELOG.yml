@@ -1,4 +1,18 @@
 - commits:
+    - subject: Fix logging of GitHub API error responses
+      hash: add0194e0fd860fe399b4914a78798029659893e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.1.3
+  title: ""
+  date: 2024-08-17T00:25:35.231Z
+- commits:
     - subject: Add more network-related dockerd config options
       hash: 1e7a323531596bc94f97496554310fc4bba9f63f
       body: ""
