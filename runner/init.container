@@ -39,5 +39,8 @@ rm -f /home/runner/.jitconfig
 rm -f /home/runner/.credentials
 rm -f /home/runner/.credentials_rsaparams
 
+ACTIONS_RUNNER_RUNTIME_LABELS="$(get_runtime_labels)"
+export ACTIONS_RUNNER_RUNTIME_LABELS
+
 # Execute the s6-overlay entrypoint
 exec /init
