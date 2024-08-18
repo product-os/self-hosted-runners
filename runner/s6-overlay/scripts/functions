@@ -39,10 +39,6 @@ round_up_to_power_of_two() {
 get_runtime_labels() {
     local _labels=()
 
-    # Allow the user to disable automatic labels
-    truthy "${ACTIONS_RUNNER_NO_AUTOMATIC_LABELS:-}" && return
-    truthy "${ACTIONS_RUNNER_NO_RUNTIME_LABELS:-}" && return
-
     _labels+=("machine:$(uname -m)")
     _labels+=("arch:$(dpkg --print-architecture)")
 

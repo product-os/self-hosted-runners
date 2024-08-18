@@ -168,9 +168,6 @@ cleanup() {
 get_default_labels() {
     local _labels=()
 
-    # Allow the user to disable default labels
-    truthy "${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-}" && return
-
     _labels+=("self-hosted")
     _labels+=("Linux")
 
@@ -197,18 +194,20 @@ get_runner_labels_json() {
 
     # shellcheck disable=SC2086
     read -r -a _build_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_BUILD_LABELS:-})"
+
     # shellcheck disable=SC2086
     read -r -a _runtime_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_RUNTIME_LABELS:-})"
+
     # shellcheck disable=SC2086
     read -r -a _extra_labels <<<"$(printf '%s ' ${ACTIONS_RUNNER_EXTRA_LABELS:-})"
 
-    # add the default labels
-    _runner_labels+=("${_default_labels[@]}")
-    # add the build labels
-    _runner_labels+=("${_build_labels[@]}")
-    # add the runtime labels
-    _runner_labels+=("${_runtime_labels[@]}")
-    # add the extra labels
+    # Allow the user to disable default labels
+    truthy "${ACTIONS_RUNNER_NO_DEFAULT_LABELS:-}" ||  _runner_labels+=("${_default_labels[@]}")
+    # Allow the user to disable build labels
+    truthy "${ACTIONS_RUNNER_NO_AUTOMATIC_LABELS:-}" || truthy "${ACTIONS_RUNNER_NO_BUILD_LABELS:-}" || _runner_labels+=("${_build_labels[@]}")
+    # Allow the user to disable runtime labels
+    truthy "${ACTIONS_RUNNER_NO_AUTOMATIC_LABELS:-}" || truthy "${ACTIONS_RUNNER_NO_RUNTIME_LABELS:-}" || _runner_labels+=("${_runtime_labels[@]}")
+    # Add any extra labels
     _runner_labels+=("${_extra_labels[@]}")
 
     # Format as JSON array
