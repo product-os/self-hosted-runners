@@ -1,4 +1,23 @@
 - commits:
+    - subject: Move runtime label generation out of register script
+      hash: b48e43adb0d8cfb2f85f3c9106618bc43bf885b6
+      body: |
+        The register script is shared by the VM runtime
+        but both runtimes have different label requirements.
+
+        With this change each runtime can set ACTIONS_RUNNER_RUNTIME_LABELS
+        during init with whatever functions are appropriate.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.1.4
+  title: ""
+  date: 2024-08-18T20:15:33.507Z
+- commits:
     - subject: Fix logging of GitHub API error responses
       hash: add0194e0fd860fe399b4914a78798029659893e
       body: ""
