@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.32
+      hash: 0194d8c8a7117ab58a26a969a5938474e3614df8
+      body: |
+        Update aws/aws-cli from 2.17.31 to 2.17.32
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.5
+  title: ""
+  date: 2024-08-18T21:17:13.633Z
+- commits:
     - subject: Move runtime label generation out of register script
       hash: b48e43adb0d8cfb2f85f3c9106618bc43bf885b6
       body: |
