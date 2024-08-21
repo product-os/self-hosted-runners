@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.17.0
+      hash: 13dada762ddabfb5b7e160eb1e22e7e88d7b61a7
+      body: |
+        Update node from 20.16.0 to 20.17.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.8
+  title: ""
+  date: 2024-08-21T18:16:49.225Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.34
       hash: c98dec5cd5823bb061a49451643e21aab365d693
       body: |
