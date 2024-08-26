@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency nabeken/go-github-apps to v0.1.17
+      hash: 5af6e13e1c89d3d6630704481512e141cf52558e
+      body: |
+        Update nabeken/go-github-apps from 0.1.16 to 0.1.17
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.14
+  title: ""
+  date: 2024-08-26T21:13:26.449Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.38
       hash: 60e60c15b9877f546b6db207371fb2b71e153617
       body: |
