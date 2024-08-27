@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.39
+      hash: 4228c67172cb43c77739b3944d61676cf0e0d0a7
+      body: |
+        Update aws/aws-cli from 2.17.38 to 2.17.39
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.15
+  title: ""
+  date: 2024-08-27T20:10:46.139Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.1.17
       hash: 5af6e13e1c89d3d6630704481512e141cf52558e
       body: |
