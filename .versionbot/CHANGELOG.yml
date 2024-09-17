@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v19
+      hash: b2f51c1c2ba3b0bfad99a06612051e22d928e6d7
+      body: |
+        Update balena-io/balena-cli from 18.2.34 to 19.0.10
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.23
+  title: ""
+  date: 2024-09-17T19:22:46.679Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.2.1
       hash: 2d10df492956a2ddf4d11db433daa17d488ec12a
       body: |
