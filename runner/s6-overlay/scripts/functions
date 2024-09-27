@@ -83,5 +83,8 @@ get_runtime_labels() {
         _labels+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
     fi
 
+    # replace spaces with underscores
+    _labels=("${_labels[@]// /_}")
+
     printf '%s ' "${_labels[@]}"
 }
