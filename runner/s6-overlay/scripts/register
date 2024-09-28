@@ -46,21 +46,6 @@ get_geo() {
     fi
 }
 
-round_up_to_power_of_two() {
-    local _value=$1
-    awk -v v="${_value}" 'BEGIN {
-        p=int(log(v)/log(2));
-        if (2^p < v) p++;
-        print 2^p
-    }'
-}
-
-get_rounded_mem_gib() {
-    local _memgib
-    _memgib="$(free -g | awk '/^Mem:/ {print $2}')"
-    round_up_to_power_of_two "${_memgib}"
-}
-
 get_app_token() {
     local _app_id="${1}"
     local _installation_id="${2}"
