@@ -1,4 +1,21 @@
 - commits:
+    - subject: Replace spaces in labels with underscores
+      hash: 0d0af80e5672d80930ece0a80f23a082ac670437
+      body: |
+        Currently if a provided label has whitespace it
+        will be treated as two labels, and this often happens
+        when processing the board_name from sys.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.1.31
+  title: ""
+  date: 2024-09-28T18:48:57.828Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.56
       hash: 590c793661e2c56d4e55663f86645432ac70d96f
       body: |
