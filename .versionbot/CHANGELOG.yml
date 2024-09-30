@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.61
+      hash: 01ef4b79f85d4e938848c822f2e384911109c448
+      body: |
+        Update aws/aws-cli from 2.17.56 to 2.17.61
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.32
+  title: ""
+  date: 2024-09-30T23:21:52.329Z
+- commits:
     - subject: Replace spaces in labels with underscores
       hash: 0d0af80e5672d80930ece0a80f23a082ac670437
       body: |
