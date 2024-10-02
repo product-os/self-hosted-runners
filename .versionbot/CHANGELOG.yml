@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.17.64
+      hash: 86b26552a914a6047bf9199e293ee01f0121903b
+      body: |
+        Update aws/aws-cli from 2.17.63 to 2.17.64
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.37
+  title: ""
+  date: 2024-10-02T20:16:46.705Z
+- commits:
     - subject: Update golang Docker tag to v1.23.2
       hash: 8ec359a10a3d6fcf879d95d5e5810ee4829edc4b
       body: |
