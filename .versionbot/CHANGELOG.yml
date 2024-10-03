@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.9.0
+      hash: f8aa4ee5c1ca478e91891af07060680cb66c7978
+      body: |
+        Update npm from 10.8.3 to 10.9.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.38
+  title: ""
+  date: 2024-10-03T19:25:12.672Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.17.64
       hash: 86b26552a914a6047bf9199e293ee01f0121903b
       body: |
