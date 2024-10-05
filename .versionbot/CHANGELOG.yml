@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency node to v20.18.0
+      hash: d5fb3d8f32ee7df7fa86f02a3cda535c171f9b09
+      body: |
+        Update node from 20.17.0 to 20.18.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.42
+  title: ""
+  date: 2024-10-05T04:18:54.471Z
+- commits:
     - subject: Update dependency actions/runner to v2.320.0
       hash: bf4e9500d71fb327869a8be5b60a546f8f8eedab
       body: |
