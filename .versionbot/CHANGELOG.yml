@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.320.0
+      hash: bf4e9500d71fb327869a8be5b60a546f8f8eedab
+      body: |
+        Update actions/runner from 2.319.1 to 2.320.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.41
+  title: ""
+  date: 2024-10-05T03:26:10.682Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.18.0
       hash: 89e9d60374c7a8ee4f0550a35830e82b15db8030
       body: |
