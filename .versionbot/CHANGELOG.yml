@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: d0e92ae406dd709550aaa111044b02c3fb1f7756
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 8.0.8 to 8.0.10
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.47
+  title: ""
+  date: 2024-10-08T17:17:29.603Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v19.0.18
       hash: 05b0fd18d71b01d1a8ea719447f986dcaed90356
       body: |
