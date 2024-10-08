@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.18.2
+      hash: 04b1f9b086f78eeae93daa01eca7b2369ba9126d
+      body: |
+        Update aws/aws-cli from 2.18.1 to 2.18.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.48
+  title: ""
+  date: 2024-10-08T20:14:15.491Z
+- commits:
     - subject: Update dotnet monorepo
       hash: d0e92ae406dd709550aaa111044b02c3fb1f7756
       body: |
