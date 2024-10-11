@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency just-containers/s6-overlay to v3.2.0.2
+      hash: 7f42003d91c305bf00d1a9d40826239fcc2bb0f0
+      body: |
+        Update just-containers/s6-overlay from 3.2.0.0 to 3.2.0.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.51
+  title: ""
+  date: 2024-10-11T13:27:38.050Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v19.0.20
       hash: 3c1c353cf1962b95eaa3766941b6c519738da200
       body: |
