@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v19.0.20
+      hash: 3c1c353cf1962b95eaa3766941b6c519738da200
+      body: |
+        Update balena-io/balena-cli from 19.0.18 to 19.0.20
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.50
+  title: ""
+  date: 2024-10-11T12:13:41.129Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.18.4
       hash: 1ce9cf8a068ca7e4b8d98913e92f9aeb4431debb
       body: |
