@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.18.9
+      hash: 1aea9b2054eeb39009072c7373e3ee6359861b92
+      body: |
+        Update aws/aws-cli from 2.18.8 to 2.18.9
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.62
+  title: ""
+  date: 2024-10-17T20:21:20.683Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.18.8
       hash: cc15edb3a569bf2d9f047065555dadb9841de983
       body: |
