@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.4.6
+      hash: 4bcef334c414879740d07bf9f5e1ca03b8de057a
+      body: |
+        Update powershell/powershell from 7.4.5 to 7.4.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.76
+  title: ""
+  date: 2024-10-22T23:16:20.428Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.18.12
       hash: 53c1d279fb8e3e9f128a2f466e70df28744f10aa
       body: |
