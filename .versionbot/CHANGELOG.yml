@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.18.12
+      hash: 53c1d279fb8e3e9f128a2f466e70df28744f10aa
+      body: |
+        Update aws/aws-cli from 2.18.11 to 2.18.12
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.75
+  title: ""
+  date: 2024-10-22T20:20:31.842Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v19.14.0
       hash: c87e70742a04c92460ab0633b4446b7762dd11a5
       body: |
