@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.18.16
+      hash: 1b283a9c0522ebfc9e0b303b8f151e966b74a9dc
+      body: |
+        Update aws/aws-cli from 2.18.15 to 2.18.16
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Self-hosted Renovate Bot
+      nested: []
+  version: 6.1.83
+  title: ""
+  date: 2024-10-28T20:17:59.780Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.18.15
       hash: 9e5a2df86560798fe50f82fda8da28f66290963d
       body: |
