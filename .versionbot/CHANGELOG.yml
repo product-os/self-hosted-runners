@@ -1,4 +1,15 @@
 - commits:
+    - subject: Explicitly set GH_TOKEN permissions
+      hash: 716f85c326c6ed54fa1aec1fb1849a8847a47bc7
+      body: ""
+      footer:
+        change-type: patch
+      author: Anton Belodedenko
+      nested: []
+  version: 6.1.88
+  title: ""
+  date: 2024-11-18T21:18:27.854Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.19.3
       hash: 1da8c2da00a58e41eaf37e05ca96ec64989b3d51
       body: |
