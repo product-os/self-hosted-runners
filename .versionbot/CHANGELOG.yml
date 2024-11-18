@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.19.5
+      hash: d0034d636a340aafa935869d00461ea73b5e0b9b
+      body: |
+        Update aws/aws-cli from 2.19.3 to 2.19.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.1.90
+  title: ""
+  date: 2024-11-18T23:16:12.789Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.6.2
       hash: 4d7d8d9556c0d984f2f188ebbd1ffe32f6124eb0
       body: |
