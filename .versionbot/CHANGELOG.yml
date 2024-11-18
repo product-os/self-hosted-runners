@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.6.2
+      hash: 4d7d8d9556c0d984f2f188ebbd1ffe32f6124eb0
+      body: |
+        Update actions/runner-container-hooks from 0.6.1 to 0.6.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.1.89
+  title: ""
+  date: 2024-11-18T22:19:33.517Z
+- commits:
     - subject: Explicitly set GH_TOKEN permissions
       hash: 716f85c326c6ed54fa1aec1fb1849a8847a47bc7
       body: ""
