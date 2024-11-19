@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.44.5
+      hash: d54430acdc11c9aee47dd73054297363612fb61b
+      body: |
+        Update mikefarah/yq from 4.44.3 to 4.44.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.1.91
+  title: ""
+  date: 2024-11-19T00:12:17.906Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.19.5
       hash: d0034d636a340aafa935869d00461ea73b5e0b9b
       body: |
