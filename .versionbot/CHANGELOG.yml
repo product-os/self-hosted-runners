@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 9860071a1a726f81156f88408e0dbdb3eee81be8
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 8.0.10 to 8.0.11
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.1.92
+  title: ""
+  date: 2024-11-19T01:35:06.281Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.44.5
       hash: d54430acdc11c9aee47dd73054297363612fb61b
       body: |
