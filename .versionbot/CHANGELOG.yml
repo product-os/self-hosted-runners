@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.63.0
+      hash: fc251084826e98f066dccb57311c04744cbc34d2
+      body: |
+        Update cli/cli from 2.60.1 to 2.63.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.1.99
+  title: ""
+  date: 2024-12-02T23:12:25.688Z
+- commits:
     - subject: Update dependency npm to v10.9.1
       hash: ac26d6d4b0ab76a225e0e3bd4c5cade62d3ed852
       body: |
