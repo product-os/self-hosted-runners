@@ -83,6 +83,10 @@ get_runtime_labels() {
         _labels+=("board:$(</sys/devices/virtual/dmi/id/board_name)")
     fi
 
+    if command -v lscpu >/dev/null; then
+        _labels+=("cpu_model:$(lscpu | awk -F': *' '/Model name/ {print $2}')")
+    fi
+
     # replace spaces with underscores
     _labels=("${_labels[@]// /_}")
 
