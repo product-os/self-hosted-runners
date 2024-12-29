@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.23.4
+      hash: de876936e2e8721302006101ac654f04b9f2beb4
+      body: |
+        Update golang from 1.23.3 to 1.23.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.1
+  title: ""
+  date: 2024-12-29T00:17:02.507Z
+- commits:
     - subject: Add CPU model name to automatic runner labels
       hash: 13aa897443450e27429af5174c17c8f1a5ee724c
       body: ""
