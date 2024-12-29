@@ -87,9 +87,14 @@ runs:
       run: |
         docker info
         docker run hello-world
-        touch runner/.env
-        docker compose --project-directory runner config
-        yq '.' runner/docker-compose.yml
+
+    - name: Test compose
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      working-directory: tests/compose
+      run: |
+        docker compose -f docker-compose.a.yml -f docker-compose.b.yml config > docker-compose.yml
+        yq '.' docker-compose.yml
+        docker compose run test
 
     - name: Check packages
       shell: bash --noprofile --norc -eo pipefail -x {0}

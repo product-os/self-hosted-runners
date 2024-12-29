@@ -1,0 +1,8 @@
+
+services:
+  sut:
+    image: alpine
+    command:
+      - sh
+      - -c
+      - apk add curl && curl -v --retry 5 --retry-delay 2 web:80
