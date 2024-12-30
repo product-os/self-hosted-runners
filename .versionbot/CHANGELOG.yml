@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v10.9.2
+      hash: 39705b0f204f388f4bd8b3c561eb59e0a39369b9
+      body: |
+        Update npm from 10.9.1 to 10.9.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.4
+  title: ""
+  date: 2024-12-30T16:30:39.358Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.44.6
       hash: 3b4c92c03b33afbe4c155b7ea16948784e68be53
       body: |
