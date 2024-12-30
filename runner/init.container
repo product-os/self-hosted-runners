@@ -5,7 +5,8 @@ set -e
 # shellcheck disable=SC1091
 . /etc/s6-overlay/scripts/functions
 
-# shellcheck disable=SC2310
+truthy "${DISABLE:-}" && exit 0
+
 truthy "${VERBOSE:-}" && set -x
 
 # these tmpfs mounts need the executable bit set
