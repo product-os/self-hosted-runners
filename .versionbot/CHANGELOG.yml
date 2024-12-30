@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.44.6
+      hash: 3b4c92c03b33afbe4c155b7ea16948784e68be53
+      body: |
+        Update mikefarah/yq from 4.44.5 to 4.44.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.3
+  title: ""
+  date: 2024-12-30T15:24:59.748Z
+- commits:
     - subject: Pin docker compose to 2.29.7 to avoid regression bug
       hash: 05019a31c7859b63fe1e77ea00513bd0c12e2163
       body: |
