@@ -1,4 +1,31 @@
 - commits:
+    - subject: Pin docker compose to 2.29.7 to avoid regression bug
+      hash: 05019a31c7859b63fe1e77ea00513bd0c12e2163
+      body: |
+        In v2.32.1 there is an issue with depends_on not being
+        propagated when two compose files are merged via the config command
+        and one extends the other.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Test docker compose service dependencies
+      hash: 321d9787140af96de1df8c48d51fbebb219392b4
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.2.2
+  title: ""
+  date: 2024-12-30T12:19:18.487Z
+- commits:
     - subject: Update golang Docker tag to v1.23.4
       hash: de876936e2e8721302006101ac654f04b9f2beb4
       body: |
