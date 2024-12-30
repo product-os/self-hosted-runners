@@ -193,15 +193,24 @@ RUN mkdir -p /etc/apt/keyrings \
 # otherwise the apt installation of docker-ce will create the group with a different GID
 RUN groupadd docker --gid 123
 
+# renovate: datasource=github-releases depName=docker/cli
+ARG DOCKER_VERSION=v27.4.1
+
+# renovate: datasource=github-releases depName=docker/compose
+ARG DOCKER_COMPOSE_VERSION=v2.29.7
+
+# renovate: datasource=github-releases depName=docker/buildx
+ARG DOCKER_BUILDX_VERSION=v0.19.3
+
 ARG PACKAGES_common="\
     bind9-dnsutils \
     build-essential \
     cpu-checker \
     containerd.io \
-    docker-buildx-plugin \
-    docker-ce-cli \
-    docker-ce \
-    docker-compose-plugin \
+    docker-buildx-plugin=${DOCKER_BUILDX_VERSION/v/}* \
+    docker-ce-cli=5:${DOCKER_VERSION/v/}* \
+    docker-ce=5:${DOCKER_VERSION/v/}* \
+    docker-compose-plugin=${DOCKER_COMPOSE_VERSION/v/}* \
     dosfstools \
     git \
     htop \
