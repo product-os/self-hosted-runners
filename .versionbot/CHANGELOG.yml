@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v20.1.5
+      hash: 037f581f0e6fe67ff5ebf204cc010d407ffcff5b
+      body: |
+        Update balena-io/balena-cli from 20.0.7 to 20.1.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.5
+  title: ""
+  date: 2024-12-30T17:38:49.785Z
+- commits:
     - subject: Update dependency npm to v10.9.2
       hash: 39705b0f204f388f4bd8b3c561eb59e0a39369b9
       body: |
