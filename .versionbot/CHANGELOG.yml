@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.64.0
+      hash: 1712a8ac8554c39fdb1a10434ea52a290723295b
+      body: |
+        Update cli/cli from 2.63.2 to 2.64.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.8
+  title: ""
+  date: 2024-12-31T06:13:38.762Z
+- commits:
     - subject: Update dependency cli/cli to v2.63.2
       hash: 04038f019aa45b9609b3041e8a88768f1d67df5d
       body: |
