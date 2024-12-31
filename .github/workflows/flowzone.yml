@@ -25,7 +25,7 @@ permissions:
   repository-projects: none
   security-events: none
   statuses: none
-  
+
   # Additional permissions needed by this repo, such as:
   packages: write # Allow Flowzone to publish to ghcr.io
 

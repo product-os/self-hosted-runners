@@ -6,7 +6,8 @@ One of the benefits is access to features of the host kernel, including KVM.
 
 Not recommended for public repositories!
 
-This image is also used as the rootfs for VM-isolated runners [here](https://github.com/product-os/github-runner-vm).
+This image is also used as the rootfs for VM-isolated runners
+[here](https://github.com/product-os/github-runner-vm).
 
 ## Usage
 

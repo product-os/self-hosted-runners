@@ -77,7 +77,7 @@ runs:
         ip addr
         ip link list
         ip route
-        
+
         npm ping
 
         curl -fsSL https://raw.githubusercontent.com/dylanaraps/neofetch/7.1.0/neofetch | bash
