@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v11
+      hash: aa52b42908e43c2d0dea4103ffeb1b5d461e2112
+      body: |
+        Update npm from 10.9.2 to 11.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.10
+  title: ""
+  date: 2024-12-31T08:30:37.753Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.22.26
       hash: 43443a29479cdfecfcef3ef33b42d2b6d36ae2fb
       body: |
