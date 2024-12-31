@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.63.2
+      hash: 04038f019aa45b9609b3041e8a88768f1d67df5d
+      body: |
+        Update cli/cli from 2.63.1 to 2.63.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.7
+  title: ""
+  date: 2024-12-31T05:15:23.441Z
+- commits:
     - subject: Add pre-commit config and lint files
       hash: 26f5697b0698ed94eb5a449b32deb4d34cdae521
       body: ""
