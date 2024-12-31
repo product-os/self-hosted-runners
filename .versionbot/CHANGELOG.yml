@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add pre-commit config and lint files
+      hash: 26f5697b0698ed94eb5a449b32deb4d34cdae521
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.2.6
+  title: ""
+  date: 2024-12-31T04:21:10.431Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v20.1.5
       hash: 037f581f0e6fe67ff5ebf204cc010d407ffcff5b
       body: |
