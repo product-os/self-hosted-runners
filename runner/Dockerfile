@@ -59,7 +59,7 @@ RUN eget powershell/powershell \
 FROM eget-build AS balena-cli
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v20.1.6
+ARG BALENA_CLI_VERSION=v20.2.1
 
 RUN eget balena-io/balena-cli \
     --asset "standalone" --asset ".zip"\
