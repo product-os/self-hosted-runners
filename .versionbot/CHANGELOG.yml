@@ -1,4 +1,20 @@
 - commits:
+    - subject: Allow the runner container to be disabled via env var
+      hash: 13f109a782a0db88249724e5a88c5aad626932e1
+      body: |
+        This is common practice to allow granular control over
+        which services are enabled at runtime.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.2.13
+  title: ""
+  date: 2025-01-02T05:58:00.983Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v20.1.6
       hash: 2598698c7d204ef3ed24e10ed804d766264b7eba
       body: |
