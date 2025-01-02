@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v20.2.1
+      hash: 8923379dd697425f88a249445e0bf78cf74344d3
+      body: |
+        Update balena-io/balena-cli from 20.1.6 to 20.2.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.15
+  title: ""
+  date: 2025-01-02T07:19:16.384Z
+- commits:
     - subject: Update pre-commit hook rhysd/actionlint to v1.7.5
       hash: 290daa2908dd09496266307ba9f3b66607d4bdc4
       body: |
