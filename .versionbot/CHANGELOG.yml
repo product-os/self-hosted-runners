@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook rhysd/actionlint to v1.7.5
+      hash: 290daa2908dd09496266307ba9f3b66607d4bdc4
+      body: |
+        Update rhysd/actionlint from 1.7.3 to 1.7.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.14
+  title: ""
+  date: 2025-01-02T06:23:45.274Z
+- commits:
     - subject: Allow the runner container to be disabled via env var
       hash: 13f109a782a0db88249724e5a88c5aad626932e1
       body: |
