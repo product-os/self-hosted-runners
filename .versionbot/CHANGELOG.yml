@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v4
+      hash: 426b90465214599a8b563f266009a13520974a06
+      body: |
+        Update pre-commit/pre-commit-hooks from 3.4.0 to 4.6.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.17
+  title: ""
+  date: 2025-01-03T14:14:11.319Z
+- commits:
     - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v3.4.0
       hash: 09d10a18bdb5065a1f7bda6bd1c6876b4d85ddc4
       body: |
