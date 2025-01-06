@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.22.29
+      hash: 8602cbc4018282cd4afc1de32d342f63447a265a
+      body: |
+        Update aws/aws-cli from 2.22.26 to 2.22.29
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.18
+  title: ""
+  date: 2025-01-06T21:16:53.091Z
+- commits:
     - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v4
       hash: 426b90465214599a8b563f266009a13520974a06
       body: |
