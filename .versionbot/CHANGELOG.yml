@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook rhysd/actionlint to v1.7.6
+      hash: 9f3f2a2a94143c3a4dcde1ed18887ab97d7a2da1
+      body: |
+        Update rhysd/actionlint from 1.7.5 to 1.7.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.2.20
+  title: ""
+  date: 2025-01-06T23:15:24.117Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.2.2
       hash: 1782b52f2a5dfec69035962242cd314f464f90e8
       body: |
