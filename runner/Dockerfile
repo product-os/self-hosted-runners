@@ -170,9 +170,9 @@ RUN eget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$
 # Ubuntu 20.04 (focal)
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.36-focal AS focal
 # Ubuntu 22.04 (jammy)
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.11-jammy AS jammy
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.12-jammy AS jammy
 # Ubuntu 24.04 (noble)
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.11-noble AS noble
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.12-noble AS noble
 
 # hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
