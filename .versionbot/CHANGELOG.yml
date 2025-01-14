@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.65.0
+      hash: 6ff02bea2a3222b99319fbe006a61681ecd034df
+      body: |
+        Update cli/cli from 2.64.0 to 2.65.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.1
+  title: ""
+  date: 2025-01-14T17:13:08.213Z
+- commits:
     - subject: Add optional s6-overlay symlink packages
       hash: d266242eafaa37bbfd46b1581c3eb7d62cc8167e
       body: |
