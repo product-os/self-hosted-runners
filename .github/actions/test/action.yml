@@ -112,6 +112,7 @@ runs:
         python3 --version
         pwsh -Version
         runc --version
+        s6-rc help
         socat -V
         yq --version
         zstd --version

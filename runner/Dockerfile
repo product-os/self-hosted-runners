@@ -119,8 +119,21 @@ RUN eget just-containers/s6-overlay \
     --all --file "*" --to "./" \
     --tag "${S6_OVERLAY_VERSION}"
 
+# hadolint ignore=DL3059
 RUN eget just-containers/s6-overlay \
     --asset "s6-overlay-noarch.tar.xz" \
+    --all --file "*" --to "./" \
+    --tag "${S6_OVERLAY_VERSION}"
+
+# hadolint ignore=DL3059
+RUN eget just-containers/s6-overlay \
+    --asset "s6-overlay-symlinks-noarch.tar.xz" \
+    --all --file "*" --to "./" \
+    --tag "${S6_OVERLAY_VERSION}"
+
+# hadolint ignore=DL3059
+RUN eget just-containers/s6-overlay \
+    --asset "s6-overlay-symlinks-arch.tar.xz" \
     --all --file "*" --to "./" \
     --tag "${S6_OVERLAY_VERSION}"
 
@@ -365,6 +378,7 @@ RUN aws --version && \
     pwsh -Version && \
     python3 --version && \
     runc --version && \
+    s6-rc help && \
     socat -V && \
     yq --version && \
     zstd --version
