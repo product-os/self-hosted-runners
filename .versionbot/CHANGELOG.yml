@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.45.1
+      hash: 189c3142640faad42fa3b5bb5c092219b0a442ee
+      body: |
+        Update mikefarah/yq from 4.44.6 to 4.45.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.8
+  title: ""
+  date: 2025-01-15T00:14:43.412Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8.0.12
       hash: 01399e6a4757f46ec8cfee1e72736557025a7f50
       body: |
