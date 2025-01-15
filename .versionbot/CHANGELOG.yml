@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v20.2.3
+      hash: f193cb62808238f482fe74730a5725b2f6cc19b4
+      body: |
+        Update balena-io/balena-cli from 20.2.2 to 20.2.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.3.9
+  title: ""
+  date: 2025-01-15T19:15:55.591Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.45.1
       hash: 189c3142640faad42fa3b5bb5c092219b0a442ee
       body: |
