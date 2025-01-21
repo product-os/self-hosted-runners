@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# The main goal of this init script is to set up the filesystem
+# in a way that changes are not persisted across container restarts.
+
+# This is done by creating an overlayfs mount with the current root
+# as the lower layer, and a temporary directory as the upper layer.
+# Then, the chroot environment is executed with the overlayfs mount
+# as the root directory.
+
 set -e
 
 # shellcheck disable=SC1091
@@ -9,39 +17,57 @@ truthy "${DISABLE:-}" && exit 0
 
 truthy "${VERBOSE:-}" && set -x
 
-# these tmpfs mounts need the executable bit set
-mount -o remount,rw,exec tmpfs /tmp
-mount -o remount,rw,exec tmpfs /run
+# These tmpfs mounts need the executable bit set
+mount -v -o remount,rw,exec tmpfs /tmp
+mount -v -o remount,rw,exec tmpfs /run
 
-# Create tmpfs mounts for each top-level directory under /
-for dir in /*; do
-    [[ -d "${dir}" ]] || continue
+# Ensure the rootfs directory is empty.
+# This directory must be an ext4 or tmpfs volume, and not overlayfs.
+rm -rf /rootfs/*
 
-    # skip directories that are mount points
-    if mountpoint -q "${dir}"; then
-        continue
-    fi
+# Create directories for overlay structure
+mkdir -vp /rootfs/lower    # mount point for ro base layer
+mkdir -vp /rootfs/upper    # rw layer
+mkdir -vp /rootfs/work     # required by overlayfs
+mkdir -vp /rootfs/merged   # the final merged view
 
-    echo "Remounting ${dir} as tmpfs..."
+# Bind mount the current root as the lower (ro) layer
+mount -v --rbind / /rootfs/lower
+mount -v -o remount,ro,bind /rootfs/lower
 
-    # create a tmpfs mount
-    tmp="$(mktemp -d)"
-    mount -t tmpfs tmpfs "${tmp}"
+# Set up the overlay mount
+mount -v -t overlay overlay \
+    -o lowerdir=/rootfs/lower,upperdir=/rootfs/upper,workdir=/rootfs/work \
+    /rootfs/merged
 
-    # copy all files from the directory to the tmpfs mount
-    rsync -aAX "${dir}/" "${tmp}/"
+root_id="$(findmnt --noheadings --output ID --raw /)"
 
-    # bind mount the tmpfs over / making it ephemeral
-    mount -v --bind "${tmp}" "${dir}"
+# Find and replicate all mounts with rbind
+# shellcheck disable=SC2312
+findmnt --types ext4,tmpfs,devtmpfs,proc,sysfs,shm --output TARGET,PARENT --noheadings --uniq | while read -r target parent; do
+    # Skip the root mount
+    [[ "${target}" == "/" ]] && continue
+
+    # Skip the rootfs mount
+    [[ "${target}" == "/rootfs" ]] && continue
+
+    # Skip submounts (where the parent is not the root)
+    [[ "${parent}" != "${root_id}" ]] && continue
+
+    # Use rbind to replicate the mount and submounts
+    mount -v --rbind "${target}" "/rootfs/merged${target}"
 done
 
-# Remove any existing runner configuration files
-rm -f /home/runner/.jitconfig
-rm -f /home/runner/.credentials
-rm -f /home/runner/.credentials_rsaparams
+# Print the new mounts for debugging
+findmnt --types ext4,tmpfs,devtmpfs,proc,sysfs,shm --uniq
+
+# Assert these docker files are mounted in the chroot
+diff /etc/resolv.conf /rootfs/merged/etc/resolv.conf
+diff /etc/hosts /rootfs/merged/etc/hosts
+diff /etc/hostname /rootfs/merged/etc/hostname
 
 ACTIONS_RUNNER_RUNTIME_LABELS="$(get_runtime_labels)"
 export ACTIONS_RUNNER_RUNTIME_LABELS
 
 # Execute the s6-overlay entrypoint
-exec /init
+exec chroot /rootfs/merged /init
