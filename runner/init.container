@@ -40,21 +40,18 @@ mount -v -t overlay overlay \
     -o lowerdir=/rootfs/lower,upperdir=/rootfs/upper,workdir=/rootfs/work \
     /rootfs/merged
 
-root_id="$(findmnt --noheadings --output ID --raw /)"
+# Get the root mount ID
+root_id="$(awk '$5 == "/" {print $1}' /proc/self/mountinfo)"
 
-# Find and replicate all mounts with rbind
-# shellcheck disable=SC2312
-findmnt --types ext4,tmpfs,devtmpfs,proc,sysfs,shm --output TARGET,PARENT --noheadings --uniq | while read -r target parent; do
-    # Skip the root mount
-    [[ "${target}" == "/" ]] && continue
+# Get all mounts whose parent ID matches root_id
+mounts="$(awk -v root="${root_id}" '$2 == root { print $5 }' /proc/self/mountinfo)"
 
-    # Skip the rootfs mount
-    [[ "${target}" == "/rootfs" ]] && continue
+# Iterate over the mounts and recursively bind them to the merged rootfs
+for target in ${mounts}; do
 
-    # Skip submounts (where the parent is not the root)
-    [[ "${parent}" != "${root_id}" ]] && continue
+    # Skip the rootfs mounts
+    [[ "${target}" =~ ^/rootfs ]] && continue
 
-    # Use rbind to replicate the mount and submounts
     mount -v --rbind "${target}" "/rootfs/merged${target}"
 done
 
