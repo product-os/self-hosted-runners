@@ -1,4 +1,24 @@
 - commits:
+    - subject: Use chroot and overlayfs for container runtime filesystem
+      hash: 73da5819999d010918628d035e369afac0cdf393
+      body: |
+        The main goal of this init script is to set up the filesystem
+        in a way that changes are not persisted across container restarts.
+
+        Using overlayfs allows faster startup as we don't have to copy
+        the root filesystem on every boot, but we can still isolate
+        any runtime filesystem changes in a separate layer.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.4.0
+  title: ""
+  date: 2025-01-23T16:27:34.029Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v20.2.3
       hash: f193cb62808238f482fe74730a5725b2f6cc19b4
       body: |
