@@ -40,7 +40,7 @@ runs:
         dpkg --print-architecture
         free -h
         df -h
-        mount
+        findmnt
         lsblk
 
     - name: Check devices

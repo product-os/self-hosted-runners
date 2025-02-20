@@ -17,54 +17,35 @@ truthy "${DISABLE:-}" && exit 0
 
 truthy "${VERBOSE:-}" && set -x
 
-# These tmpfs mounts need the executable bit set
-mount -v -o remount,rw,exec tmpfs /tmp
-mount -v -o remount,rw,exec tmpfs /run
+# When provided with a docker host socket, this container should relaunch
+# copy of itself with the --rm flag to guarantee ephemeral storage.
+if docker info >/dev/null 2>&1 && [[ -n "${DOCKER_HOST:-}" ]]; then
+    # For now assume the hostname is the short container ID.
+    container_id="$(docker inspect -f '{{.Id}}' "$(hostname)")"
 
-# Ensure the rootfs directory is empty.
-# This directory must be an ext4 or tmpfs volume, and not overlayfs.
-rm -rf /rootfs/*
+    # Docker inspect template to generate a run command with the same properties as the current container.
+    # https://gist.github.com/efrecon/8ce9c75d518b6eb863f667442d7bc679
+    run_command=$(docker inspect --format "$(</run.tpl)" "${container_id}")
 
-# Create directories for overlay structure
-mkdir -vp /rootfs/lower    # mount point for ro base layer
-mkdir -vp /rootfs/upper    # rw layer
-mkdir -vp /rootfs/work     # required by overlayfs
-mkdir -vp /rootfs/merged   # the final merged view
+    # Remove the DOCKER_HOST variable from the run command to prevent recursion!
+    run_command=$(echo "${run_command}" | sed '/DOCKER_HOST/d')
+    run_command=$(echo "${run_command}" | sed '/docker.sock/d')
+    run_command=$(echo "${run_command}" | sed '/balena.sock/d')
 
-# Bind mount the current root as the lower (ro) layer
-mount -v --rbind / /rootfs/lower
-mount -v -o remount,ro,bind /rootfs/lower
-
-# Set up the overlay mount
-mount -v -t overlay overlay \
-    -o lowerdir=/rootfs/lower,upperdir=/rootfs/upper,workdir=/rootfs/work \
-    /rootfs/merged
-
-# Get the root mount ID
-root_id="$(awk '$5 == "/" {print $1}' /proc/self/mountinfo)"
-
-# Get all mounts whose parent ID matches root_id
-mounts="$(awk -v root="${root_id}" '$2 == root { print $5 }' /proc/self/mountinfo)"
-
-# Iterate over the mounts and recursively bind them to the merged rootfs
-for target in ${mounts}; do
-
-    # Skip the rootfs mounts
-    [[ "${target}" =~ ^/rootfs ]] && continue
-
-    mount -v --rbind "${target}" "/rootfs/merged${target}"
-done
-
-# Print the new mounts for debugging
-findmnt --types ext4,tmpfs,devtmpfs,proc,sysfs,shm --uniq
-
-# Assert these docker files are mounted in the chroot
-diff /etc/resolv.conf /rootfs/merged/etc/resolv.conf
-diff /etc/hosts /rootfs/merged/etc/hosts
-diff /etc/hostname /rootfs/merged/etc/hostname
+    echo "RUN COMMAND: ${run_command}"
+    eval "exec ${run_command}" >/dev/null 2>&1
+    exit 0
+fi
 
 ACTIONS_RUNNER_RUNTIME_LABELS="$(get_runtime_labels)"
 export ACTIONS_RUNNER_RUNTIME_LABELS
 
-# Execute the s6-overlay entrypoint
-exec chroot /rootfs/merged /init
+if truthy "${DRY_RUN:-}"; then
+    echo "PERFORMING DRY RUN"
+    rm /etc/s6-overlay/s6-rc.d/user/contents.d/runner
+    # Execute the s6-overlay entrypoint
+    exec /init /etc/s6-overlay/scripts/healthcheck
+else
+    # Execute the s6-overlay entrypoint
+    exec /init
+fi

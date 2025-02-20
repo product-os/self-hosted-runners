@@ -9,3 +9,6 @@ services:
       - /tmp
       - /run
       - /scratch
+    labels:
+      # This allows the runner to re-launch itself in an ephemeral container
+      io.balena.features.balena-socket: true
