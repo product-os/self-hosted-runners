@@ -9,11 +9,8 @@ services:
     # see README for more environment variables
     env_file:
       - .env
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       VERBOSE: ${VERBOSE:-true}
       ACTIONS_RUNNER_REGISTRATION_SLUG: repos/product-os/self-hosted-runners
       ACTIONS_RUNNER_EXTRA_LABELS: run_id:${GITHUB_RUN_ID:-dev}
       ACTIONS_RUNNER_NO_DEFAULT_LABELS: true
-      DOCKER_HOST: unix:///var/run/docker.sock

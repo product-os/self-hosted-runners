@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2312
 
 # The main goal of this init script is to set up the filesystem
 # in a way that changes are not persisted across container restarts.
@@ -17,35 +18,23 @@ truthy "${DISABLE:-}" && exit 0
 
 truthy "${VERBOSE:-}" && set -x
 
-# When provided with a docker host socket, this container should relaunch
-# copy of itself with the --rm flag to guarantee ephemeral storage.
-if docker info >/dev/null 2>&1 && [[ -n "${DOCKER_HOST:-}" ]]; then
-    # For now assume the hostname is the short container ID.
-    container_id="$(docker inspect -f '{{.Id}}' "$(hostname)")"
-
-    # Docker inspect template to generate a run command with the same properties as the current container.
-    # https://gist.github.com/efrecon/8ce9c75d518b6eb863f667442d7bc679
-    run_command=$(docker inspect --format "$(</run.tpl)" "${container_id}")
-
-    # Remove the DOCKER_HOST variable from the run command to prevent recursion!
-    run_command=$(echo "${run_command}" | sed '/DOCKER_HOST/d')
-    run_command=$(echo "${run_command}" | sed '/docker.sock/d')
-    run_command=$(echo "${run_command}" | sed '/balena.sock/d')
-
-    echo "RUN COMMAND: ${run_command}"
-    eval "exec ${run_command}" >/dev/null 2>&1
-    exit 0
+if ! truthy "${DISABLE_RESET:-}"; then
+    echo "Resetting container filesystem..."
+    reset_container
 fi
 
+# Set the runtime labels
 ACTIONS_RUNNER_RUNTIME_LABELS="$(get_runtime_labels)"
 export ACTIONS_RUNNER_RUNTIME_LABELS
 
+# Execute the s6-overlay entrypoint
 if truthy "${DRY_RUN:-}"; then
-    echo "PERFORMING DRY RUN"
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/runner
-    # Execute the s6-overlay entrypoint
+    # Disable the runner service
+    rm -f /etc/s6-overlay/s6-rc.d/user/contents.d/runner
+    # Use the healthcheck script as the main service
     exec /init /etc/s6-overlay/scripts/healthcheck
 else
-    # Execute the s6-overlay entrypoint
+    # Enable the runner service
+    touch /etc/s6-overlay/s6-rc.d/user/contents.d/runner
     exec /init
 fi

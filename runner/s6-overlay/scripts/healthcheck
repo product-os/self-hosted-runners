@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Check if the runner is healthy
+# Check if the docker engine is healthy
 
 while ! docker info 1>/dev/null 2>&1; do
     echo "Waiting for docker to be ready"
@@ -12,13 +12,3 @@ done
 docker info
 
 docker run hello-world
-
-docker buildx create --name builder-debug --driver docker-container --driver-opt network=host --buildkitd-flags "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host" --use
-
-docker create --name builder-debug-container --privileged moby/buildkit:buildx-stable-1
-
-docker inspect builder-debug-container
-
-find / -name buildctl
-
-docker buildx inspect --bootstrap --builder builder-debug
