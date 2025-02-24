@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency docker/compose to v2.32.4
+      hash: 20e9fbbe8a445049dc47454b21afa0f6d2e668b9
+      body: |
+        Update docker/compose from 2.32.3 to 2.32.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.1
+  title: ""
+  date: 2025-02-24T17:18:52.163Z
+- commits:
     - subject: Remove support for Ubuntu Focal images
       hash: a03125c78a20939badb276cf69e9b20b34db6edf
       body: |
