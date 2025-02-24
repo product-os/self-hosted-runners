@@ -167,8 +167,7 @@ RUN eget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$
 
 # https://hub.docker.com/_/microsoft-dotnet-runtime-deps
 # https://mcr.microsoft.com/en-us/product/dotnet/runtime-deps/tags
-# Ubuntu 20.04 (focal)
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.36-focal AS focal
+
 # Ubuntu 22.04 (jammy)
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.12-jammy AS jammy
 # Ubuntu 24.04 (noble)
@@ -246,19 +245,6 @@ ARG PACKAGES_common="\
     vim \
     wget \
     zstd \
-    "
-
-# install dotnet dependencies for focal (Ubuntu 20.04)
-# https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu#dependencies
-ARG PACKAGES_focal="\
-    ${PACKAGES_common} \
-    libc6 \
-    libgcc-s1 \
-    libgssapi-krb5-2 \
-    libicu66 \
-    libssl1.1 \
-    libstdc++6 \
-    zlib1g \
     "
 
 # install dotnet dependencies for jammy (Ubuntu 22.04)
