@@ -92,3 +92,35 @@ get_runtime_labels() {
 
     printf '%s ' "${_labels[@]}"
 }
+
+# Reset the container filesystem to the initial state by deleting the upper layer.
+# Requires privileged container.
+reset_container() {
+    # Get the device containing the docker data directory based on the /etc/hosts file mount.
+    # This is an automatic ext4 file mounted by docker on the host.
+    docker_data_dev="$(df --output=source /etc/hosts | tail -n 1)"
+
+    # Mount the host device containing the docker data directory.
+    mount_dir="$(mktemp -d)"
+    mount -v "${docker_data_dev}" "${mount_dir}"
+
+    # Extract the overlay ID from the root mount options.
+    overlay_id=$(findmnt -t overlay -no OPTIONS / | grep -o 'upperdir=[^,]*' | cut -d= -f2 | awk -F/ '{print $(NF-1)}')
+    echo "Overlay ID: ${overlay_id}"
+
+    # Find first matching overlay directory.
+    upper_dir="$(find "${mount_dir}" -path "**/overlay2/${overlay_id}/diff" -print -quit)"
+    echo "Upper dir: ${upper_dir}"
+
+    # Preserve directory structure but delete contents.
+    # This effectively "deletes" the upper layer and resets the container to the initial state.
+    echo "Deleting contents of upper layer..."
+    find "${upper_dir:?}" -mindepth 1 -print
+    find "${upper_dir:?}" -mindepth 1 -delete
+
+    # Unmount the host device containing the docker data directory.
+    umount -v "${mount_dir}"
+
+    # Remove the temporary mount directory.
+    rm -rf "${mount_dir}"
+}

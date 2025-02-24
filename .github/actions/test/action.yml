@@ -40,7 +40,7 @@ runs:
         dpkg --print-architecture
         free -h
         df -h
-        mount
+        findmnt
         lsblk
 
     - name: Check devices
@@ -95,6 +95,17 @@ runs:
         docker compose -f docker-compose.a.yml -f docker-compose.b.yml config > docker-compose.yml
         yq '.' docker-compose.yml
         docker compose run test
+
+    - name: Setup buildx
+      id: setup_buildx
+      uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
+      env:
+        # renovate: datasource=github-releases depName=docker/buildx
+        BUILDX_VERSION: v0.21.0
+      with:
+        driver-opts: network=host
+        install: true
+        version: ${{ env.BUILDX_VERSION }}
 
     - name: Check packages
       shell: bash --noprofile --norc -eo pipefail -x {0}

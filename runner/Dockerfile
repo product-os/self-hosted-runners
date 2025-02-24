@@ -404,7 +404,3 @@ ENV DOCKER_PIDFILE=/var/run/docker.pid
 ENV DOCKER_DEFAULT_ULIMITS="nofile:65535,65535"
 
 CMD [ "/init.container" ]
-
-# This volume is used to store the rootfs for the chroot environment.
-# It must be an ext4 or tmpfs volume, and not overlayfs.
-VOLUME /rootfs

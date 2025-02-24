@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Check if the docker engine is healthy
+
+while ! docker info 1>/dev/null 2>&1; do
+    echo "Waiting for docker to be ready"
+    sleep 1
+done
+
+docker info
+
+docker run hello-world
