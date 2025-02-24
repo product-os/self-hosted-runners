@@ -1,4 +1,20 @@
 - commits:
+    - subject: Remove support for Ubuntu Focal images
+      hash: a03125c78a20939badb276cf69e9b20b34db6edf
+      body: |
+        GitHub is removing support for Ubuntu 20.04 on April 1, 2025
+        so we will follow suit.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.6.0
+  title: ""
+  date: 2025-02-24T16:55:39.590Z
+- commits:
     - subject: Reset the container by deleting the upper layer
       hash: c45c85657f1f9f892c1d0a79070ba5ff9ecbbc7e
       body: |
