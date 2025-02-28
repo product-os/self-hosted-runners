@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v22.13.1
+      hash: e73278048713f74a175e65f03783e743f7d57e05
+      body: |
+        Update node from 22.13.0 to 22.13.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.3
+  title: ""
+  date: 2025-02-28T21:12:10.560Z
+- commits:
     - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v5
       hash: aabe51396ff361352046feb740b15bb7d43bd166
       body: |
