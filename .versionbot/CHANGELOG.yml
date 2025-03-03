@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.67.0
+      hash: 457b7f435380fbff4f308f61cbee65827aa3cb22
+      body: |
+        Update cli/cli from 2.65.0 to 2.67.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.8
+  title: ""
+  date: 2025-03-03T23:15:11.262Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8.0.13
       hash: a6310829c6d322679f29e983e03cf347d1c9555e
       body: |
