@@ -45,7 +45,7 @@ RUN eget actions/runner-container-hooks \
 FROM eget-build AS powershell
 
 # renovate: datasource=github-releases depName=powershell/powershell
-ARG POWERSHELL_VERSION=v7.4.6
+ARG POWERSHELL_VERSION=v7.5.0
 
 # https://learn.microsoft.com/en-us/powershell/scripting/install/install-other-linux#installation-using-a-binary-archive-file
 RUN eget powershell/powershell \
