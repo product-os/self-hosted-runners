@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency nabeken/go-github-apps to v0.2.3
+      hash: c0ba3abe2380855299f85ef39abe132da7ceb37e
+      body: |
+        Update nabeken/go-github-apps from 0.2.2 to 0.2.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.9
+  title: ""
+  date: 2025-03-04T00:13:29.214Z
+- commits:
     - subject: Update dependency cli/cli to v2.67.0
       hash: 457b7f435380fbff4f308f61cbee65827aa3cb22
       body: |
