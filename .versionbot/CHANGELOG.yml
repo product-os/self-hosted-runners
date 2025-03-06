@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook igorshubovych/markdownlint-cli to v0.44.0
+      hash: bb2687a02c6676ffe49f5f0a5bed0b8a16b23fb1
+      body: |
+        Update igorshubovych/markdownlint-cli from 0.43.0 to 0.44.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.13
+  title: ""
+  date: 2025-03-06T00:10:47.537Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.5.0
       hash: ccef19dc62d5677db52aa0bba3601b2b8822b9a7
       body: |
