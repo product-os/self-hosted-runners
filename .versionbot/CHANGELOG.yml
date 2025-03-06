@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency docker/buildx to v0.21.2
+      hash: 1b9efa32e22c71911d3fbfeb87a26ac1176f0b6f
+      body: |
+        Update docker/buildx from 0.21.1 to 0.21.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.21
+  title: ""
+  date: 2025-03-06T08:14:36.758Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.24.18
       hash: ba1ee7b5fba053f1fb4e87741f1160cf532e7c1d
       body: |
