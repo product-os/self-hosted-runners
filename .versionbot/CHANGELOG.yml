@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update docker/setup-buildx-action action to v3.10.0
+      hash: 6ca4b8a12c46b06a820d8c8f5cc31d3e7a8acb53
+      body: |
+        Update docker/setup-buildx-action from 3.9.0 to 3.10.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.17
+  title: ""
+  date: 2025-03-06T04:12:57.049Z
+- commits:
     - subject: Update pre-commit hook rhysd/actionlint to v1.7.7
       hash: 04ab11d0cf16664bc5c6e0808966f29e2cc35a28
       body: |
