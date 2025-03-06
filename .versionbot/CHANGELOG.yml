@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.68.0
+      hash: c61a968cf2161379685a51deb8e29a5a7c11089b
+      body: |
+        Update cli/cli from 2.67.0 to 2.68.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.22
+  title: ""
+  date: 2025-03-06T09:14:45.161Z
+- commits:
     - subject: Update dependency docker/buildx to v0.21.2
       hash: 1b9efa32e22c71911d3fbfeb87a26ac1176f0b6f
       body: |
