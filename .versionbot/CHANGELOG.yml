@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook rhysd/actionlint to v1.7.7
+      hash: 04ab11d0cf16664bc5c6e0808966f29e2cc35a28
+      body: |
+        Update rhysd/actionlint from 1.7.6 to 1.7.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.16
+  title: ""
+  date: 2025-03-06T03:26:16.533Z
+- commits:
     - subject: Update Node.js to v22.14.0
       hash: 924fdb1315c10620add97ec89b9a71aed988d8fc
       body: |
