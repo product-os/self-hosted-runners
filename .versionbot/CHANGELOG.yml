@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.23.7
+      hash: 628b64a3355ec359c7f985164ab974d08e967c9e
+      body: |
+        Update golang from 1.23.4 to 1.23.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.14
+  title: ""
+  date: 2025-03-06T01:27:29.268Z
+- commits:
     - subject: Update pre-commit hook igorshubovych/markdownlint-cli to v0.44.0
       hash: bb2687a02c6676ffe49f5f0a5bed0b8a16b23fb1
       body: |
