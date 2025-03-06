@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v22.14.0
+      hash: 924fdb1315c10620add97ec89b9a71aed988d8fc
+      body: |
+        Update node from 22.13.1 to 22.14.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.15
+  title: ""
+  date: 2025-03-06T02:40:32.613Z
+- commits:
     - subject: Update golang Docker tag to v1.23.7
       hash: 628b64a3355ec359c7f985164ab974d08e967c9e
       body: |
