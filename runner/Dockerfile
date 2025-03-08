@@ -142,7 +142,7 @@ RUN eget just-containers/s6-overlay \
 FROM eget-build AS go-github-apps
 
 # renovate: datasource=github-releases depName=nabeken/go-github-apps
-ARG GO_GITHUB_APPS_VERSION=v0.2.3
+ARG GO_GITHUB_APPS_VERSION=v0.2.4
 
 RUN eget nabeken/go-github-apps \
     --asset ".tar.gz" \
