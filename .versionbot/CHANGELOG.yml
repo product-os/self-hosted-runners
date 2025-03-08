@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.24.20
+      hash: 7511439381eb8904c604900072cf8d4250a93aeb
+      body: |
+        Update aws/aws-cli from 2.24.19 to 2.24.20
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.26
+  title: ""
+  date: 2025-03-08T04:15:30.098Z
+- commits:
     - subject: Update dependency nabeken/go-github-apps to v0.2.4
       hash: 76206d1ceb38043a5fa952f6270ce2232b97d425
       body: |
