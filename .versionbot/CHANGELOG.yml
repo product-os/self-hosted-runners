@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8.0.14
+      hash: 7bd652898c96a2d7e12a31dc025944dc1ae4e729
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 8.0.13 to 8.0.14
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.29
+  title: ""
+  date: 2025-03-11T19:20:53.866Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.24.21
       hash: dbed4b6c01db442d728738ac75254d902c9d4c6b
       body: |
