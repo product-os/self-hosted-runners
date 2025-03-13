@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.24.23
+      hash: cada45980e88e3d154dd90ca8ed1bd9818efbd6b
+      body: |
+        Update aws/aws-cli from 2.24.21 to 2.24.23
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.30
+  title: ""
+  date: 2025-03-13T20:16:48.040Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v8.0.14
       hash: 7bd652898c96a2d7e12a31dc025944dc1ae4e729
       body: |
