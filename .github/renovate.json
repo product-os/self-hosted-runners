@@ -1,0 +1,6 @@
+{
+    "extends": [
+        "github>product-os/renovate-config"
+    ],
+    "prConcurrentLimit": 0
+}
