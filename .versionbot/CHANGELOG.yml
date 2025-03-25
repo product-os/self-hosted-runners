@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.323.0
+      hash: 62d41011f45f4a85f0239103f9577464d28c72d4
+      body: |
+        Update actions/runner from 2.322.0 to 2.323.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.33
+  title: ""
+  date: 2025-03-25T19:17:01.139Z
+- commits:
     - subject: Use hosted runners while the self-hosted fleet is down
       hash: 16ad15a14c3bdc8eb437d90a09885cb8191be64b
       body: ""
