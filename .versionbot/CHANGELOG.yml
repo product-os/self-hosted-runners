@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.25.3
+      hash: d88704c1035e0dbe03b3828b69611f5e6829561b
+      body: |
+        Update aws/aws-cli from 2.24.23 to 2.25.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.34
+  title: ""
+  date: 2025-03-25T20:16:05.785Z
+- commits:
     - subject: Update dependency actions/runner to v2.323.0
       hash: 62d41011f45f4a85f0239103f9577464d28c72d4
       body: |
