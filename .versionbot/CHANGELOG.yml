@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v21.1.1
+      hash: bb31d56f2c65c5c0ad8988538223aeb959e34fa8
+      body: |
+        Update balena-io/balena-cli from 21.1.0 to 21.1.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.41
+  title: ""
+  date: 2025-03-26T21:14:53.263Z
+- commits:
     - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v9
       hash: 2cb007b697618386b42283a00fac59eed574f7e6
       body: |
