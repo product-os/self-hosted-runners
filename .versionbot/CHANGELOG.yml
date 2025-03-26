@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update mcr.microsoft.com/dotnet/runtime-deps Docker tag to v9
+      hash: 2cb007b697618386b42283a00fac59eed574f7e6
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 8.0.14 to 9.0.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.6.40
+  title: ""
+  date: 2025-03-26T17:55:55.025Z
+- commits:
     - subject: Use free hosted runners
       hash: 96b81c3d300f2f54f11253a27c40ff3a9859d06c
       body: |
