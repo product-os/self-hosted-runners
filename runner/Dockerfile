@@ -171,7 +171,7 @@ RUN eget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$
 # Ubuntu 22.04 (jammy)
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.14-jammy AS jammy
 # Ubuntu 24.04 (noble)
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0.14-noble AS noble
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0.3-noble AS noble
 
 # hadolint ignore=DL3006
 FROM ${OS_CODENAME} AS runtime
