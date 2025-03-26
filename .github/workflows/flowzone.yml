@@ -49,8 +49,8 @@ jobs:
         ghcr.io/product-os/self-hosted-runners
       docker_runs_on: >
         {
-          "linux/amd64": ["Linux-32-core"],
-          "linux/arm64": ["Linux-32-core-arm"]
+          "linux/amd64": ["ubuntu-24.04"],
+          "linux/arm64": ["ubuntu-24.04-arm"]
         }
       bake_targets: jammy,noble
       jobs_timeout_minutes: 60
