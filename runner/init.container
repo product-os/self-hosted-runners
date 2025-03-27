@@ -19,7 +19,7 @@ truthy "${DISABLE:-}" && exit 0
 truthy "${VERBOSE:-}" && set -x
 
 if ! truthy "${DISABLE_RESET:-}"; then
-    echo "Resetting container filesystem..."
+    echo "Resetting container..."
     reset_container
 fi
 
