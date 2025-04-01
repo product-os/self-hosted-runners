@@ -5,6 +5,7 @@ services:
   runner:
     build: .
     privileged: true
+    read_only: true
     tmpfs:
       - /tmp
       - /run
