@@ -1,4 +1,26 @@
 - commits:
+    - subject: Use pivot_root and read_only for ephemeral rootfs
+      hash: 458ff1f22a7344d1e5da03259e6534de54f1e1e0
+      body: |
+        The previous method was resulting in corruption
+        of the underlying overlayfs and resulted in unwritable
+        directories like /usr
+
+        Instead create a new rootfs in a volume and use pivot_root
+        to switch to it on container start.
+
+        This allows the original container root to be set to read-only.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.7.0
+  title: ""
+  date: 2025-04-01T14:48:20.781Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.25.7
       hash: 6aeea695ea9cb6f948712cf97c74fb5ed2c504b4
       body: |
