@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.24.2
+      hash: 91cab6f76c1ac0b84cd97e880bad08d827075a77
+      body: |
+        Update golang from 1.24.1 to 1.24.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.7.1
+  title: ""
+  date: 2025-04-01T18:18:17.518Z
+- commits:
     - subject: Use pivot_root and read_only for ephemeral rootfs
       hash: 458ff1f22a7344d1e5da03259e6534de54f1e1e0
       body: |
