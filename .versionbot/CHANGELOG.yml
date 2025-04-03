@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v21.1.5
+      hash: 0654499e15cdc087661b46f33aa8eb9316dff068
+      body: |
+        Update balena-io/balena-cli from 21.1.4 to 21.1.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.7.6
+  title: ""
+  date: 2025-04-03T14:16:02.528Z
+- commits:
     - subject: Fix resolv.conf assertion that was not valid for balena engine
       hash: 40e57505ac9348c01f4e4afe143279401dc1254c
       body: |
