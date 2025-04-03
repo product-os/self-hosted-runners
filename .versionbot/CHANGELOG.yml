@@ -1,4 +1,20 @@
 - commits:
+    - subject: Fix resolv.conf assertion that was not valid for balena engine
+      hash: 40e57505ac9348c01f4e4afe143279401dc1254c
+      body: |
+        balena engine does not put the helper text at the top of resolve.conf
+        so we cannot use that to identify the source of the file
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.7.5
+  title: ""
+  date: 2025-04-03T09:57:35.353Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.25.9
       hash: a4f86c6120195b49b4c2973ef447485c8439ea1d
       body: |
