@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.25.11
+      hash: abd1350f046ead72311fc1f6481462fbefd188a1
+      body: |
+        Update aws/aws-cli from 2.25.10 to 2.25.11
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.7.11
+  title: ""
+  date: 2025-04-04T20:14:48.492Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.25.10
       hash: 7a18e96b6d827ccc1bdef2e00e25927e8127cd13
       body: |
