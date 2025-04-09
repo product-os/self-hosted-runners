@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.25.14
+      hash: db69420d8b256f921cc9678abcbc73c783e5a933
+      body: |
+        Update aws/aws-cli from 2.25.13 to 2.25.14
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.7.17
+  title: ""
+  date: 2025-04-09T20:14:55.859Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 2a9af27786b23fe9135e3dbc11b06cd9e4c35a83
       body: |
