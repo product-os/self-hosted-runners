@@ -15,6 +15,30 @@ truthy() {
     [[ ${1,,} =~ true|yes|on|1 ]]
 }
 
+log() {
+    _level="$1"
+    _message="$2"
+    printf "[%s][%s] %s\n" "${0}" "${_level}" "${_message}" >&2
+}
+
+fail() {
+    error "$1"
+    sleep 10
+    exit 1
+}
+
+error() {
+    log "ERROR" "$1"
+}
+
+warn() {
+    log "WARN" "$1"
+}
+
+info() {
+    log "INFO" "$1"
+}
+
 get_geo() {
     # shellcheck disable=SC2310
     if curl_with_opts -I https://ipinfo.io >/dev/null 2>&1; then

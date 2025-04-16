@@ -127,3 +127,13 @@ runs:
         socat -V
         yq --version
         zstd --version
+
+    - name: Check for update-locks
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        if [[ -f /tmp/balena/updates.lock ]] && ! flock -n -x 200 /tmp/balena/updates.lock true; then
+          echo "Updates are locked!"
+          exit 0
+        fi
+        echo "Updates are not locked!"
+        exit 1
