@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner-container-hooks to v0.7.0
+      hash: 0990e57ede395c1429b7c8d2b3420d68e903a5f5
+      body: |
+        Update actions/runner-container-hooks from 0.6.2 to 0.7.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.7.23
+  title: ""
+  date: 2025-04-17T11:15:12.911Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.26.3
       hash: ef3b3477bdb8ea3dad695c43750c4b6a11042bdd
       body: |
