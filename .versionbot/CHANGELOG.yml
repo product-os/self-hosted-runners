@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add update-locks service with with default timeout of 8h
+      hash: 20e9bd592cc58ebf497ed1be3a1f7312060609df
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.8.0
+  title: ""
+  date: 2025-04-17T17:09:50.818Z
+- commits:
     - subject: Update dependency actions/runner-container-hooks to v0.7.0
       hash: 0990e57ede395c1429b7c8d2b3420d68e903a5f5
       body: |
