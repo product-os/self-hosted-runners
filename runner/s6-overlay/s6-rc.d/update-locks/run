@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# shellcheck disable=SC1091
+. /etc/s6-overlay/scripts/functions
+
+is_job_running() {
+    # ps aux | grep -i worker
+    pgrep -f "worker" > /dev/null
+}
+
+# Function to obtain an exclusive lock
+# https://linux.die.net/man/1/flock
+obtain_lock() {
+    local _lockfile="/tmp/balena/updates.lock"
+
+    info "Obtaining update lock..."
+    mkdir -p "$(dirname "${_lockfile}")"
+
+    # Use flock to obtain an exclusive lock and sleep forever in the background.
+    # Do not fail if lock cannot be acquired, wait forever until it can.
+    # When the container is killed, so shall this process, releasing the lock.
+    (
+        flock --exclusive 200
+        info "Obtained update lock!"
+        # Allow locks to be held for up to max timeout to avoid holding the lock forever
+        # when jobs disconnect or are killed and not reported back to the runner.
+        sleep "${UPDATE_LOCK_TIMEOUT:-8h}"
+    ) 200>"${_lockfile}"
+
+    # The file descriptor 200 is arbitrary and does not impact other containers.
+    info "Update lock released!"
+}
+
+while : ; do
+    if is_job_running; then
+        obtain_lock
+    fi
+    sleep 2s
+done
