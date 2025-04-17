@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.26.4
+      hash: cb12823af1686061641ec425ddc4563651aaa839
+      body: |
+        Update aws/aws-cli from 2.26.3 to 2.26.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.1
+  title: ""
+  date: 2025-04-17T19:21:39.857Z
+- commits:
     - subject: Add update-locks service with with default timeout of 8h
       hash: 20e9bd592cc58ebf497ed1be3a1f7312060609df
       body: ""
