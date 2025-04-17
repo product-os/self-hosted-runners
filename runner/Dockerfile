@@ -33,7 +33,7 @@ RUN eget actions/runner \
 FROM eget-build AS runner-container-hooks
 
 # renovate: datasource=github-releases depName=actions/runner-container-hooks
-ARG ACTIONS_HOOKS_VERSION=v0.6.2
+ARG ACTIONS_HOOKS_VERSION=v0.7.0
 
 RUN eget actions/runner-container-hooks \
     --asset "docker" --asset ".zip" \
