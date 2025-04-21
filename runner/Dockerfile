@@ -209,7 +209,7 @@ RUN groupadd docker --gid 123
 ARG DOCKER_VERSION=v27.4.1
 
 # renovate: datasource=github-releases depName=docker/compose
-ARG DOCKER_COMPOSE_VERSION=v2.34.0
+ARG DOCKER_COMPOSE_VERSION=v2.35.1
 
 # renovate: datasource=github-releases depName=docker/buildx
 ARG DOCKER_BUILDX_VERSION=v0.22.0
