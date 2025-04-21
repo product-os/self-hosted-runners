@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency docker/compose to v2.35.1
+      hash: b1f92acc0882a87269c250dad57e0e73ae6b4f20
+      body: |
+        Update docker/compose from 2.34.0 to 2.35.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.3
+  title: ""
+  date: 2025-04-21T21:14:40.364Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.26.6
       hash: 9582091ae2ced4ef2caf78972f22cc70c49ec67b
       body: |
