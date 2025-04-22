@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.26.7
+      hash: 40dcc8358d4b90c104c73b5757576d54834d1cae
+      body: |
+        Update aws/aws-cli from 2.26.6 to 2.26.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.5
+  title: ""
+  date: 2025-04-22T20:15:26.744Z
+- commits:
     - subject: Update dependency docker/buildx to v0.23.0
       hash: 32018e2465707f0c18e5b4c562b664d6e90a7bc3
       body: |
