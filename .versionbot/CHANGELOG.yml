@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.5.1
+      hash: 760773733d0f20e6b0d337a67efa5ae6e835ec80
+      body: |
+        Update powershell/powershell from 7.5.0 to 7.5.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.10
+  title: ""
+  date: 2025-04-24T22:20:51.169Z
+- commits:
     - subject: Update dependency cli/cli to v2.71.2
       hash: 64b307b577e406a0f15b338cad10e79035d66bbf
       body: |
