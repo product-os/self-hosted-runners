@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.27.1
+      hash: 5639c8c53a75381b12ce62c1c28c027427b1714e
+      body: |
+        Update aws/aws-cli from 2.27.0 to 2.27.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.11
+  title: ""
+  date: 2025-04-24T23:16:02.904Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.5.1
       hash: 760773733d0f20e6b0d337a67efa5ae6e835ec80
       body: |
