@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.45.2
+      hash: ab5b364663da5e5add8aade16ca3170979681aa8
+      body: |
+        Update mikefarah/yq from 4.45.1 to 4.45.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.17
+  title: ""
+  date: 2025-05-03T08:17:29.536Z
+- commits:
     - subject: Update dependency cli/cli to v2.72.0
       hash: 059c11d2aab579a8c3b0a7de7e2c8331320fc90d
       body: |
