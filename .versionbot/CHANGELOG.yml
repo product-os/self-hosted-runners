@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.27.7
+      hash: be76b7e88f9c4cb4e807e26f48a83377b0ffb36e
+      body: |
+        Update aws/aws-cli from 2.27.5 to 2.27.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.18
+  title: ""
+  date: 2025-05-03T09:17:01.608Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.45.2
       hash: ab5b364663da5e5add8aade16ca3170979681aa8
       body: |
