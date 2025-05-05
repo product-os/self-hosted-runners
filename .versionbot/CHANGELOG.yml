@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency just-containers/s6-overlay to v3.2.0.3
+      hash: c190603e0b97b51f33232cc0c20c640c337c0727
+      body: |
+        Update just-containers/s6-overlay from 3.2.0.2 to 3.2.0.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.19
+  title: ""
+  date: 2025-05-05T09:22:36.698Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.7
       hash: be76b7e88f9c4cb4e807e26f48a83377b0ffb36e
       body: |
