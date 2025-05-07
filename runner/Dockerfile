@@ -112,7 +112,7 @@ RUN eget "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m)-${AWSCLI_VER
 FROM eget-build AS s6-overlay
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
-ARG S6_OVERLAY_VERSION=v3.2.0.3
+ARG S6_OVERLAY_VERSION=v3.2.1.0
 
 RUN eget just-containers/s6-overlay \
     --asset "s6-overlay-$(uname -m).tar.xz" \
