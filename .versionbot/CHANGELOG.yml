@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.27.11
+      hash: d516b814cb77aae7fe89fd24ba1a4b403c74fec6
+      body: |
+        Update aws/aws-cli from 2.27.9 to 2.27.11
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.26
+  title: ""
+  date: 2025-05-08T19:24:33.934Z
+- commits:
     - subject: Update dependency just-containers/s6-overlay to v3.2.1.0
       hash: fa5b1d7f464f5f513d1bdba633e5c07adfc3dcff
       body: |
