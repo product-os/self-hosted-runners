@@ -72,7 +72,7 @@ RUN eget balena-io/balena-cli \
 FROM eget-build AS yq
 
 # renovate: datasource=github-releases depName=mikefarah/yq
-ARG YQ_VERSION=v4.45.2
+ARG YQ_VERSION=v4.45.4
 
 RUN eget mikefarah/yq \
     --asset ".tar.gz" \
