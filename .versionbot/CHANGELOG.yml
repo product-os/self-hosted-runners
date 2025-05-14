@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v22.15.1
+      hash: b4c3d45716234a365a0e60b5125dd3eb646fc017
+      body: |
+        Update node from 22.15.0 to 22.15.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.33
+  title: ""
+  date: 2025-05-14T22:17:26.220Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 95d8d28bbcd6b585a816bc8a68c3723e9fd57b1e
       body: |
