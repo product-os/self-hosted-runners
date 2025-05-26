@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v11.4.1
+      hash: a0ad58582d4ab43632a6acbd44a8125c5a08c4ec
+      body: |
+        Update npm from 11.4.0 to 11.4.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.42
+  title: ""
+  date: 2025-05-26T23:11:03.277Z
+- commits:
     - subject: Update pre-commit hook igorshubovych/markdownlint-cli to v0.45.0
       hash: 633f1e6b93875c432b92ddb87c836910faf7c21d
       body: |
