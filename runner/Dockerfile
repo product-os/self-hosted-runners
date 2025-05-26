@@ -59,13 +59,13 @@ RUN eget powershell/powershell \
 FROM eget-build AS balena-cli
 
 # renovate: datasource=github-releases depName=balena-io/balena-cli
-ARG BALENA_CLI_VERSION=v21.1.12
+ARG BALENA_CLI_VERSION=v22.0.0
 
 RUN eget balena-io/balena-cli \
-    --asset "standalone" --asset ".zip"\
+    --asset "standalone" --asset ".tar.gz" \
     --all --file "*" --to "./" \
     --tag "${BALENA_CLI_VERSION}" \
-    && ./balena version
+    && ./balena/bin/balena version
 
 ####################################################################################################
 
@@ -303,9 +303,9 @@ COPY --from=gh-cli /opt/ /usr/local/bin/
 COPY --from=awscli /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=awscli /usr/local/bin/ /usr/local/bin/
 COPY --from=go-github-apps /opt/ /usr/local/bin/
-COPY --from=balena-cli /opt/ /usr/local/lib/balena-cli/
+COPY --from=balena-cli /opt/balena/ /usr/local/lib/balena/
 
-RUN ln -sf /usr/local/lib/balena-cli/balena /usr/local/bin/balena && \
+RUN ln -sf /usr/local/lib/balena/bin/balena /usr/local/bin/balena && \
     balena version
 
 COPY --from=s6-overlay /opt/ /
