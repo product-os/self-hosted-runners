@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v22
+      hash: ba9f404809b835146eebb4dbbaaab9c79eaf2efa
+      body: |
+        Update balena-io/balena-cli from 21.1.12 to 22.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.39
+  title: ""
+  date: 2025-05-26T20:20:33.519Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.17
       hash: a8b6cd69a0d498fc63324dd92d131dc75f25f4f9
       body: |
