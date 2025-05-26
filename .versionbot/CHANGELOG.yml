@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook igorshubovych/markdownlint-cli to v0.45.0
+      hash: 633f1e6b93875c432b92ddb87c836910faf7c21d
+      body: |
+        Update igorshubovych/markdownlint-cli from 0.44.0 to 0.45.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.41
+  title: ""
+  date: 2025-05-26T22:12:32.323Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.22
       hash: 76c66f86b74ae1611555a50e67715b1d9c9b0a25
       body: |
