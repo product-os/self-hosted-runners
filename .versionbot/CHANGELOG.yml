@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.73.0
+      hash: 9b6125b4be473c3fe56f960afe4422752dd66793
+      body: |
+        Update cli/cli from 2.72.0 to 2.73.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.44
+  title: ""
+  date: 2025-05-27T01:33:07.876Z
+- commits:
     - subject: Update Node.js to v22.16.0
       hash: 0a29dbb52ad535002957933ba39aa6f757588b7d
       body: |
