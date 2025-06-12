@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 4e63d955d73e7ec2dc08446b5534ab34d8e0fdb2
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 9.0.5 to 9.0.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.8.70
+  title: ""
+  date: 2025-06-12T17:34:40.229Z
+- commits:
     - subject: Update dependency npm to v11.4.2
       hash: 0da0b35aaf1e6135df3ed40ab4569cb4c0f669e7
       body: |
