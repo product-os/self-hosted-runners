@@ -1,4 +1,28 @@
 - commits:
+    - subject: Fix update-lock dependency ordering
+      hash: 0024c227eb25a9a42109ae9766881cce441038fa
+      body: |
+        The update-locks service has no depedencies because
+        it's just a shell process regularly checking to see if the
+        worker process exists.
+
+        Instead, the runner should only start if the update-locks
+        loop is already started.
+
+        Also, having both services be a dependency of the entrypoint
+        meant that removing the runner service didn't actually stop
+        it from running as they depended on each other.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.9.0
+  title: ""
+  date: 2025-06-14T03:37:04.378Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 4e63d955d73e7ec2dc08446b5534ab34d8e0fdb2
       body: |
