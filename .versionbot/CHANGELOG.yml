@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update docker/setup-buildx-action action to v3.11.1
+      hash: e6af2ed9841b5209d5ca960e8401024cab2f89b5
+      body: |
+        Update docker/setup-buildx-action from 3.11.0 to 3.11.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.4
+  title: ""
+  date: 2025-06-18T09:26:29.484Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.37
       hash: af11fecc585aa718dea7704a30adfa1fc54ce549
       body: |
