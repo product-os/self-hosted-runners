@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency docker/compose to v2.37.3
+      hash: d2ed593309e77e25986376d07cc40fee1ea1c6cb
+      body: |
+        Update docker/compose from 2.36.2 to 2.37.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.13
+  title: ""
+  date: 2025-06-25T03:04:06.971Z
+- commits:
     - subject: Update Node.js to v22.17.0
       hash: 659c2b5f85e0ac82e48820d53ac86a32a25dee9a
       body: |
