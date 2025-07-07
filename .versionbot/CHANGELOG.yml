@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.326.0
+      hash: 84ee1272c43fde6c90ecb6b94b896a8cb25e4c69
+      body: |
+        Update actions/runner from 2.325.0 to 2.326.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.21
+  title: ""
+  date: 2025-07-07T21:23:26.819Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.49
       hash: 41239a8c6967ef2080731a862a940b09123f7707
       body: |
