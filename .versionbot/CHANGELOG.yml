@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency docker/compose to v2.38.2
+      hash: 7dc74100218fd3cd5e0c8c320bdb66e29f0b4086
+      body: |
+        Update docker/compose from 2.37.3 to 2.38.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.26
+  title: ""
+  date: 2025-07-09T21:17:47.483Z
+- commits:
     - subject: Update golang Docker tag to v1.24.5
       hash: a2e51447286cd71f50a8ffe9125b9ddb5a4075f5
       body: |
