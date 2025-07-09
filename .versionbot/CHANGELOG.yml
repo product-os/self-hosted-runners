@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.75.0
+      hash: ad1cdc9fa86b6b2fc2b4da0e22b8e0a98ca95d50
+      body: |
+        Update cli/cli from 2.74.2 to 2.75.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.23
+  title: ""
+  date: 2025-07-09T15:27:08.305Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 84597c5c24395f442e9bc43cfa2369c75fa33033
       body: |
