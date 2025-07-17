@@ -15,15 +15,18 @@ is_job_running() {
 obtain_lock() {
     local _lockfile="/tmp/balena/updates.lock"
 
-    info "Obtaining update lock..."
+    info "Attempting to obtain update lock..."
     mkdir -p "$(dirname "${_lockfile}")"
 
     # Use flock to obtain an exclusive lock and sleep forever in the background.
-    # Do not fail if lock cannot be acquired, wait forever until it can.
-    # When the container is killed, so shall this process, releasing the lock.
+    # Do not fail if lock cannot be acquired, wait forever until it can, or until this container dies.
+    # Once we have the lock, hold it until this container dies or 8h timeout (whichever comes first).
+    # When the container is killed, so shall this process, releasing the lock and deleting the file.
     (
         flock --exclusive 200
         info "Obtained update lock!"
+        # Set up trap to delete lock file on exit (only after we have the lock)
+        trap 'rm -f "${_lockfile}"' EXIT
         # Allow locks to be held for up to max timeout to avoid holding the lock forever
         # when jobs disconnect or are killed and not reported back to the runner.
         sleep "${UPDATE_LOCK_TIMEOUT:-8h}"
@@ -34,6 +37,7 @@ obtain_lock() {
 }
 
 while : ; do
+    # shellcheck disable=SC2310
     if is_job_running; then
         obtain_lock
     fi
