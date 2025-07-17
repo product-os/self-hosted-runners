@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.27.54
+      hash: a9bf1d7de079f10c351facb229fe8f6485115f43
+      body: |
+        Update aws/aws-cli from 2.27.53 to 2.27.54
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.34
+  title: ""
+  date: 2025-07-17T19:22:48.394Z
+- commits:
     - subject: Always remove application lockfile after releasing lock
       hash: 0a4eba4f9913f156307205e16718f3c2d4c44b8e
       body: ""
