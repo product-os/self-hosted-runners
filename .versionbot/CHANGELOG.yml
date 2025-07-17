@@ -1,4 +1,18 @@
 - commits:
+    - subject: Always remove application lockfile after releasing lock
+      hash: 0a4eba4f9913f156307205e16718f3c2d4c44b8e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.9.33
+  title: ""
+  date: 2025-07-17T16:54:22.937Z
+- commits:
     - subject: Update dependency cli/cli to v2.75.1
       hash: cea668863776e9ecc6017236e93634d717ba0087
       body: |
