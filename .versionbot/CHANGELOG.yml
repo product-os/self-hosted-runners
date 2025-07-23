@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.76.1
+      hash: 3a0d2b005d3ab4bac89a2bb2adae78e1ed24b9bc
+      body: |
+        Update cli/cli from 2.76.0 to 2.76.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.42
+  title: ""
+  date: 2025-07-23T20:15:22.574Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.27.58
       hash: 42f0ea70c78e871d4abc0a91496c25cabf8bad17
       body: |
