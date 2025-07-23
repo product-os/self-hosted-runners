@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.47.1
+      hash: 554e1ba7f992950c19c773d5c9a90e0b5a423e2d
+      body: |
+        Update mikefarah/yq from 4.46.1 to 4.47.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.40
+  title: ""
+  date: 2025-07-23T07:29:24.742Z
+- commits:
     - subject: Update dependency actions/runner to v2.327.0
       hash: 15643241f9fbf29498461a1550ae93ddcaa3d0dd
       body: |
