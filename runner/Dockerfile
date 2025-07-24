@@ -98,7 +98,7 @@ RUN eget cli/cli \
 FROM eget-build AS awscli
 
 # renovate: datasource=github-tags depName=aws/aws-cli
-ARG AWSCLI_VERSION=2.27.58
+ARG AWSCLI_VERSION=2.27.59
 
 # install awscli manually as it's not available in apt for Ubuntu 24.04
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
