@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v11.5.1
+      hash: 4a52035147b75944f724bfbd1621822454c451a4
+      body: |
+        Update npm from 11.4.2 to 11.5.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.43
+  title: ""
+  date: 2025-07-24T19:23:53.564Z
+- commits:
     - subject: Update dependency cli/cli to v2.76.1
       hash: 3a0d2b005d3ab4bac89a2bb2adae78e1ed24b9bc
       body: |
