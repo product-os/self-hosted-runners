@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.76.2
+      hash: 0b9962f29808949e4a28d1a722db91f56f7e3972
+      body: |
+        Update cli/cli from 2.76.1 to 2.76.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.51
+  title: ""
+  date: 2025-07-30T23:17:50.072Z
+- commits:
     - subject: Update dependency docker/compose to v2.39.1
       hash: ea3086716d831613c4eada03fcf7e7034bd85c8b
       body: |
