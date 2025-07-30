@@ -85,7 +85,7 @@ RUN eget mikefarah/yq \
 FROM eget-build AS gh-cli
 
 # renovate: datasource=github-releases depName=cli/cli
-ARG GH_CLI_VERSION=v2.76.1
+ARG GH_CLI_VERSION=v2.76.2
 
 RUN eget cli/cli \
     --asset ".tar.gz" \
