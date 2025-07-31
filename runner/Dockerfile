@@ -317,7 +317,7 @@ COPY --from=node /opt/ /usr/local/
 RUN /home/runner/bin/installdependencies.sh
 
 # renovate: datasource=npm depName=npm
-ARG NPM_VERSION=11.5.1
+ARG NPM_VERSION=11.5.2
 
 # install npm
 RUN npm install -g "npm@${NPM_VERSION}" \
