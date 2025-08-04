@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.28.2
+      hash: 0eb39ba63a40e4c359bf87c5689dcb86287bf1e1
+      body: |
+        Update aws/aws-cli from 2.28.0 to 2.28.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.55
+  title: ""
+  date: 2025-08-04T20:18:07.155Z
+- commits:
     - subject: Update Node.js to v22.18.0
       hash: ea0dcff3d3146b9d18c10034ba9006bfb4c5ee8c
       body: |
