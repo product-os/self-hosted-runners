@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v22.2.0
+      hash: ae3fc11a154562c0e36d37a0c2cc964b134029fc
+      body: |
+        Update balena-io/balena-cli from 22.1.5 to 22.2.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.59
+  title: ""
+  date: 2025-08-05T22:19:36.677Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 4e576dd2c85fe3beb6b9ebfee596951b864b66bf
       body: |
