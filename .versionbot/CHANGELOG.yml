@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 4e576dd2c85fe3beb6b9ebfee596951b864b66bf
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 9.0.7 to 9.0.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.58
+  title: ""
+  date: 2025-08-05T21:16:04.227Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.28.3
       hash: 6502de225a8a26d392f182d5833ebe7e3105b3ef
       body: |
