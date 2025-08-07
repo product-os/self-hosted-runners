@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update golang Docker tag to v1.24.6
+      hash: 9adbec8b15a2e96c033a1d97a4567d7750a171c4
+      body: |
+        Update golang from 1.24.5 to 1.24.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.64
+  title: ""
+  date: 2025-08-07T21:23:48.767Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.28.5
       hash: 119b5bae23a354a6fdcadc8cbe3d70777054bfc0
       body: |
