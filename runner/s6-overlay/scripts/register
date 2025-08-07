@@ -104,6 +104,34 @@ get_runner_group_id() {
         jq --arg name "${_runner_group_name}" '.runner_groups[] | select(.name == $name) | .id'
 }
 
+check_token_limit() {
+    local _github_token="${1}"
+	local _api_url="https://api.github.com/rate_limit"
+
+	local _json
+	local _used
+	local _limit
+	local _remaining
+	local _reset
+	local _now
+	local _datetime
+	local _minutes
+
+	_json="$(curl_with_opts "${_api_url}" -H "Authorization: token ${_github_token}")"
+	_used="$(echo "${_json}" | jq -re .rate.used)"
+	_limit="$(echo "${_json}" | jq -re .rate.limit)"
+	_remaining="$(echo "${_json}" | jq -re .rate.remaining)"
+	_reset="$(echo "${_json}" | jq -re .rate.reset)"
+	_now=$(date +%s)
+	_datetime="$(date -d @"$(echo "${_json}" | jq -re .rate.reset)" +"%Y-%m-%d %H:%M:%S")"
+	_minutes="$(( (_reset - _now) / 60 ))m"
+
+	info "GitHub token used ${_used}/${_limit}, resetting in ${_minutes} (${_datetime})."
+	if [[ -n "${_remaining:-}" ]] && [[ ${_remaining:-} -le 0 ]]; then
+		warn "All GitHub token quota used, runner registration will fail until reset."
+	fi
+}
+
 # Create a just-in-time runner for the repository, organization, or enterprise
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-configuration-for-a-just-in-time-runner-for-an-enterprise
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-configuration-for-a-just-in-time-runner-for-an-organization
@@ -113,6 +141,8 @@ register_runner() {
     local _github_token="${2}"
     local _json_payload="${3}"
     local _api_url="https://api.github.com/${_registration_slug}/actions/runners/generate-jitconfig"
+
+    check_token_limit "${_github_token}"
 
     info "Registering runner with GitHub..."
     (curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" \
