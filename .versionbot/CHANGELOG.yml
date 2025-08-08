@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.28.6
+      hash: dd6eee99dd38446c9be0815c287aa7482788f2a0
+      body: |
+        Update aws/aws-cli from 2.28.5 to 2.28.6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.65
+  title: ""
+  date: 2025-08-08T20:21:36.382Z
+- commits:
     - subject: Update golang Docker tag to v1.24.6
       hash: 9adbec8b15a2e96c033a1d97a4567d7750a171c4
       body: |
