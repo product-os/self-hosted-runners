@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v6
+      hash: 8129fc0898be023596fcc67003996cd21ca5cee1
+      body: |
+        Update pre-commit/pre-commit-hooks from 5.0.0 to 6.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.70
+  title: ""
+  date: 2025-08-12T16:04:40.808Z
+- commits:
     - subject: "patch: Check GH token limits and warn if depleted"
       hash: 3d27ef08e89ab6e6fcdd623ddfe0bc58d493dec1
       body: "> QoL improvement debugging jobs not starting"
