@@ -329,6 +329,10 @@ RUN npm install -g "npm@${NPM_VERSION}" \
 COPY s6-overlay /etc/s6-overlay
 RUN chmod +x /etc/s6-overlay/scripts/*
 
+# install GH unregister script
+COPY cont-finish.d /etc/cont-finish.d
+RUN chmod +x /etc/cont-finish.d/*
+
 # install container init script
 COPY init.container /init.container
 RUN chmod +x /init.container

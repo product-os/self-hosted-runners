@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091,SC2310,SC2312
+
+# Tentatively delete the runner from github when we're done
+# Inactive runners should be cleaned up by GitHub after 24h
+# But when we happen to hit the current 10k registered limit on some occasion
+
+# if we're running in a vm (https://github.com/product-os/github-runner-vm), we'll get the id as an arg
+runner_id=${1}
+
+if [ -z "${runner_id}" ] && [ -f /home/runner/.id ]; then
+  runner_id="$(cat /home/runner/.id)"
+fi
+
+if [ -z "${runner_id}" ]; then
+  echo "Runner ID file not found. Cannot unregister runner."
+  exit 0
+fi
+
+registration_slug="${ACTIONS_RUNNER_REGISTRATION_SLUG:-}"
+app_id="${ACTIONS_RUNNER_APP_ID:-}"
+installation_id="${ACTIONS_RUNNER_INSTALLATION_ID:-}"
+private_key_file="${ACTIONS_RUNNER_PRIVATE_KEY_FILE:-"/tmp/private.pem"}"
+private_key_base64="${ACTIONS_RUNNER_APP_KEY_B64:-}"
+
+# This logic is the same as for the registration token
+# But can't easily be refactored into a shared function as those scripts will
+# be used in different contexts
+# TODO: refactor into a shared function
+
+log() {
+    _level="$1"
+    _message="$2"
+    printf "[%s][%s] %s\n" "${0}" "${_level}" "${_message}" >&2
+}
+
+fail() {
+    error "$1"
+    sleep 10
+    exit 1
+}
+
+error() {
+    log "ERROR" "$1"
+}
+
+warn() {
+    log "WARN" "$1"
+}
+
+info() {
+    log "INFO" "$1"
+}
+
+get_app_token() {
+    local _app_id="${1}"
+    local _installation_id="${2}"
+    local _private_key_file="${3}"
+    local _registration_slug="${4}"
+
+    if [[ "${_registration_slug:-}" =~ ^enterprises\/.*$ ]]; then
+        warn "GitHub Apps are not a supported authentication method for GitHub Enterprise runners"
+        return 1
+    fi
+
+    if [[ -n "${_app_id}" ]]; then
+        info "Using GitHub App ID: ${_app_id}"
+    else
+        warn "GitHub App ID not provided!"
+        return 1
+    fi
+
+    if [[ -n "${_installation_id}" ]]; then
+        info "Using GitHub App Installation ID: ${_installation_id}"
+    else
+        warn "GitHub App Installation ID not provided!"
+        return 1
+    fi
+
+    if [[ -n "${_private_key_file}" ]]; then
+        info "Using GitHub App Private Key File: ${_private_key_file}"
+    else
+        warn "GitHub App Private Key File not provided!"
+        return 1
+    fi
+
+    info "Requesting installation token from GitHub App..."
+
+    # https://github.com/nabeken/go-github-apps
+    GITHUB_PRIV_KEY=$(<"${_private_key_file}")
+    export GITHUB_PRIV_KEY
+    eval "$(go-github-apps -export -app-id "${_app_id}" -inst-id "${_installation_id}" || exit 1)"
+
+    info "GitHub App token has been exported to GITHUB_TOKEN environment variable."
+
+    unset GITHUB_PRIV_KEY
+    rm -f "${_private_key_file}"
+}
+
+if [[ ! "${registration_slug:-}" =~ ^(repos|orgs|enterprises)\/.*$ ]]; then
+    fail "ACTIONS_RUNNER_REGISTRATION_SLUG must be in the format repos/OWNER/REPO or orgs/ORG or enterprises/ENTERPRISE"
+fi
+
+for key in ACTIONS_RUNNER_AUTH_TOKEN GITHUB_TOKEN GH_TOKEN; do
+    if [[ -n "${!key:-}" ]]; then
+        info "Using '${key}' for authentication..."
+        github_token="${!key}"
+        break
+    else
+        info "No valid authentication method found for ${key}."
+    fi
+done
+
+if [[ -z "${github_token:-}" ]]; then
+    # decode app key and write to a file if one was provided via env vars
+    if [[ ! -f "${private_key_file}" ]] && [[ -n "${private_key_base64}" ]]; then
+        echo "${private_key_base64}" | base64 -d >"${private_key_file}" || true
+    fi
+
+    get_app_token "${app_id}" "${installation_id}" "${private_key_file}" "${registration_slug}" || true
+    github_token="${GITHUB_TOKEN:-}"
+fi
+
+if [[ -z "${github_token:-}" ]]; then
+    fail "No authentication methods provided!"
+fi
+
+info "Deleting runner $runner_id with GitHub..."
+curl --location --request DELETE "https://api.github.com/${registration_slug}/actions/runners/$runner_id" -H "Authorization: token ${github_token}"
