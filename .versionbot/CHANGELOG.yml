@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.28.8
+      hash: 9cb133b1fccff7cebb91f90c4c6c9dad358a8007
+      body: |
+        Update aws/aws-cli from 2.28.7 to 2.28.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.72
+  title: ""
+  date: 2025-08-13T18:27:30.740Z
+- commits:
     - subject: Update dependency actions/runner to v2.328.0
       hash: 61569310d307753ec6bbda376741bf19afa038e2
       body: |
