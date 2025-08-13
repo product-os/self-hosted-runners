@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.328.0
+      hash: 61569310d307753ec6bbda376741bf19afa038e2
+      body: |
+        Update actions/runner from 2.327.1 to 2.328.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.9.71
+  title: ""
+  date: 2025-08-13T17:23:18.421Z
+- commits:
     - subject: Update pre-commit hook pre-commit/pre-commit-hooks to v6
       hash: 8129fc0898be023596fcc67003996cd21ca5cee1
       body: |
