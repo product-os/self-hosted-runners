@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v24.6.0
+      hash: f08e3475905ecb6b30ef934c05c364aaddbbc614
+      body: |
+        Update node from 24.5.0 to 24.6.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.4
+  title: ""
+  date: 2025-08-14T22:20:47.190Z
+- commits:
     - subject: "patch: tentatively unregister runners when shutting down"
       hash: e00f5a6e1e99408c62464980f35e6bacf5c08b9d
       body: ""
