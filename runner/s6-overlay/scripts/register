@@ -146,7 +146,7 @@ register_runner() {
 
     info "Registering runner with GitHub..."
     (curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" \
-        -d "${_json_payload}") | jq -r '.encoded_jit_config'
+        -d "${_json_payload}")
 }
 
 log() {
@@ -246,6 +246,7 @@ private_key_file="${ACTIONS_RUNNER_PRIVATE_KEY_FILE:-"/tmp/private.pem"}"
 private_key_base64="${ACTIONS_RUNNER_APP_KEY_B64:-}"
 
 runner_config_file="${1:-"/home/runner/.jitconfig"}"
+runner_id_file="${2:-"/home/runner/.id"}"
 
 if [[ -f "${runner_config_file}" ]]; then
     info "Runner is already registered, skipping..."
@@ -300,6 +301,12 @@ json_payload=$(jq -nc \
 
 jq . <<<"${json_payload}"
 
-register_runner "${registration_slug}" "${github_token}" "${json_payload}" >"${runner_config_file}"
+json_response=$(register_runner "${registration_slug}" "${github_token}" "${json_payload}")
+
+# write jit config
+echo "${json_response}" | jq -r '.encoded_jit_config' > "${runner_config_file}"
+
+# write id that will be used for teardown
+echo "${json_response}" | jq -r '.runner.id' > "${runner_id_file}"
 
 info "Runner configuration written to ${runner_config_file}."
