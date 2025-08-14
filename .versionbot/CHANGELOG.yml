@@ -1,4 +1,20 @@
 - commits:
+    - subject: Update from NodeJS 22.x to 24.x
+      hash: 5008266f4583ba0bf43b28cf00a145341cd0ca11
+      body: |
+        NodeJS v24 is the current LTS and is going to
+        start becomming required by actions.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.10.0
+  title: ""
+  date: 2025-08-14T16:32:05.129Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.28.9
       hash: 604689bd8fb10eaf4e7af06811d0d36373acf8a8
       body: |
