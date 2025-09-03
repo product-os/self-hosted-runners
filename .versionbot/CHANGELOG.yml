@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v11.6.0
+      hash: 3fe80dd9ad69201233e4524aacdbefeb1f914b5b
+      body: |
+        Update npm from 11.5.2 to 11.6.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.24
+  title: ""
+  date: 2025-09-03T21:16:20.355Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v22.4.1
       hash: ca879ef4f8392d35dc63a3a686ec2d42763d11dd
       body: |
