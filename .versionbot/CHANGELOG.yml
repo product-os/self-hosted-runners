@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency cli/cli to v2.79.0
+      hash: d90dcd6c203a68b4ebd514483b0b060f36ca7bbf
+      body: |
+        Update cli/cli from 2.78.0 to 2.79.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.33
+  title: ""
+  date: 2025-09-09T18:17:00.973Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.47.2
       hash: 0da058217260057f714e06762f989deed1b96e86
       body: |
