@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency mikefarah/yq to v4.47.2
+      hash: 0da058217260057f714e06762f989deed1b96e86
+      body: |
+        Update mikefarah/yq from 4.47.1 to 4.47.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.32
+  title: ""
+  date: 2025-09-09T17:23:53.106Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 2bf74c656f54481d66e6a9aaf22c58366163b0b6
       body: |
