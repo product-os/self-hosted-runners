@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency powershell/powershell to v7.5.3
+      hash: c1d059d02e4dc6b932cf8948d21d7b45921541e3
+      body: |
+        Update powershell/powershell from 7.5.2 to 7.5.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.35
+  title: ""
+  date: 2025-09-10T16:23:30.294Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.29.0
       hash: ae0de7ffbd51b0f2bff3297752fd07ee1566a48f
       body: |
