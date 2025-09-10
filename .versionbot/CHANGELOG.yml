@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v22.4.2
+      hash: 3dad32dc12dd0dcd730b621f573bcb2e0301af5e
+      body: |
+        Update balena-io/balena-cli from 22.4.1 to 22.4.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.36
+  title: ""
+  date: 2025-09-10T18:24:08.253Z
+- commits:
     - subject: Update dependency powershell/powershell to v7.5.3
       hash: c1d059d02e4dc6b932cf8948d21d7b45921541e3
       body: |
