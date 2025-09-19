@@ -212,7 +212,7 @@ ARG DOCKER_VERSION=v27.4.1
 ARG DOCKER_COMPOSE_VERSION=v2.39.2
 
 # renovate: datasource=github-releases depName=docker/buildx
-ARG DOCKER_BUILDX_VERSION=v0.27.0
+ARG DOCKER_BUILDX_VERSION=v0.28.0
 
 ARG PACKAGES_common="\
     bind9-dnsutils \
