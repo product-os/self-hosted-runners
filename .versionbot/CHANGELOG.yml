@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v24.9.0
+      hash: 7e007d17d8ae26a68fb5fff4765f68638eac0278
+      body: |
+        Update node from 24.8.0 to 24.9.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.10.58
+  title: ""
+  date: 2025-09-25T20:23:30.542Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.31.2
       hash: d45dbe2b181038be588e0166183890951bcd811a
       body: |
