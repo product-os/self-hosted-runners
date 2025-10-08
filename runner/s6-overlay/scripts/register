@@ -15,22 +15,6 @@ curl_with_opts() {
     curl --fail --silent --retry 3 --connect-timeout 3 "$@"
 }
 
-# Helper function to replace the lack of --fail-with-body in versions of curl < 7.76.0
-curl_fail_with_body() {
-    local _http_code
-    local _output
-
-    _output=$(mktemp)
-    _http_code="$(curl --silent --write-out "%{http_code}" --output "${_output}" "$@")"
-
-    (jq . "${_output}" || cat "${_output}") | tee /dev/stderr
-    rm -f "${_output}"
-
-    if [[ "${_http_code}" -ge 400 ]]; then
-        return 22
-    fi
-}
-
 truthy() {
     [[ ${1,,} =~ true|yes|on|1 ]]
 }
@@ -100,7 +84,7 @@ get_runner_group_id() {
     local _api_url="https://api.github.com/${_registration_slug}/actions/runner-groups"
 
     info "Getting runner group ID from GitHub..."
-    (curl_fail_with_body --location "${_api_url}" -H "Authorization: token ${_github_token}") |
+    (curl --fail-with-body --location "${_api_url}" -H "Authorization: token ${_github_token}") |
         jq --arg name "${_runner_group_name}" '.runner_groups[] | select(.name == $name) | .id'
 }
 
@@ -145,7 +129,7 @@ register_runner() {
     check_token_limit "${_github_token}"
 
     info "Registering runner with GitHub..."
-    (curl_fail_with_body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" \
+    (curl --fail-with-body --location --request POST "${_api_url}" -H "Authorization: token ${_github_token}" \
         -d "${_json_payload}")
 }
 

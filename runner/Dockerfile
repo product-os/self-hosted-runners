@@ -377,6 +377,7 @@ ARG BALENARC_OFFLINE_MODE=1
 RUN aws --version && \
     balena version && \
     ctr --version && \
+    curl --version && \
     docker --version && \
     docker buildx version && \
     docker compose version && \
