@@ -335,7 +335,7 @@ RUN chmod -R 777 /usr/local/lib/node_modules \
 RUN /home/runner/bin/installdependencies.sh
 
 # renovate: datasource=npm depName=npm
-ARG NPM_VERSION=11.6.1
+ARG NPM_VERSION=11.6.2
 
 # install npm
 RUN npm install -g "npm@${NPM_VERSION}" \
