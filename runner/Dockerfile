@@ -325,6 +325,11 @@ COPY --from=s6-overlay /opt/ /
 
 COPY --from=node /opt/ /usr/local/
 
+# Fix global modules installation as regular user
+# https://github.com/actions/virtual-environments/issues/3727
+RUN chmod -R 777 /usr/local/lib/node_modules \
+    && chmod -R 777 /usr/local/bin
+
 # install any missing runner dotnet dependencies
 # https://github.com/actions/runner/blob/main/src/Misc/layoutbin/installdependencies.sh
 RUN /home/runner/bin/installdependencies.sh
