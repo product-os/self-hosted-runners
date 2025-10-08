@@ -1,4 +1,22 @@
 - commits:
+    - subject: Replace fail_with_body helper function with curl 7.76.0
+      hash: 8a40579cdbbdb68f20d6dd56efb488380342776c
+      body: |
+        Since we deprecated support for Ubuntu Focal and the
+        version of curl included in that distro, we no longer need
+        this helper function as both Jammy and Noble support the
+        --fail-with-body flag.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.11.4
+  title: ""
+  date: 2025-10-08T21:45:38.640Z
+- commits:
     - subject: Update dependency npm to v11.6.2
       hash: 5a1797b34cb1d726c8a216b18c2e5279f4ff90b7
       body: |
