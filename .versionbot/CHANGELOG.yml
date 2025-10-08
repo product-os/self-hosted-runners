@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency npm to v11.6.2
+      hash: 5a1797b34cb1d726c8a216b18c2e5279f4ff90b7
+      body: |
+        Update npm from 11.6.1 to 11.6.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.3
+  title: ""
+  date: 2025-10-08T21:22:56.353Z
+- commits:
     - subject: Update golang Docker tag to v1.25.2
       hash: c185bbabf65421efe56963abd3287c8daba09690
       body: |
