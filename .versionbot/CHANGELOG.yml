@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.31.11
+      hash: e38abaa380118ca063ada5642c14901dafe6704a
+      body: |
+        Update aws/aws-cli from 2.31.9 to 2.31.11
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.1
+  title: ""
+  date: 2025-10-08T19:27:55.175Z
+- commits:
     - subject: Fix global modules installation as regular user
       hash: 45fb6a5b9384fd4c2181cc1631f91091b3e5d453
       body: ""
