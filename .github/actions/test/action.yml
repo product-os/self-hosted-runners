@@ -118,6 +118,7 @@ runs:
         docker buildx version
         docker compose version
         gh version
+        kubectl version --client
         node --version
         npm --version
         python3 --version
@@ -127,6 +128,17 @@ runs:
         socat -V
         yq --version
         zstd --version
+
+    - name: Test global npm package install
+      shell: bash --noprofile --norc -eo pipefail -x {0}
+      run: |
+        npm list -g --depth=0
+        npm install -g cowsay
+        cowsay "cowsay is working"
+
+        npm list -g --depth=0
+        npm uninstall -g cowsay
+        npm list -g --depth=0
 
     - name: Check for update-locks
       shell: bash --noprofile --norc -eo pipefail -x {0}

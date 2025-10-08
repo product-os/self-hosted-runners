@@ -109,6 +109,18 @@ RUN eget "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m)-${AWSCLI_VER
 
 ####################################################################################################
 
+FROM eget-build AS kubectl
+
+# renovate: datasource=github-tags depName=kubernetes/kubernetes
+ARG KUBECTL_VERSION=v1.34.1
+
+RUN eget "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/$(dpkg --print-architecture)/kubectl" \
+    --all --file "*" --to "/opt" \
+    --tag "${KUBECTL_VERSION}" \
+    && ./kubectl version --client
+
+####################################################################################################
+
 FROM eget-build AS s6-overlay
 
 # renovate: datasource=github-releases depName=just-containers/s6-overlay versioning=loose
@@ -302,6 +314,7 @@ COPY --from=yq /opt/ /usr/local/bin/
 COPY --from=gh-cli /opt/ /usr/local/bin/
 COPY --from=awscli /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=awscli /usr/local/bin/ /usr/local/bin/
+COPY --from=kubectl /opt/ /usr/local/bin/
 COPY --from=go-github-apps /opt/ /usr/local/bin/
 COPY --from=balena-cli /opt/balena/ /usr/local/lib/balena/
 
@@ -311,6 +324,11 @@ RUN ln -sf /usr/local/lib/balena/bin/balena /usr/local/bin/balena && \
 COPY --from=s6-overlay /opt/ /
 
 COPY --from=node /opt/ /usr/local/
+
+# Fix global modules installation as regular user
+# https://github.com/actions/virtual-environments/issues/3727
+RUN chmod -R 777 /usr/local/lib/node_modules \
+    && chmod -R 777 /usr/local/bin
 
 # install any missing runner dotnet dependencies
 # https://github.com/actions/runner/blob/main/src/Misc/layoutbin/installdependencies.sh
@@ -363,6 +381,7 @@ RUN aws --version && \
     docker buildx version && \
     docker compose version && \
     gh version && \
+    kubectl version --client && \
     node --version && \
     npm --version && \
     pwsh -Version && \
