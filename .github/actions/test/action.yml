@@ -118,6 +118,7 @@ runs:
         docker buildx version
         docker compose version
         gh version
+        kubectl version --client
         node --version
         npm --version
         python3 --version
