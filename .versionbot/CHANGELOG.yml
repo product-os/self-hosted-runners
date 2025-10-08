@@ -1,4 +1,28 @@
 - commits:
+    - subject: Fix global modules installation as regular user
+      hash: 45fb6a5b9384fd4c2181cc1631f91091b3e5d453
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Install kubectl package for pre-commit utils
+      hash: 4232a2c6c4a50c5d305e2f6cdeec490535fb969f
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 6.11.0
+  title: ""
+  date: 2025-10-08T18:11:17.802Z
+- commits:
     - subject: Update dependency docker/compose to v2.40.0
       hash: 03875d2587026a3fa06a679821f7436cd19af749
       body: |
