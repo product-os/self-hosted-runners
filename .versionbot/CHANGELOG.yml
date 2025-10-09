@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update Node.js to v24.10.0
+      hash: dce2e562ce4588fe1e71fe5a259c7fd1a9ae20e5
+      body: |
+        Update node from 24.9.0 to 24.10.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.5
+  title: ""
+  date: 2025-10-09T00:29:58.452Z
+- commits:
     - subject: Replace fail_with_body helper function with curl 7.76.0
       hash: 8a40579cdbbdb68f20d6dd56efb488380342776c
       body: |
