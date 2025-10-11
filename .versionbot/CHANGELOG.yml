@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update pre-commit hook rhysd/actionlint to v1.7.8
+      hash: 62c70e3debbcf71dec2afe716474db658434a9f2
+      body: |
+        Update rhysd/actionlint from 1.7.7 to 1.7.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.10
+  title: ""
+  date: 2025-10-11T12:20:33.368Z
+- commits:
     - subject: Update dependency aws/aws-cli to v2.31.13
       hash: 27ec6de53aca6b795c726388bba14e12e2ffd51b
       body: |
