@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency balena-io/balena-cli to v22.4.12
+      hash: 928ac5512e484d765b5551f5ccdc18825ef09ed5
+      body: |
+        Update balena-io/balena-cli from 22.4.11 to 22.4.12
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.13
+  title: ""
+  date: 2025-10-13T21:19:25.659Z
+- commits:
     - subject: Update dependency mikefarah/yq to v4.48.1
       hash: b083cf07f0d503bc7f778c4cfbe7ca9fcf28e9e5
       body: |
