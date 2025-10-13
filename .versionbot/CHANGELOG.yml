@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.31.14
+      hash: 62265c604254137305276c732c3dc7fbf8382c8a
+      body: |
+        Update aws/aws-cli from 2.31.13 to 2.31.14
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.11
+  title: ""
+  date: 2025-10-13T19:27:20.339Z
+- commits:
     - subject: Update pre-commit hook rhysd/actionlint to v1.7.8
       hash: 62c70e3debbcf71dec2afe716474db658434a9f2
       body: |
