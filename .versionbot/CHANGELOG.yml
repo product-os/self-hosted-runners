@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.31.15
+      hash: ac5f7e58bb2899d93eb5c8cebb325508b03ce075
+      body: |
+        Update aws/aws-cli from 2.31.14 to 2.31.15
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.18
+  title: ""
+  date: 2025-10-14T21:24:44.273Z
+- commits:
     - subject: Update dependency actions/runner to v2.329.0
       hash: b09a55ac9aafcdd57f5598adbcd64c43608e9529
       body: |
