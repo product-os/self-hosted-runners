@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency actions/runner to v2.329.0
+      hash: b09a55ac9aafcdd57f5598adbcd64c43608e9529
+      body: |
+        Update actions/runner from 2.328.0 to 2.329.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.17
+  title: ""
+  date: 2025-10-14T20:26:52.610Z
+- commits:
     - subject: Update dotnet monorepo
       hash: 22fb1bd5cc0e1db822e340ed12f01ef82ccd1eac
       body: |
