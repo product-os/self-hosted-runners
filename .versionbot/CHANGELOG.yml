@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dotnet monorepo
+      hash: 22fb1bd5cc0e1db822e340ed12f01ef82ccd1eac
+      body: |
+        Update mcr.microsoft.com/dotnet/runtime-deps from 9.0.9 to 9.0.10
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.16
+  title: ""
+  date: 2025-10-14T19:26:36.487Z
+- commits:
     - subject: Update dependency balena-io/balena-cli to v22.4.13
       hash: 222ebd40dbee9fff5e17dabef2dda0d8168a5970
       body: |
