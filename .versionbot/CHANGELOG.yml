@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency aws/aws-cli to v2.31.18
+      hash: 60e4c0716b2935c65c8ad865ea1b2eec105a0696
+      body: |
+        Update aws/aws-cli from 2.31.17 to 2.31.18
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 6.11.24
+  title: ""
+  date: 2025-10-17T20:23:29.925Z
+- commits:
     - subject: Update dependency docker/compose to v2.40.1
       hash: cc7d813e3755e79f9a023ef9bb98b20f333ea32d
       body: |
